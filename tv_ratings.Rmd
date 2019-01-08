@@ -26,6 +26,19 @@ tv_ratings %>%
   geom_line() + 
   labs(x = "Year", 
        y = "# of titles")
+
+tv_ratings %>% 
+  group_by(title) %>% 
+  mutate(avg_share = mean(share)) %>% 
+  ungroup() %>% 
+  mutate(title = fct_reorder(title, avg_share)) %>% 
+  arrange(desc(avg_share)) %>% 
+  distinct(title, .keep_all = T) %>% 
+  head(15) %>% 
+  ggplot(aes(x = title, y = avg_share)) + 
+  geom_col() + 
+  coord_flip()
+
   
 
 

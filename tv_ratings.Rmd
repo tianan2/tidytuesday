@@ -1,0 +1,33 @@
+---
+title: "Untitled"
+author: "Jaehwan Lim"
+date: "January 6, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(stringr)
+
+theme_set(theme_light())
+
+tv_ratings <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/9749b0ef5c5f6690df98fb5bdbbec57e01c35bd5/data/2019/2019-01-08/IMDb_Economist_tv_ratings.csv")
+
+```
+
+```{r}
+library(lubridate)
+
+tv_ratings %>% 
+  count(date = floor_date(date, "year")) %>% 
+  ggplot(aes(x = date, y = n)) +
+  geom_line() + 
+  labs(x = "Year", 
+       y = "# of titles")
+  
+
+
+```
+

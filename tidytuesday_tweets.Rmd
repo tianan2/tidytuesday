@@ -71,7 +71,7 @@ tweet_words %>%
   geom_col() +
   coord_flip() + 
   labs(title = "Most common words in #tidytuesday tweets", 
-       x = "Words", 
+       x = "Frequency of words", 
        y = "# of words")
   
 ```

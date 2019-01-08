@@ -39,6 +39,25 @@ tv_ratings %>%
   geom_col() + 
   coord_flip()
 
+tv_ratings %>% 
+  mutate(date = floor_date(date, "year")) %>% 
+  group_by(date) %>% 
+  mutate(avg_rating = mean(av_rating)) %>% 
+  ungroup() %>%
+  ggplot(aes(x = date, y = avg_rating)) +
+  geom_line() +
+  expand_limits(y = 7) 
+
+tv_ratings %>% 
+  mutate(date = floor_date(date, "year")) %>% 
+  filter(date == "2000-01-01")
+  
+
+
+  
+
+
+
   
 
 

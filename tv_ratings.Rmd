@@ -38,23 +38,52 @@ tv_ratings %>%
   ggplot(aes(x = title, y = avg_share)) + 
   geom_col() + 
   coord_flip()
+```
+
+### Has TV been getting better or worse over time? 
+
+```{r}
+
+by_year <- tv_ratings %>% 
+  group_by(year = 2 * (year(date) %/% 2)) %>% 
+  summarize(mean_rating = mean(av_rating), 
+            median_rating = median(av_rating),
+            mean_season1 = mean(av_rating[seasonNumber == 1]), 
+            mean_season = mean(seasonNumber),
+            sd_rating = sd(av_rating), 
+            observations = n()) 
+
+
 
 tv_ratings %>% 
-  mutate(date = floor_date(date, "year")) %>% 
-  group_by(date) %>% 
-  mutate(avg_rating = mean(av_rating)) %>% 
-  ungroup() %>%
-  ggplot(aes(x = date, y = avg_rating)) +
-  geom_line() +
-  expand_limits(y = 7) 
+  ggplot(aes(date, av_rating)) +
+  geom_point() +
+  geom_smooth(method = "loess")
 
 tv_ratings %>% 
-  mutate(date = floor_date(date, "year")) %>% 
-  group_by(date) %>% 
-  mutate(avg_share = mean(share)) %>% 
-  ungroup() %>%
-  ggplot(aes(x = date, y = avg_share)) +
-  geom_line() 
+  mutate(year = year(date)) %>% 
+  ggplot(aes(factor(year), av_rating)) +
+  geom_boxplot() 
+
+```
+
+## Do most shows get better or worse over time?
+```{r}
+
+```
+
+```{r}
+tv_ratings %>%
+  filter(seasonNumber <= 7) %>% 
+  group_by(seasonNumber) %>% 
+  summarize(av_rating = mean(av_rating)) %>% 
+  ggplot(aes(x = seasonNumber, y = av_rating)) +
+  geom_line()
+
+tv_ratings %>% 
+  group_by(title) %>% 
+  arrange(date) %>% 
+  mutate(season_number = row_number()) %>% 
 
 ```
 

@@ -84,13 +84,26 @@ tv_ratings %>%
 If season 1 is good, what is the probability that they get season 2?
 
 ```{r}
-tv_ratings %>% 
-  filter(seasonNumber <= 2) %>% 
+first_three_seasons <- tv_ratings %>% 
+  filter(seasonNumber <= 3) %>% 
+  group_by(title) %>% 
+  mutate(first_date = min(date)) %>% 
+  ungroup() %>% 
   transmute(title, 
             seasonNumber = str_c("season", seasonNumber, sep = ""), 
+            first_date,
             av_rating) %>% 
   distinct(title, seasonNumber, .keep_all = TRUE) %>% 
-  spread(seasonNumber, av_rating) 
+  spread(seasonNumber, av_rating) %>% 
+  filter(!is.na(season1)) %>% 
+  filter(first_date <= "2017-01-01")
+  
+library(broom)
+
+glm(!is.na(season2) ~ season1, data = first_three_seasons) %>% 
+  tidy()
+
+  
 
 
 ```

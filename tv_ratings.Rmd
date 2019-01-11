@@ -3,6 +3,8 @@ title: "Untitled"
 author: "Jaehwan Lim"
 date: "January 6, 2019"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -62,19 +64,14 @@ by_year %>%
 
 ## Plotting mean_rating for seasonNumber
 tv_ratings %>% 
-  group_by(year = 2 * (year(date) %/% 2), 
-           seasonNumber) %>%
-  filter(seasonNumber <= 4) %>% 
-  summarize(mean_rating = mean(av_rating)) %>% 
+  group_by(year = 5 * (year(date) %/% 5), 
+           seasonNumber = ifelse(seasonNumber >= 4, "+4", seasonNumber)) %>%
+  summarize(mean_rating = mean(av_rating), 
+            observations = n()) %>% 
   ggplot(aes(year, mean_rating, color = factor(seasonNumber))) +
-  geom_line()
-
-  
-
-tv_ratings %>% 
-  ggplot(aes(date, av_rating)) +
-  geom_point() +
-  geom_smooth(method = "loess")
+  geom_line() + 
+  labs(color = "Season", 
+       y = "Average rating in each 5-year period")
 
 tv_ratings %>% 
   mutate(year = year(date)) %>% 
@@ -83,8 +80,18 @@ tv_ratings %>%
 
 ```
 
-## Do most shows get better or worse over time?
+### Show survival
+If season 1 is good, what is the probability that they get season 2?
+
 ```{r}
+tv_ratings %>% 
+  filter(seasonNumber <= 2) %>% 
+  transmute(title, 
+            seasonNumber = str_c("season", seasonNumber, sep = ""), 
+            av_rating) %>% 
+  distinct(title, seasonNumber, .keep_all = TRUE) %>% 
+  spread(seasonNumber, av_rating) 
+
 
 ```
 

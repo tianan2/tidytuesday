@@ -43,6 +43,7 @@ tv_ratings %>%
 ### Has TV been getting better or worse over time? 
 
 ```{r}
+library(lubridate)
 
 by_year <- tv_ratings %>% 
   group_by(year = 2 * (year(date) %/% 2)) %>% 
@@ -53,7 +54,22 @@ by_year <- tv_ratings %>%
             sd_rating = sd(av_rating), 
             observations = n()) 
 
+## Plotting every metric into a single graph by using gather
+by_year %>% 
+  gather(metric, value, -year, -observations, -mean_season, -sd_rating) %>% 
+  ggplot(aes(year, value, color = metric)) +
+  geom_line() 
 
+## Plotting mean_rating for seasonNumber
+tv_ratings %>% 
+  group_by(year = 2 * (year(date) %/% 2), 
+           seasonNumber) %>%
+  filter(seasonNumber <= 4) %>% 
+  summarize(mean_rating = mean(av_rating)) %>% 
+  ggplot(aes(year, mean_rating, color = factor(seasonNumber))) +
+  geom_line()
+
+  
 
 tv_ratings %>% 
   ggplot(aes(date, av_rating)) +

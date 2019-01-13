@@ -47,6 +47,7 @@ tv_ratings %>%
 ```{r}
 library(lubridate)
 
+## aggregating numbers by year
 by_year <- tv_ratings %>% 
   group_by(year = 2 * (year(date) %/% 2)) %>% 
   summarize(mean_rating = mean(av_rating), 

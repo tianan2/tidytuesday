@@ -104,7 +104,7 @@ library(broom)
 glm(!is.na(season2) ~ season1, data = first_three_seasons) %>% 
   tidy()
 
-  
+
 
 
 ```

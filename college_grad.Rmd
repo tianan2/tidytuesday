@@ -1,0 +1,61 @@
+---
+title: "Untitled"
+author: "Jaehwan Lim"
+date: "January 13, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(janitor)
+
+recent_grads <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-10-16/recent-grads.csv") %>% clean_names()
+
+theme_set(theme_light())
+```
+
+## What categories of majors make more moeny than others?
+
+```{r}
+recent_grads %>%
+  mutate(major_category = fct_reorder(major_category, median)) %>% 
+  ggplot(aes(major_category, median)) + 
+  geom_boxplot() + 
+  coord_flip() + 
+  scale_y_continuous(labels = scales::dollar_format())
+```
+
+```{r}
+recent_grads %>%
+  group_by(major_category) %>% 
+  summarize(median_median = median(median)) %>% 
+  mutate(major_category = fct_reorder(major_category, median_median)) %>% 
+  ggplot(aes(major_category, median_median)) + 
+  geom_col() + 
+  coord_flip() + 
+  scale_y_continuous(labels = scales::dollar_format())
+```
+
+## What are the highest earning majors?
+
+```{r}
+recent_grads %>% 
+  arrange(desc(median)) %>% 
+  select(major, major_category, median, p25th, p75th) %>% 
+  head(20) %>% 
+  mutate(major= fct_reorder(major, median)) %>% 
+  ggplot(aes(major, median, color = major_category)) + 
+  geom_point() + 
+## show interval 
+  geom_errorbar(aes(ymin = p25th, ymax = p75th)) + 
+  coord_flip() + 
+  scale_y_continuous(labels = scales::dollar_format()) +
+## set the y limit to 0
+  expand_limits(y = 0)
+
+```
+

@@ -180,10 +180,18 @@ major_processed %>%
 ```
 
 ```{r}
+library(broom)
+
 major_processed %>% 
   select(major, major_category, total, share_women, sample_size, median) %>%
-  
-  
+  add_count(major_category) %>%
+  filter(n >= 10) %>%
+  nest(-major_category) %>% 
+  mutate(model = map(data, ~ lm(median ~ share_women, data = ., weights = sample_size)), 
+         tidied = map(model, tidy)) %>%
+  unnest(tidied) %>% 
+  filter(term == "share_women") %>% 
+  arrange(estimate)
 
 ```
 

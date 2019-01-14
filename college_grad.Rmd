@@ -4,7 +4,7 @@ author: "Jaehwan Lim"
 date: "January 13, 2019"
 output: html_document
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 ```{r setup, include=FALSE}
@@ -18,7 +18,47 @@ library(stringr)
 
 recent_grads <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-10-16/recent-grads.csv") %>% clean_names()
 
+major_processed <- recent_grads %>% 
+  arrange(desc(median)) %>%
+  mutate(major = str_to_title(major), 
+         major = fct_reorder(major, median)) 
+
 theme_set(theme_light())
+```
+
+## What are the most common major categories?
+
+```{r}
+recent_grads %>% 
+  count(major_category, wt = total, sort = TRUE) %>% 
+  mutate(major_category = fct_reorder(major_category, n)) %>% 
+  head(20) %>% 
+  ## putting colors into the bars; add rainbow effect
+  ggplot(aes(major_category, n, fill = major_category)) + 
+  geom_col() +
+  coord_flip() + 
+  labs(x = "", 
+       y = "Total number of graduates surveyed", 
+       major_category = "") +
+  ## drop the legend
+  theme(legend.position = "none")
+```
+
+## What are the most common *majors*? (since there are 173 majors, we can't show them all)
+
+```{r}
+major_processed %>% 
+  arrange(desc(total)) %>% 
+  head(20) %>% 
+  mutate(major = fct_reorder(major, total)) %>% 
+  ggplot(aes(major, total, fill = major)) + 
+  geom_col() +
+  coord_flip() + 
+  scale_y_continuous(labels = scales::comma_format()) +
+  theme(legend.position = "none") +
+  labs(x = "Top 20 most common majors", 
+       y = "Total of graduates surveyed")
+ 
 ```
 
 ## What categories of majors make more moeny than others?
@@ -64,7 +104,8 @@ major_processed %>%
 ## set the y limit to 0
   expand_limits(y = 0) + 
   labs(title = "What are the highest-earning majors?", 
-       subtitle = "Top 20 majors with at least 100 samples")
+       subtitle = "Top 20 majors with at least 100 graduates surveyed", 
+       y = "Median graduate salary")
 
 ```
 
@@ -92,4 +133,59 @@ major_processed %>%
   scale_x_log10()
 
 ```
+
+## How does gender ratio relate to earnings?
+
+```{r}
+library(ggrepel)
+
+major_processed %>% 
+  arrange(desc(total)) %>% 
+  head(20) %>% 
+  gather(gender, number, men, women) %>% 
+  mutate(major = fct_reorder(major, total)) %>% 
+  ggplot(aes(major, number, fill = gender)) + 
+  geom_col() + 
+  coord_flip()
+
+major_processed %>% 
+  filter(!is.na(total)) %>% 
+  group_by(major_category) %>% 
+  summarize(total = sum(total), 
+            men = sum(men), 
+            women = sum(women), 
+            median_salary = sum(median * sample_size) / sum(sample_size)) %>% 
+  mutate(share_women = women / total) %>%
+  ggplot(aes(share_women, median_salary)) + 
+  geom_point() +
+  geom_text_repel(aes(label = major_category)) + 
+  geom_smooth(method = "lm") +
+  expand_limits(y = 0) 
+  
+```
+
+```{r}
+major_processed %>% 
+  ggplot(aes(share_women, median)) +
+  geom_point() + 
+  geom_smooth(method = "lm") +
+  expand_limits(y = 0)
+```
+
+```{r}
+major_processed %>% 
+  select(major, total, share_women, sample_size, median) %>% 
+  lm(median ~ share_women, data = ., weights = sample_size) %>% 
+  summary()
+```
+
+```{r}
+major_processed %>% 
+  select(major, major_category, total, share_women, sample_size, median) %>%
+  
+  
+
+```
+
+
 

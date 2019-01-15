@@ -104,8 +104,19 @@ library(broom)
 glm(!is.na(season2) ~ season1, data = first_three_seasons) %>% 
   tidy()
 
+```
 
-
+```{r}
+first_three_seasons %>% 
+  ## originally, ntile function was used instead of cut fuction, namely, group_by(ntile(season1, 5))
+  group_by(season1_bin = cut(season1, c(0, 7, 7.5, 8, 8.5, 10))) %>% 
+  summarize(had_second_season = mean(!is.na(season2)), 
+            observations = n()) %>% 
+  ## why need to add group = 1? It's because, "For line graphs, the data points must be grouped so that it knows which points to connect. In this case, it is simple -- all points should be connected, so group=1. When more variables are used and multiple lines are drawn, the grouping for lines is usually done by variable."
+  ggplot(aes(x = season1_bin, y = had_second_season, group = 1)) +
+  geom_line() +
+  geom_point() +
+  scale_y_continuous(labels = scales::percent_format())
 
 ```
 

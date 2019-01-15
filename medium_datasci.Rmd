@@ -1,0 +1,42 @@
+---
+title: "Untitled"
+author: "Jaehwan Lim"
+date: "January 15, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(stringr)
+
+medium_datasci <- read_csv("https://github.com/rfordatascience/tidytuesday/blob/master/data/2018/2018-12-04/medium_datasci.csv?raw=true") %>% 
+  select(-x1)
+
+```
+
+```{r}
+medium_datasci %>% 
+  summarize_at(vars(starts_with("tag_")), sum)
+
+medium_gathered <- medium_datasci %>% 
+  ## another way to code the third arguement - starts_with("tag_")
+  gather(tag, frequency, c(tag_ai:tag_machine_learning)) %>% 
+  ## novel approach to clean the string - str_remove
+  mutate(tag = str_remove(tag, "tag_")) %>% 
+  filter(frequency == 1)
+  
+medium_gathered %>% 
+  count(tag, sort = TRUE)
+
+medium_gathered %>% 
+  group_by(tag) %>% 
+  summarize(median = median(claps)) %>% 
+  arrange(desc(median))
+
+
+```
+

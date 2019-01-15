@@ -142,6 +142,7 @@ library(ggrepel)
 major_processed %>% 
   arrange(desc(total)) %>% 
   head(20) %>% 
+  ## tidying the data
   gather(gender, number, men, women) %>% 
   mutate(major = fct_reorder(major, total)) %>% 
   ggplot(aes(major, number, fill = gender)) + 

@@ -1,0 +1,75 @@
+---
+title: "Untitled"
+author: "Jaehwan Lim"
+date: "December 19, 2018"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(lubridate)
+
+set.seed(20181209)
+
+# You can use this url to download the data directly into R (will take a few seconds)
+restaurant_inspections_raw <- read_csv("https://data.cityofnewyork.us/api/views/43nn-pn8j/rows.csv")
+
+# Cleaning names with janitor, sampling 300,000 records, and dropping some variables
+restaurant_inspections <- restaurant_inspections_raw %>% 
+        clean_names() %>%
+        select(-phone, -grade_date, -record_date, -building, -street) %>% 
+        sample_n(size = 300000) %>%
+        mutate(inspection_date = mdy(inspection_date)) %>%
+        separate(inspection_type, c("inspection_program", "inspection_type"), sep = " / ", )
+
+```
+
+```{r}
+restaurant_inspections %>% 
+  count(year = year(inspection_date), 
+        month = month(inspection_date), 
+        grade) %>% 
+  arrange(year, month) %>% 
+  
+
+restaurant_inspections %>% 
+  count(violation_description, sort = T) %>% 
+  head() %>% 
+  pull(violation_description)
+  
+  
+inspections <- restaurant_inspections %>% 
+  group_by(camis, 
+           dba,
+           boro,
+           zipcode,
+           cuisine_description,
+           inspection_date,
+           action, 
+           score,
+           grade, 
+           inspection_type,
+           inspection_program) %>% 
+  summarize(critical_violations = sum(critical_flag == "Critical", na.rm = TRUE), 
+            noncritical_violations = sum(critical_flag == "Not Critical", na.rm = TRUE)) %>%
+  ungroup()
+
+most_recent_cycle_inspections <- inspections %>% 
+  filter(inspection_program == "Cycle Inspection", 
+         inspection_type == "Initial Inspection") %>% 
+  arrange(desc(inspection_date)) %>% 
+  distinct(camis, .keep_all = TRUE)
+
+```
+
+```{r}
+
+```
+

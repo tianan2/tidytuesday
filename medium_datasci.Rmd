@@ -27,6 +27,7 @@ medium_gathered <- medium_datasci %>%
   gather(tag, frequency, c(tag_ai:tag_machine_learning)) %>% 
   ## novel approach to clean the string - str_remove
   mutate(tag = str_remove(tag, "tag_")) %>% 
+  ## another step that I haven't figured out
   filter(frequency == 1)
   
 medium_gathered %>% 
@@ -34,8 +35,8 @@ medium_gathered %>%
 
 medium_gathered %>% 
   group_by(tag) %>% 
-  summarize(median = median(claps)) %>% 
-  arrange(desc(median))
+  summarize(median_claps = median(claps)) %>% 
+  arrange(desc(median_claps))
 
 
 ```

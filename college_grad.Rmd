@@ -37,8 +37,9 @@ recent_grads %>%
   ggplot(aes(major_category, n, fill = major_category)) + 
   geom_col() +
   coord_flip() + 
+  scale_y_continuous(labels = scales::comma_format()) +
   labs(x = "", 
-       y = "Total number of graduates surveyed", 
+       y = "Total number of graduates", 
        major_category = "") +
   ## drop the legend
   theme(legend.position = "none")
@@ -66,21 +67,12 @@ major_processed %>%
 ```{r}
 recent_grads %>%
   mutate(major_category = fct_reorder(major_category, median)) %>% 
-  ggplot(aes(major_category, median)) + 
+  ggplot(aes(major_category, median, fill = major_category)) + 
   geom_boxplot() + 
   coord_flip() + 
-  scale_y_continuous(labels = scales::dollar_format())
-```
-
-```{r}
-recent_grads %>%
-  group_by(major_category) %>% 
-  summarize(median_median = median(median)) %>% 
-  mutate(major_category = fct_reorder(major_category, median_median)) %>% 
-  ggplot(aes(major_category, median_median)) + 
-  geom_col() + 
-  coord_flip() + 
-  scale_y_continuous(labels = scales::dollar_format())
+  scale_y_continuous(labels = scales::dollar_format()) +
+  expand_limits(y = 0) +
+  theme(legend.position = "none")
 ```
 
 ## What are the highest earning majors?
@@ -124,6 +116,8 @@ major_processed %>%
   expand_limits(y = 0)
 
 ```
+
+### Checking the sample size
 
 ```{r}
 major_processed %>%
@@ -192,8 +186,25 @@ major_processed %>%
          tidied = map(model, tidy)) %>%
   unnest(tidied) %>% 
   filter(term == "share_women") %>% 
-  arrange(estimate)
+  arrange(estimate) %>% 
+  ## adjust p-value using fdr
+  mutate(fdr = p.adjust(p.value, method = "fdr"))
 
+```
+
+```{r}
+knitr::knit_exit()
+```
+
+```{r}
+recent_grads %>%
+  group_by(major_category) %>% 
+  summarize(median_median = median(median)) %>% 
+  mutate(major_category = fct_reorder(major_category, median_median)) %>% 
+  ggplot(aes(major_category, median_median)) + 
+  geom_col() + 
+  coord_flip() + 
+  scale_y_continuous(labels = scales::dollar_format())
 ```
 
 

@@ -29,20 +29,17 @@ theme_set(theme_light())
 ## What are the most common major categories?
 
 ```{r}
-recent_grads %>% 
-  count(major_category, wt = total, sort = TRUE) %>% 
-  mutate(major_category = fct_reorder(major_category, n)) %>% 
-  head(20) %>% 
-  ## putting colors into the bars; add rainbow effect
-  ggplot(aes(major_category, n, fill = major_category)) + 
+by_major_category %>% 
+  mutate(major_category = fct_reorder(major_category, total)) %>%
+  gather(gender, number, men, women) %>% 
+  ggplot(aes(major_category, number, fill = gender)) + 
   geom_col() +
-  coord_flip() + 
-  scale_y_continuous(labels = scales::comma_format()) +
+  coord_flip() +
+  scale_y_continuous(labels = scales::comma_format()) + 
   labs(x = "", 
        y = "Total number of graduates", 
-       major_category = "") +
-  ## drop the legend
-  theme(legend.position = "none")
+       major_category = "") 
+  
 ```
 
 ## What are the most common *majors*? (since there are 173 majors, we can't show them all)
@@ -150,7 +147,7 @@ major_processed %>%
             men = sum(men), 
             women = sum(women), 
             median_salary = sum(median * sample_size) / sum(sample_size)) %>% 
-  mutate(share_women = women / total) %>%
+  mutate(share_women = women / total) %>% 
   ggplot(aes(share_women, median_salary)) + 
   geom_point() +
   geom_text_repel(aes(label = major_category)) + 
@@ -159,11 +156,31 @@ major_processed %>%
   
 ```
 
+
+# I'll also be aggregating by category
+
+```{r by_major_category}
+
+by_major_category <- major_processed %>% 
+  filter(!is.na(total)) %>% 
+  group_by(major_category) %>% 
+  summarize(total = sum(total), 
+            men = sum(men), 
+            women = sum(women), 
+            median_salary = sum(median * sample_size) / sum(sample_size)) %>% 
+  mutate(share_women = women / total) %>% 
+  arrange(desc(share_women))
+
+```
+
 ```{r}
+library(plotly)
+
 major_processed %>% 
-  ggplot(aes(share_women, median)) +
+  mutate(major_category = fct_lump(major_category, 4)) %>% 
+  ggplot(aes(share_women, median, color = major_category, size = sample_size)) +
   geom_point() + 
-  geom_smooth(method = "lm") +
+  geom_smooth(aes(group = 1), method = "lm") +
   expand_limits(y = 0)
 ```
 
@@ -206,6 +223,3 @@ recent_grads %>%
   coord_flip() + 
   scale_y_continuous(labels = scales::dollar_format())
 ```
-
-
-

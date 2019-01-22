@@ -1,0 +1,50 @@
+---
+title: "Untitled"
+author: "Jaehwan Lim"
+date: "January 19, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+
+nfl_raw <- read_csv("data/2018-08-28/nfl_2010-2017.csv") %>% 
+  select(-X1)
+
+theme_set(theme_light())
+
+
+```
+
+```{r}
+nfl_raw %>% 
+  filter(position == "QB") %>% 
+  group_by(name) %>%
+  mutate(sum_pass_yds = sum(pass_yds)) %>% 
+  arrange(desc(sum_pass_yds)) %>% 
+  distinct(name, .keep_all = TRUE)
+  
+nfl_raw %>% 
+  group_by(game_year) %>% 
+  filter(!is.na(rush_yds), !is.na(pass_yds), !is.na(rec_yds)) %>% 
+  summarize(rush_mean = mean(rush_yds), 
+            pass_mean = mean(pass_yds),
+            rec_mean = mean(rec_yds)) %>% 
+  gather(metric, value, rush_mean : rec_mean) %>% 
+  ggplot(aes(game_year, value, color = metric)) + 
+  geom_line() +
+  geom_point()
+
+
+  geom_line(aes(game_year, pass_mean), color = "blue") + 
+  geom_line(aes(game_year, rec_mean)) 
+
+            
+
+```
+
+

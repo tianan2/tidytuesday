@@ -176,12 +176,17 @@ by_major_category <- major_processed %>%
 ```{r}
 library(plotly)
 
-major_processed %>% 
+g <- major_processed %>% 
   mutate(major_category = fct_lump(major_category, 4)) %>% 
-  ggplot(aes(share_women, median, color = major_category, size = sample_size)) +
+  ggplot(aes(share_women, median, color = major_category, size = sample_size, labels = major)) +
   geom_point() + 
   geom_smooth(aes(group = 1), method = "lm") +
+  scale_x_continuous(labels = scales::percent_format()) +
+  scale_y_continuous(labels = scales::dollar_format()) +
   expand_limits(y = 0)
+
+ggplotly(g)
+
 ```
 
 ```{r}
@@ -209,6 +214,19 @@ major_processed %>%
 
 ```
 
+```{r}
+recent_grads %>% 
+  filter(sample_size >= 100) %>% 
+  mutate(IQR = p75th - p25th) %>% 
+  arrange(desc(IQR)) %>% 
+  View()
+
+```
+
+# Future work
+  * Examining umemployment and fraction taking a job requiring a college degree
+  * Examining IQR
+  
 ```{r}
 knitr::knit_exit()
 ```

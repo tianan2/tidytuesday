@@ -118,6 +118,19 @@ first_three_seasons %>%
   geom_point() +
   scale_y_continuous(labels = scales::percent_format())
 
+first_three_seasons %>% 
+  group_by(season1_bin = cut(season1, c(0, 7, 7.5, 8, 8.5, 10)), 
+           time_bin = ifelse(first_date < "2000-01-01", "Before 2000", "After 2000")) %>% 
+  summarize(had_second_season = mean(!is.na(season2)), 
+            observations = n()) %>% 
+  ggplot(aes(x = season1_bin, 
+             y = had_second_season, 
+             color = time_bin, 
+             group = time_bin)) +
+  geom_line() +
+  geom_point() +
+  scale_y_continuous(labels = scales::percent_format())
+
 ```
 
 ```{r}
@@ -128,10 +141,6 @@ tv_ratings %>%
   ggplot(aes(x = seasonNumber, y = av_rating)) +
   geom_line()
 
-tv_ratings %>% 
-  group_by(title) %>% 
-  arrange(date) %>% 
-  mutate(season_number = row_number()) %>% 
 
 ```
 

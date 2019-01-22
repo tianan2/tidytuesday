@@ -73,9 +73,6 @@ tv_ratings %>%
   geom_line() + 
   labs(color = "Season", 
        y = "Average rating in each 5-year period")
-
-
-
 ```
 
 ### Show survival

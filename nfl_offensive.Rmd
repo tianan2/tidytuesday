@@ -20,6 +20,8 @@ theme_set(theme_light())
 
 ```
 
+## Who is the best QB by passing-yards?
+
 ```{r}
 nfl_raw %>% 
   filter(position == "QB") %>% 
@@ -27,23 +29,22 @@ nfl_raw %>%
   mutate(sum_pass_yds = sum(pass_yds)) %>% 
   arrange(desc(sum_pass_yds)) %>% 
   distinct(name, .keep_all = TRUE)
-  
+```
+
+## NFL offense trend change
+
+```{r}
 nfl_raw %>% 
+  group_by(team, game_year) %>% 
+  mutate(rush_mean = mean(rush_yds + rec_yds, na.rm = T), 
+         pass_mean = mean(pass_yds, na.rm = T)) %>% 
+  ungroup() %>% 
   group_by(game_year) %>% 
-  filter(!is.na(rush_yds), !is.na(pass_yds), !is.na(rec_yds)) %>% 
-  summarize(rush_mean = mean(rush_yds), 
-            pass_mean = mean(pass_yds),
-            rec_mean = mean(rec_yds)) %>% 
-  gather(metric, value, rush_mean : rec_mean) %>% 
+  summarize(rush_mean = mean(rush_mean), 
+            pass_mean = mean(pass_mean)) %>% 
+  gather(metric, value, rush_mean, pass_mean) %>% 
   ggplot(aes(game_year, value, color = metric)) + 
-  geom_line() +
-  geom_point()
-
-
-  geom_line(aes(game_year, pass_mean), color = "blue") + 
-  geom_line(aes(game_year, rec_mean)) 
-
-            
+  geom_line() 
 
 ```
 

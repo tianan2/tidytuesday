@@ -74,10 +74,7 @@ tv_ratings %>%
   labs(color = "Season", 
        y = "Average rating in each 5-year period")
 
-tv_ratings %>% 
-  mutate(year = year(date)) %>% 
-  ggplot(aes(factor(year), av_rating)) +
-  geom_boxplot() 
+
 
 ```
 
@@ -151,10 +148,31 @@ first_three_seasons %>%
   augment(newdata = new_data, type.predict = "response") %>% 
   ggplot(aes(year, .fitted, color = factor(season1))) +
   geom_line() + 
-  scale_y_continuous(labels = scales::percent_format())
+  scale_y_continuous(labels = scales::percent_format()) + 
+  labs(title = "Probability of getting season 2 has become more dependent on the ratings of season 1", 
+       color = "Season1 rating", 
+       y = "Predicted probability")
+
+## another plot 
+library(splines)
+
+mod <- first_three_seasons %>% 
+  mutate(year = year(first_date), 
+         had_second_season = !is.na(season2)) %>% 
+  glm(had_second_season ~ season1 * year, data = ., family = "binomial") 
+
+summary(mod) 
+
+mod %>% 
+  ## learn how to use "augment" function
+  augment(newdata = new_data, type.predict = "response") %>% 
+  ggplot(aes(year, .fitted, color = factor(season1))) +
+  geom_line() + 
+  scale_y_continuous(labels = scales::percent_format()) + 
+  labs(title = "Probability of getting season 2 has become more dependent on the ratings of season 1", 
+       color = "Season1 rating", 
+       y = "Predicted probability of getting season 2")
   
-
-
 ```
 
 ```{r}

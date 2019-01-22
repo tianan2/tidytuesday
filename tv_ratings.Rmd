@@ -133,6 +133,30 @@ first_three_seasons %>%
 
 ```
 
+## Visualizing the interaction term of year and season1
+
+```{r}
+
+
+new_data <- crossing(
+  year = 1990:2018, 
+  season1 = seq(6, 9)
+)
+
+first_three_seasons %>% 
+  mutate(year = year(first_date), 
+         had_second_season = !is.na(season2)) %>% 
+  glm(had_second_season ~ season1 * year, data = ., family = "binomial") %>% 
+  ## learn how to use "augment" function
+  augment(newdata = new_data, type.predict = "response") %>% 
+  ggplot(aes(year, .fitted, color = factor(season1))) +
+  geom_line() + 
+  scale_y_continuous(labels = scales::percent_format())
+  
+
+
+```
+
 ```{r}
 tv_ratings %>%
   filter(seasonNumber <= 7) %>% 

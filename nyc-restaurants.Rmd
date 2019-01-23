@@ -4,7 +4,7 @@ author: "Jaehwan Lim"
 date: "December 19, 2018"
 output: html_document
 editor_options: 
-  chunk_output_type: inline
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -32,18 +32,17 @@ restaurant_inspections <- restaurant_inspections_raw %>%
 ```
 
 ```{r}
+## see if each row is distinct in what terms
 restaurant_inspections %>% 
-  count(year = year(inspection_date), 
-        month = month(inspection_date), 
-        grade) %>% 
-  arrange(year, month) %>% 
-  
+  count(dba, camis, inspection_date, sort = T)
+
+restaurant_inspections %>% 
+  count(year = year(inspection_date)) 
 
 restaurant_inspections %>% 
   count(violation_description, sort = T) %>% 
   head() %>% 
   pull(violation_description)
-  
   
 inspections <- restaurant_inspections %>% 
   group_by(camis, 
@@ -53,12 +52,12 @@ inspections <- restaurant_inspections %>%
            cuisine_description,
            inspection_date,
            action, 
-           score,
+           score, 
            grade, 
-           inspection_type,
-           inspection_program) %>% 
-  summarize(critical_violations = sum(critical_flag == "Critical", na.rm = TRUE), 
-            noncritical_violations = sum(critical_flag == "Not Critical", na.rm = TRUE)) %>%
+           inspection_type, 
+           inspection_program) %>%
+  summarize(critical_violations = sum(critical_flag == "Critical", na.rm = T), 
+            noncritical_violations = sum(critical_flag == "Not Critical", na.rm = T)) %>% 
   ungroup()
 
 most_recent_cycle_inspections <- inspections %>% 
@@ -70,6 +69,32 @@ most_recent_cycle_inspections <- inspections %>%
 ```
 
 ```{r}
+library(broom)
+
+by_cuisine <- most_recent_cycle_inspections %>% 
+  group_by(cuisine_description) %>% 
+  summarize(avg_score = mean(score), 
+            median_score = median(score), 
+            restaurant = n()) %>% 
+  arrange(desc(restaurant))
+
+
+cuisine_conf_ints <- most_recent_cycle_inspections %>% 
+  add_count(cuisine_description) %>% 
+  filter(n > 200) %>% 
+  nest(-cuisine_description) %>% 
+  mutate(model = map(data, ~ t.test(.$score))) %>% 
+  unnest(map(model, tidy))
+
+cuisine_conf_ints %>% 
+  mutate(cuisine_description = str_remove(cuisine_description, " \\(.*"), 
+         cuisine_description = fct_reorder(cuisine_description, estimate)) %>% 
+  ggplot(aes(cuisine_description, estimate)) + 
+  geom_point() + 
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high, width = 0.2)) + 
+  coord_flip()
+  
+
 
 ```
 

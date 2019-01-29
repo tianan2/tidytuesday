@@ -4,7 +4,7 @@ author: "Jaehwan Lim"
 date: "December 19, 2018"
 output: html_document
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 ```{r setup, include=FALSE}
@@ -28,6 +28,8 @@ restaurant_inspections <- restaurant_inspections_raw %>%
         sample_n(size = 300000) %>%
         mutate(inspection_date = mdy(inspection_date)) %>%
         separate(inspection_type, c("inspection_program", "inspection_type"), sep = " / ", )
+
+theme_set(theme_light())
 
 ```
 
@@ -68,6 +70,8 @@ most_recent_cycle_inspections <- inspections %>%
 
 ```
 
+## Which type of cuisine is more likely to get higher scores (e.g., more violations)?
+
 ```{r}
 library(broom)
 
@@ -97,6 +101,8 @@ cuisine_conf_ints %>%
        y = "Average inspection scores (higher means more violoations)")
 
 ```
+
+## Does the # of locations affect the distribution of score?
 
 ```{r}
 by_dba <- most_recent_cycle_inspections %>% 
@@ -135,6 +141,7 @@ violation_cuisine_counts <- restaurant_inspections %>%
   ungroup() 
 
 violation_cuisine_counts %>% 
+  ## interesting approach to calculate risk 
   mutate(relative_risk = fraction / avg_fraction) %>%
   arrange(desc(relative_risk)) %>%
   filter(violation_description == "Live roaches present in facility's food and/or non-food areas.") 

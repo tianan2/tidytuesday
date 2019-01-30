@@ -22,19 +22,19 @@ theme_set(theme_light())
 
 us_wind_processed <- us_wind %>% 
   ## another way of excludig particular observations
-  filter(!t_state %in% c("AK", "HI", "GU", "PR"))
+  filter(!t_state %in% c("AK", "HI", "GU", "PR")) %>% 
+  mutate(p_year = ifelse(p_year < 0, NA, p_year))
   
 us_wind_processed %>% 
-  group_by(p_name, t_state) %>%
-  filter(p_year > 0) %>% 
-  summarize(year = min(p_year), 
+  group_by(p_name, t_state) %>% 
+  summarize(year = min(p_year, na.rm = T), 
             avg_xlong = mean(xlong, na.rm = T), 
             avg_ylat = mean(ylat, na.rm = T),
             sd_xlong = sd(xlong, na.rm = T), 
             sd_ylat = sd(ylat, na.rm = T), 
             turbines = n()) %>% 
-  ggplot(aes(avg_xlong, avg_ylat, size = turbines)) + 
-  geom_point(aes(color = year)) + 
+  ggplot(aes(avg_xlong, avg_ylat, size = turbines, color = year)) + 
+  geom_point() + 
   borders("state") +
   coord_map() + 
   theme_void()

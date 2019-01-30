@@ -19,26 +19,22 @@ theme_set(theme_light())
 ```
 
 ```{r}
-us_wind %>% 
-  filter(p_year != "-9999") %>% 
-  count(p_year) %>% 
-  ggplot(aes(p_year, n)) + 
-  geom_line()
-
-us_wind %>% 
-  count(t_state, t_county, sort = T)
 
 us_wind_processed <- us_wind %>% 
   ## another way of excludig particular observations
   filter(!t_state %in% c("AK", "HI", "GU", "PR"))
   
 us_wind_processed %>% 
-  group_by(p_name) %>% 
-  summarize(avg_xlong = mean(xlong, na.rm = T), 
-            avg_ylat = mean(ylat, na.rm = T), 
+  group_by(p_name, t_state) %>%
+  filter(p_year > 0) %>% 
+  summarize(year = min(p_year), 
+            avg_xlong = mean(xlong, na.rm = T), 
+            avg_ylat = mean(ylat, na.rm = T),
+            sd_xlong = sd(xlong, na.rm = T), 
+            sd_ylat = sd(ylat, na.rm = T), 
             turbines = n()) %>% 
   ggplot(aes(avg_xlong, avg_ylat, size = turbines)) + 
-  geom_point() + 
+  geom_point(aes(color = year)) + 
   borders("state") +
   coord_map() + 
   theme_void()

@@ -38,6 +38,19 @@ medium_gathered %>%
   summarize(median_claps = median(claps)) %>% 
   arrange(desc(median_claps))
 
+## why do we use median instead of mean?
+medium_datasci %>% 
+  ggplot(aes(claps)) + 
+  geom_histogram() + 
+  scale_x_log10()
+
+medium_datasci %>% 
+  mutate(reading_time = pmin(10, reading_time)) %>% 
+  ggplot(aes(reading_time)) + 
+  geom_histogram() + 
+  scale_x_continuous(breaks = seq(2, 10, 2), 
+                     labels = c(seq(2, 8, 2), "10+"))
+
 
 ```
 

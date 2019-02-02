@@ -76,7 +76,8 @@ medium_words %>%
   head(20) %>% 
   ggplot(aes(word, n)) + 
   geom_col() +
-  coord_flip()
+  coord_flip() + 
+  labs(title = "Most common words in Medium post titles")
   
   
   

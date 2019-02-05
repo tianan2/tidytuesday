@@ -23,16 +23,22 @@ theme_set(theme_light())
 us_wind_processed <- us_wind %>% 
   ## another way of excludig particular observations
   filter(!t_state %in% c("AK", "HI", "GU", "PR")) %>% 
-  mutate(p_year = ifelse(p_year < 0, NA, p_year))
-  
-us_wind_processed %>% 
+  mutate(p_year = ifelse(p_year < 0, NA, p_year), 
+         t_cap = ifelse(t_cap < -8000, NA, t_cap)) %>% 
+  mutate_if(is.numeric, 
+
+wind_project <- us_wind_processed %>% 
   group_by(p_name, t_state) %>% 
   summarize(year = min(p_year, na.rm = T), 
             avg_xlong = mean(xlong, na.rm = T), 
             avg_ylat = mean(ylat, na.rm = T),
             sd_xlong = sd(xlong, na.rm = T), 
             sd_ylat = sd(ylat, na.rm = T), 
+            total_capacity = sum(t_cap),
             turbines = n()) %>% 
+  ungroup()
+
+ 
   ggplot(aes(avg_xlong, avg_ylat, size = turbines, color = year)) + 
   geom_point() + 
   borders("state") +
@@ -40,6 +46,19 @@ us_wind_processed %>%
   theme_void()
 
 ```
+
+## How has turbine capacity changed over time? 
+
+```{r}
+wind_project %>% 
+  group_by(year) %>% 
+  summarize(median_total = median(total_capacity, na.rm = T)) %>% 
+  ggplot(aes(year, median_total)) + 
+  geom_line()
+
+
+```
+
 
 ```{r}
 us_wind %>% 

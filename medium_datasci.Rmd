@@ -53,4 +53,19 @@ medium_datasci %>%
 
 
 ```
+## Text Mining
+
+```{r}
+library(tidytext)
+
+medium_datasci %>% 
+  select(title, subtitle, year, reading_time, claps) %>% 
+  unnest_tokens(word, title) %>% 
+  anti_join(stop_words, by = "word") %>% 
+  count(word, sort = T)
+  
+  
+  
+
+```
 

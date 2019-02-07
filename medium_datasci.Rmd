@@ -16,6 +16,7 @@ library(stringr)
 medium_datasci <- read_csv("https://github.com/rfordatascience/tidytuesday/blob/master/data/2018/2018-12-04/medium_datasci.csv?raw=true") %>% 
   select(-x1)
 
+theme_set(theme_light())
 ```
 
 ```{r}
@@ -58,14 +59,62 @@ medium_datasci %>%
 ```{r}
 library(tidytext)
 
-medium_datasci %>% 
-  select(title, subtitle, year, reading_time, claps) %>% 
+medium_words <- medium_datasci %>% 
+  filter(!is.na(title)) %>% 
+  transmute(post_id = row_number(), title, subtitle, year, reading_time, claps) %>% 
   unnest_tokens(word, title) %>% 
   anti_join(stop_words, by = "word") %>% 
-  count(word, sort = T)
-  
-  
-  
+  filter(str_detect(word, "[a-z]")) %>% 
+  filter(word != "de") 
+
+medium_words %>% 
+  count(word, sort = T) %>% 
+  mutate(word = fct_reorder(word, n)) %>%
+  head(20) %>% 
+  ggplot(aes(word, n)) +
+  geom_col() + 
+  coord_flip() + 
+  labs(title = "Common words in Medium post titles")
 
 ```
+
+```{r}
+medium_words_filtered <- medium_words %>% 
+  add_count(word) %>% 
+  filter(n >= 250)
+
+tag_claps <- medium_words_filtered %>% 
+  group_by(word) %>% 
+  summarize(median_claps = median(claps), 
+            # takes the log of claps to compress the scale
+            geometric_mean_claps = exp(mean(log(claps + 1))) -1, 
+            occurrence = n()) %>%
+  arrange(desc(median_claps)) %>% 
+  ungroup()
+
+## pakackages
+library(widyr)
+library(ggraph)
+library(igraph)
+
+top_word_cors <- medium_words_filtered %>% 
+  select(post_id, word) %>%
+  ## what kind of words tend to appear as a pair?
+  pairwise_cor(word, post_id, sort = T) %>% 
+  head(150)
+
+set.seed(2018)
+
+top_word_cors %>%
+  graph_from_data_frame() %>% 
+  ggraph() + 
+  geom_edge_link() + 
+  geom_node_point() +
+  geom_node_text(aes(label = name), repel = T) + 
+  theme_void()
+
+  
+  
+```
+
 

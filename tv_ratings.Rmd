@@ -131,7 +131,6 @@ first_three_seasons %>%
 
 ```{r}
 
-
 new_data <- crossing(
   year = 1990:2018, 
   season1 = seq(6, 9)

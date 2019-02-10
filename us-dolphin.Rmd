@@ -1,0 +1,51 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+
+dolphin_us <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-12-18/allCetaceanData.csv") %>% 
+  select(-X1) %>% 
+  # transform the type of variables (chr -> integer in the case of year)
+  mutate(birthYear = as.integer(birthYear))
+
+```
+
+```{r}
+library(lubridate)
+
+dolphin_us %>% 
+  filter(status == "Died") %>% 
+  filter(!is.na(birthYear), !is.na(statusDate)) %>% 
+  ## transform the type of variables (year -> integer)
+  mutate(age = year(statusDate) - birthYear) %>% 
+  ggplot(aes(age)) +
+  geom_histogram()
+
+dolphin_us %>%
+  filter(status == "Died") %>% 
+  filter(!is.na(birthYear), !is.na(statusDate)) %>% 
+  ## transform the type of variables (year -> integer)
+  mutate(age = year(statusDate) - birthYear) %>% 
+  group_by(species) %>% 
+  filter(n > 20) %>% 
+  summarize(avg_age = median(age)) %>% 
+  mutate(species = fct_reorder(species, n)) %>% 
+  ggplot(aes(species, avg_age)) +
+  geom_col() +
+  coord_flip()
+
+
+  count(species, sort = T) %>% 
+  
+  
+  
+```
+
+

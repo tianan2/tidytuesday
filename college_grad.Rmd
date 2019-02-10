@@ -1,5 +1,5 @@
 ---
-title: "Collage graduates"
+title: "College graduates"
 author: "Jaehwan Lim"
 date: "January 13, 2019"
 output: html_document

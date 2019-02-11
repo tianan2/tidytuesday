@@ -15,6 +15,8 @@ dolphin_us <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytu
   # transform the type of variables (chr -> integer in the case of year)
   mutate(birthYear = as.integer(birthYear))
 
+theme_set(theme_light())
+
 ```
 
 ```{r}
@@ -41,11 +43,31 @@ dolphin_us %>%
   geom_col() +
   coord_flip()
 
+```
 
-  count(species, sort = T) %>% 
-  
-  
-  
+```{r}
+dolphin_us %>%
+  ggplot(aes(originDate, fill = acquisition)) +
+  geom_histogram()
+
+dolphin_us %>%
+  filter(originDate > "1960-01-01") %>% 
+  count(acquisition, 
+        decade = 5 * (year(originDate) %/% 5)) %>% 
+  ## look at how to fill the annoying gap in the graph
+  complete(decade, acquisition, fill = list(n = 0)) %>% 
+  mutate(acquisition = fct_reorder(acquisition, n, sum)) %>% 
+  group_by(decade) %>% 
+  mutate(prop = n / sum(n)) %>% 
+  ggplot(aes(decade, prop, fill = acquisition)) +
+  geom_area() +
+  geom_vline(linetype = 2, xintercept = 1979) + 
+  scale_y_continuous(labels = scales::percent_format()) +
+  ## also look at a technic of tidying plots
+  theme_minimal() +
+  labs(y = "% of dolphins recorded", 
+       x = "")
+
 ```
 
 

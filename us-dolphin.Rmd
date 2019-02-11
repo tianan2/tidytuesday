@@ -69,5 +69,22 @@ dolphin_us %>%
        x = "")
 
 ```
+### Survival analysis
+
+```{r}
+library(survival)
+
+dolphin_survival <- dolphin_us %>% 
+  filter(status %in% c("Alive", "Died")) %>% 
+  mutate(statusDate = ifelse(status == "Alive", 2017, year(statusDate)), 
+         status = ifelse(status == "Alive", 0, 1), 
+         age = statusDate - birthYear) %>% 
+  filter(!is.na(statusDate)) %>% 
+  select(birthYear, statusDate, status, sex, acquisition, species)
+
+survfit(Surv(birthYear, statusDate, status) ~ 1, dolphin_survival)
+
+
+```
 
 

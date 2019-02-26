@@ -1,0 +1,78 @@
+---
+title: "Untitled"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+theme_set(theme_light())
+
+major_field_raw <- readxl::read_excel("~/Downloads/data_tables/sed17-sr-tab012.xlsx", skip = 3)
+
+major_field <- major_field_raw %>% 
+  rename(field = `Field of study`) %>% 
+  gather(key, value, -field) %>% 
+  mutate(year = as.numeric(ifelse(str_detect(key, "\\.\\."), NA, key)), 
+         type = ifelse(!str_detect(value, "Number|Percent"), NA, value), 
+         value = as.numeric(value)) %>%
+  fill(year, type) %>% 
+  select(-key) %>% 
+  filter(!is.na(value)) %>% 
+  spread(type, value) 
+
+major_field %>% 
+  filter(field == "Psychology and social sciences") %>% 
+  ggplot(aes(year, Number)) +
+  geom_line()
+  
+```
+
+```{r}
+fine_field_raw <- readxl::read_excel("~/Downloads/data_tables/sed17-sr-tab013.xlsx", skip = 3) 
+
+fine_filed <- fine_field_raw %>% 
+  rename(field = 1) %>% 
+  gather(year, number, -field) %>% 
+  mutate(year = as.numeric(year), 
+         number = as.numeric(number)) %>% 
+  filter(!is.na(number))
+
+```
+
+```{r}
+sex_field_raw <- readxl::read_excel("~/Downloads/data_tables/sed17-sr-tab015.xlsx", skip = 3) 
+
+sex <- c("All", "Male", "Female")
+
+sex_field <- sex_field_raw %>% 
+  rename(field = 1) %>% 
+  select(-contains("change")) %>% 
+  gather(year, number, -field) %>% 
+  mutate(field = as.character(fct_recode(field, "All" = "All doctorate recipientsa"))) %>% 
+  mutate(year = as.numeric(year),
+         number = as.numeric(number), 
+         type = ifelse(field %in% sex, field, NA)) %>% 
+  fill(type) %>% 
+  filter(!is.na(number), 
+         !field %in% sex) 
+
+sex_field %>% 
+  filter(type != "All", 
+         field == "Life sciences") %>% 
+  ggplot(aes(year, number, color = type)) +
+  geom_line() + 
+  expand_limits(y = 0)
+   
+  
+  
+
+
+
+```
+

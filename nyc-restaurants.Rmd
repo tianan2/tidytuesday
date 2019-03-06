@@ -82,7 +82,6 @@ by_cuisine <- most_recent_cycle_inspections %>%
             restaurant = n()) %>% 
   arrange(desc(restaurant))
 
-
 cuisine_conf_ints <- most_recent_cycle_inspections %>% 
   add_count(cuisine_description) %>% 
   filter(n > 200) %>% 

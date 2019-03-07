@@ -57,3 +57,28 @@ jobs_gender %>%
   
 ```
 
+```{r}
+## minor category grouping
+by_minor_category_2016 <- jobs_gender %>% 
+  filter(year == 2016) %>% 
+  group_by(major_category, minor_category) %>% 
+  summarize_jobs_gender() %>% 
+  ungroup()
+```
+
+```{r}
+jobs_gender %>%
+  filter(year == 2016) %>% 
+  filter(major_category == "Healthcare Practitioners and Technical") %>% 
+  filter(occupation != "Nurse midwives") %>% 
+  group_by(occupation) %>% 
+  summarize_jobs_gender() %>% 
+  mutate(occupation = fct_reorder(occupation, wage_pct_of_male)) %>% 
+  ggplot(aes(occupation, wage_pct_of_male)) + 
+  geom_col() + 
+  coord_flip()
+  
+  
+  
+```
+

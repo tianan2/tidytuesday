@@ -67,18 +67,26 @@ by_minor_category_2016 <- jobs_gender %>%
 ```
 
 ```{r}
-jobs_gender %>%
+p <- jobs_gender %>%
   filter(year == 2016) %>% 
   filter(major_category == "Healthcare Practitioners and Technical") %>% 
-  filter(occupation != "Nurse midwives") %>% 
-  group_by(occupation) %>% 
-  summarize_jobs_gender() %>% 
-  mutate(occupation = fct_reorder(occupation, wage_pct_of_male)) %>% 
-  ggplot(aes(occupation, wage_pct_of_male)) + 
-  geom_col() + 
-  coord_flip()
+  arrange(desc(wage_percent_of_male)) %>% 
+  ggplot(aes(total_workers, 
+             workers_female / total_workers, 
+             color = total_earnings_female / total_earnings, 
+             label = occupation)) + 
+  geom_point() + 
+  scale_x_log10() + 
+  scale_color_gradient2(low = "red", 
+                        high = "blue", 
+                        midpoint = .85, 
+                        mid = "pink") + 
+  labs(x = "Total # of workers", 
+       y = "% of female workers", 
+       color = "% of female median salary out earnings out of male earnings")
   
-  
+library(plotly)
+  ggplotly(p)
   
 ```
 

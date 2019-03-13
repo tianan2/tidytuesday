@@ -33,6 +33,7 @@ server <- function(input, output) {
      q <- jobs_gender %>%
        filter(year == 2016, 
               total_workers >= 2000) %>% 
+       ## Key point 
        filter(major_category == input$major_category) %>% 
        arrange(desc(wage_percent_of_male)) %>% 
        ggplot(aes(workers_female / total_workers, 

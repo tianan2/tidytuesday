@@ -74,7 +74,7 @@ p <- jobs_gender %>%
   arrange(desc(wage_percent_of_male)) %>% 
   ggplot(aes(total_workers, 
              workers_female / total_workers, 
-             color = total_earnings_female / total_earnings, 
+             color = total_earnings_female / total_earnings_male, 
              label = occupation)) + 
   geom_point() + 
   scale_x_log10() + 
@@ -84,30 +84,53 @@ p <- jobs_gender %>%
                         mid = "pink") + 
   labs(x = "Total # of workers", 
        y = "% of female workers", 
-       color = "% of female median salary out earnings out of male earnings")
+       color = "% of female median salary out earnings out of male earnings") +
+  scale_x_continuous(labels = scales::percent_format()) +
+  scale_y_continuous(labels = scales::percent_format())
   
 library(plotly)
   ggplotly(p)
   
 ```
 ```{r}
-jobs_gender %>%
+q <- jobs_gender %>%
   filter(year == 2016) %>% 
   filter(major_category == "Healthcare Practitioners and Technical") %>% 
   arrange(desc(wage_percent_of_male)) %>% 
   ggplot(aes(workers_female / total_workers, 
-             total_earnings_female / total_earnings,
+             total_earnings_female / total_earnings_male,
              size = total_workers,
-             color = total_earnings_female / total_earnings, 
              label = occupation)) + 
   geom_point() + 
-  scale_x_log10() + 
-  scale_color_gradient2(low = "red", 
-                        high = "blue", 
-                        midpoint = .85, 
-                        mid = "pink") + 
+  scale_size_continuous(range = c(1, 10)) +
   labs(size = "Total # of workers", 
        x = "% of workers reported as female", 
-       y = "% of female median salary out of male")
+       y = "% of female median salary out of male") +
+  scale_x_continuous(labels = scales::percent_format()) +
+  scale_y_continuous(labels = scales::percent_format())
+
+library(plotly)
+ggplotly(q)
+```
+```{r}
+r <- jobs_gender %>%
+  filter(year == 2016, 
+         total_workers >= 2000) %>% 
+  filter(major_category == "Computer, Engineering, and Science") %>% 
+  arrange(desc(wage_percent_of_male)) %>% 
+  ggplot(aes(workers_female / total_workers, 
+             total_earnings_female / total_earnings_male,
+             color = minor_category, 
+             size = total_workers,
+             label = occupation)) + 
+  geom_point() + 
+  scale_size_continuous(range = c(1, 10)) +
+  labs(size = "Total # of workers", 
+       x = "% of workers reported as female", 
+       y = "% of female median salary out of male") +
+  scale_x_continuous(labels = scales::percent_format()) +
+  scale_y_continuous(labels = scales::percent_format())
+
+ggplotly(r)
 ```
 

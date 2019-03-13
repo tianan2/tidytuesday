@@ -4,7 +4,7 @@ author: "Jaehwan Lim"
 date: "January 8, 2019"
 output: html_document
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 ```{r setup, include=FALSE}
@@ -28,7 +28,9 @@ tidytuesday_tweets %>%
   expand_limits(y = 0) +
   labs(x = "Time", 
        y = "# of tweets")
+```
 
+```{r}
 tidytuesday_tweets %>% 
   count(screen_name, sort = T) %>% 
   mutate(screen_name = fct_reorder(screen_name, n)) %>% 

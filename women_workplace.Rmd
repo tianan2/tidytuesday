@@ -40,6 +40,7 @@ summarize_jobs_gender <- function (tbl) {
     mutate(wage_pct_of_male = total_earnings_female / total_earnings_male)
 }
 ```
+
 ```{r}
 jobs_gender %>% 
   group_by(year, major_category) %>% 

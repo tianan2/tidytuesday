@@ -1,0 +1,72 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+multiple_choice_response <- read.csv("kaggle-survey-2017/multipleChoiceResponses.csv")
+```
+
+```{r}
+library(tidyverse)
+
+multiple_choice_response %>% 
+  summarize(number_na = sum(is.na(Country)))
+
+```
+```{r}
+multiple_choice_response %>% 
+  map_df(~ sum(is.na(.)))
+
+```
+```{r}
+multiple_choice_response <- multiple_choice_response %>% 
+  na_if("")
+```
+
+```{r}
+multiple_choice_response <- read_csv("kaggle-survey-2017/multipleChoiceResponses.csv", 
+                                     guess_max = nrow(multiple_choice_response))
+```
+
+```{r}
+colnames(multiple_choice_response)
+```
+```{r}
+multiple_choice_response %>% 
+  select_if(is.numeric) %>% 
+  skimr::skim()
+```
+```{r}
+multiple_choice_response %>% 
+  map_df(~ n_distinct(.)) 
+```
+```{r}
+multiple_choice_response %>% 
+  map_df(~ n_distinct(.)) %>% 
+  gather(question, num_distinct_answers) %>% 
+  arrange(desc(num_distinct_answers))
+```
+```{r}
+multiple_choice_response %>% 
+  count(WorkMethodsSelect, sort = T)
+```
+```{r}
+unnested_workmethods <- multiple_choice_response %>% 
+  count(WorkMethodsSelect, sort = T) %>% 
+  filter(!is.na(WorkMethodsSelect)) %>% 
+  mutate(work_method = str_split(WorkMethodsSelect, ",")) %>% 
+  unnest(work_method) %>% 
+  select(work_method)
+```
+```{r}
+multiple_choice_response %>% 
+  count(WorkMethodsSelect, sort = T) %>% 
+  filter(!is.na(WorkMethodsSelect)) %>%
+  separate_rows(WorkMethodsSelect, sep = ",")
+```
+

@@ -2,7 +2,7 @@
 title: "Untitled"
 output: html_document
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 ```{r setup, include=FALSE}
@@ -14,7 +14,9 @@ library(tidyverse)
 theme_set(theme_light())
 
 major_field_raw <- readxl::read_excel("~/Downloads/data_tables/sed17-sr-tab012.xlsx", skip = 3)
+```
 
+```{r}
 major_field <- major_field_raw %>% 
   rename(field = `Field of study`) %>% 
   gather(key, value, -field) %>% 
@@ -25,12 +27,13 @@ major_field <- major_field_raw %>%
   select(-key) %>% 
   filter(!is.na(value)) %>% 
   spread(type, value) 
+```
 
+```{r}
 major_field %>% 
   filter(field == "Psychology and social sciences") %>% 
   ggplot(aes(year, Number)) +
   geom_line()
-  
 ```
 
 ```{r}
@@ -70,10 +73,7 @@ major_field <- readxl::read_excel("~/Downloads/data_tables/sed17-sr-tab015.xlsx"
   unique() %>% 
   setdiff(broad_field)
   
-
-
 ```
-
 
 ```{r}
 sex_field_raw <- readxl::read_excel("~/Downloads/data_tables/sed17-sr-tab015.xlsx", skip = 3) 
@@ -91,7 +91,9 @@ recipients_year_sex <- sex_field_raw %>%
   gather(year, number, -field, -broad_field, -sex) %>% 
   mutate(year = as.numeric(year),
          number = as.numeric(number)) 
+```
 
+```{r}
 recipients_year_sex %>% 
   filter(sex != "All", 
          broad_field == "Psychology and social sciences") %>% 
@@ -99,8 +101,8 @@ recipients_year_sex %>%
   geom_line() + 
   facet_wrap(~ field, scales = "free_y") +
   expand_limits(y = 0)
-
-
+```
+```{r}
 recipients_year_sex %>% 
   spread(sex, number) %>% 
   mutate(pct_male = Male / All) %>% 

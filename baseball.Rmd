@@ -1,0 +1,57 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(janitor)
+
+baseball <- read_csv("baseball.csv") %>% clean_names()
+```
+
+```{r}
+baseball %>% 
+  group_by(league, year) %>% 
+  summarize(avg_obp = mean(obp), 
+            avg_slg = mean(slg), 
+            avg_ba = mean(ba)) %>% 
+  gather(metric, value, -league, -year) %>% 
+  ggplot(aes(year, value, color = metric)) + 
+  geom_line() + 
+  facet_wrap(~ league)
+```
+```{r}
+baseball %>% 
+  group_by(league, year) %>% 
+  summarize(avg_oobp = mean(obp), 
+            avg_oslg = mean(slg)) %>% 
+  gather(metric, value, -league, -year) %>% 
+  ggplot(aes(year, value, color = metric)) + 
+  geom_line() + 
+  facet_wrap(~ league)
+```
+
+
+```{r}
+baseball_ops <- baseball %>% 
+  mutate(ops = obp + slg, 
+         oops = oobp + oslg) 
+
+glm(data = baseball_ops, playoffs ~ obp + slg, family = binomial) %>% 
+  summary()
+
+glm(data = baseball_ops, playoffs ~ obp + slg + ba, family = binomial) %>% 
+  summary()
+
+glm(data = baseball_ops, playoffs ~ oobp + oslg, family = binomial) %>% 
+  summary()
+
+glm(data = baseball_ops, playoffs ~ oops, family = binomial) %>% 
+  summary()
+```
+

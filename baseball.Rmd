@@ -54,4 +54,12 @@ glm(data = baseball_ops, playoffs ~ oobp + oslg, family = binomial) %>%
 glm(data = baseball_ops, playoffs ~ oops, family = binomial) %>% 
   summary()
 ```
+```{r}
+baseball %>% 
+  mutate(win_percent = w / g, 
+         run_support = rs / ra) %>% 
+  ggplot(aes(run_support, win_percent)) + 
+  geom_point() +
+  geom_smooth(method = "lm")
+```
 

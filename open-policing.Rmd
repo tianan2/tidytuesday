@@ -9,13 +9,36 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r message=FALSE}
 library(tidyverse)
+theme_set(theme_light())
 
 policing_raw <- readr::read_csv("https://raw.githubusercontent.com/5harad/openpolicing/master/results/data_for_figures/combined_data.csv")
 
 ```
 
+## EDA
 ```{r}
-policing_raw %>% filter(state == "CO") %>% 
-  count(location, sort = T)
+by_driver_race <-policing_raw %>% 
+  filter(stop_rate < 1) %>% 
+  spread(driver_race, stop_rate) %>% 
+  gather(minority, minority_stop_rates, Black, Hispanic) %>% 
+  fill(minority, minority_stop_rates) %>% 
+  filter(!is.na(White)) 
+```
+
+```{r}
+by_driver_race %>% 
+  ggplot(aes(White, minority_stop_rates, size = stops_per_year)) + 
+  geom_point(alpha = 0.5) + 
+  geom_abline(intercept = 0, slope = 1, color = "Red") +
+  facet_wrap(~ minority) +
+  labs(caption = "Figure 1: Stop rates of black and hispanic drivers relative to whites, disaggregated by location. Each point in the plot corresponds to either the county or similar geographic unit in which the stop was made. We find that hispanics are stopped at similar rates as whites in most jurisdictions; black drivers, however, are stopped more often than whites in over 75% of the locations we consider.") +
+  theme(plot.caption = element_text(hjust = 0))
+```
+
+```{r}
+by_driver_race %>% 
+  mutate(prop = ifelse(minority_stop_rates > White, 1, 0)) %>% 
+  group_by(minority) %>% 
+  summarize(prop_stop_rates = mean(prop))
 ```
 

@@ -110,7 +110,30 @@ board_games_data %>%
   ggplot(aes(value, average_rating)) + 
   geom_boxplot() + 
   coord_flip()
-  
-  
+```
+```{r}
+features <- categorical_variables %>% 
+  unite(feature, type, value) %>% 
+  add_count(feature) %>% 
+  filter(n >= 50) 
+```
+
+```{r}
+library(glmnet)
+library(tidytext)
+library(Matrix)
+
+## Predictor
+features_matrix <- features %>% 
+  cast_sparse(game_id, feature) 
+
+## What I am predicting
+ratings <- board_games$average_rating[match(rownames(features_matrix), board_games$game_id)]
+
+lasso_fit <- glmnet(features_matrix, ratings)
+
+lasso_fit %>% tidy()
+
+## what is a step? increasing value of the penalty parameter of lambda
 ```
 

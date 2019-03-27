@@ -1,0 +1,100 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(modelr)
+library(broom)
+
+```
+
+```{r}
+ggplot(sim1, aes(x, y)) +
+  geom_point()
+```
+```{r}
+means <- vector("double", ncol(mtcars))
+
+for (i in seq_along(mtcars)) {
+  means[[i]] <- mean(mtcars[[i]], na.rm = TRUE)
+}
+
+medians <- vector("double", ncol(mtcars))
+
+for (i in seq_along(mtcars)) {
+  medians[[i]] <- median(mtcars[[i]], na.rm = TRUE)
+}
+
+means <- map_dbl(mtcars, mean)
+medians <- map_dbl(mtcars, median)
+
+```
+```{r}
+df <- tibble(
+  a = rnorm(10), 
+  b = rnorm(10), 
+  c = rnorm(10), 
+  d = rnorm(10)
+)
+
+rescale01 <- function(x) {
+  rng <- range(x, na.rm = TRUE)
+  (x - rng[1]) / (rng[2] - rng[1])
+}
+
+df$a <- rescale01(df$a)
+df$b <- rescale01(df$b)
+df$c <- rescale01(df$c)
+df$d <- rescale01(df$d)
+
+df
+
+class(df)
+```
+```{r}
+df <- tibble(
+  a = rnorm(10), 
+  b = rnorm(10), 
+  c = rnorm(10), 
+  d = rnorm(10)
+)
+
+rescale01 <- function(x) {
+  rng <- range(x, na.rm = TRUE)
+  (x - rng[1]) / (rng[2] - rng[1])
+}
+
+for (i in seq_along(df)) {
+  df[[i]] <- rescale01(df[[i]])
+}
+
+df
+
+class(df)
+```
+```{r}
+df <- tibble(
+  a = rnorm(10), 
+  b = rnorm(10), 
+  c = rnorm(10), 
+  d = rnorm(10)
+)
+
+rescale01 <- function(x) {
+  rng <- range(x, na.rm = TRUE)
+  (x - rng[1]) / (rng[2] - rng[1])
+}
+
+df <- df %>% map(rescale01)
+
+df
+
+class(df)
+```
+

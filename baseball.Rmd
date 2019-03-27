@@ -62,4 +62,11 @@ baseball %>%
   geom_point() +
   geom_smooth(method = "lm")
 ```
+```{r}
+library(Lahman)
+
+Batting %>% 
+  filter(yearID > 1950) 
+
+```
 

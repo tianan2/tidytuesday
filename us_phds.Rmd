@@ -24,7 +24,7 @@ major_field <- major_field_raw %>%
          type = ifelse(!str_detect(value, "Number|Percent"), NA, value), 
          value = as.numeric(value)) %>%
   fill(year, type) %>% 
-  select(-key) %>% 
+  select(field, year, type, value) %>% 
   filter(!is.na(value)) %>% 
   spread(type, value) 
 ```

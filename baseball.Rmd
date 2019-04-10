@@ -1,6 +1,8 @@
 ---
 title: "Untitled"
 output: html_document
+editor_options: 
+  chunk_output_type: inline
 ---
 
 ```{r setup, include=FALSE}
@@ -64,9 +66,108 @@ baseball %>%
 ```
 ```{r}
 library(Lahman)
+library(naniar)
 
 Batting %>% 
   filter(yearID > 1950) 
 
+Salaries %>% 
+  group_by(lgID) %>% 
+  summarize(avg_salary = mean(salary, na.rm = TRUE), 
+            median_salary = median(salary, na.rm = TRUE)) %>% 
+
+```
+
+## Salary distribution
+
+```{r}
+Salaries %>% 
+  group_by(yearID) %>% 
+  summarize(avg_salary = mean(salary, na.rm = TRUE), 
+            median_salary = median(salary, na.rm = TRUE)) %>% 
+  gather(metric, value, avg_salary, median_salary) %>% 
+  ggplot(aes(yearID, value, color = metric)) +
+  geom_line()
+  
+```
+
+```{r}
+Salaries %>% 
+  group_by(yearID, lgID) %>% 
+  summarize(avg_salary = mean(salary, na.rm = TRUE), 
+            median_salary = median(salary, na.rm = TRUE)) %>% 
+  ggplot(aes(yearID, median_salary, color = lgID)) +
+  geom_line()
+```
+
+```{r}
+Salaries %>% 
+  mutate(decade = 10 * (yearID %/% 10)) %>% 
+  group_by(decade, teamID) %>% 
+  summarize(avg_salary = mean(salary)) %>% 
+  filter(decade == 2010) %>% 
+  arrange(desc(avg_salary))
+```
+
+```{r}
+pitching_salary <- Pitching %>% filter(yearID >= 1985) %>% 
+  left_join(Salaries, by = c("playerID", "yearID")) 
+
+pitching_salary %>% 
+  group_by(yearID) %>% 
+  summarize(avg_salary = mean(salary, na.rm = TRUE), 
+            median_salary = median(salary, na.rm = TRUE)) %>%
+  gather(metric, value, avg_salary, median_salary) %>% 
+  ggplot(aes(yearID, value, color = metric)) +
+  geom_line()
+```
+```{r}
+teams <- Teams %>% 
+  filter(yearID >= 1901 & lgID %in% c("AL", "NL")) %>%
+  group_by(yearID, teamID) %>%
+  mutate(TB = H + X2B + 2 * X3B + 3 * HR,
+         WinPct = W/G,
+         rpg = R/G,
+         hrpg = HR/G,
+         tbpg = TB/G,
+         kpg = SO/G,
+         k2bb = SO/BB,
+         whip = 3 * (H + BB)/IPouts)
+
+yrPlot <- function(yvar, label)
+{
+    ggplot(teams, aes_string(x = "yearID", y = yvar)) +
+       geom_point(size = 0.5) +
+       geom_smooth(method="loess") +
+       labs(x = "Year", y = paste(label, "per game"))
+}
+
+yrPlot("rpg", "Runs")
+
+yrPlot("hrpg", "Home runs")
+
+yrPlot("kpg", "Strikeouts")
+
+yrPlot("ERA", "ERA")
+
+yrPlot("SB", "Stolen Bases")
+```
+```{r}
+teamsal <- Salaries %>%
+                group_by(yearID, teamID) %>%
+                summarise(Salary = sum(salary, na.rm = TRUE)) %>%
+                select(yearID, teamID, Salary)
+
+teamsSal <- teams %>%
+                filter(yearID >= 1985) %>%
+                left_join(teamsal, by = c("yearID", "teamID")) %>%
+                select(yearID, teamID, attendance, Salary, WinPct) %>%
+                as.data.frame(.)
+
+motion2 <- gvisMotionChart(teamsSal, idvar="teamID", timevar="yearID",
+  xvar="attendance", yvar="salary", sizevar="WinPct",
+	chartid="gvisTeamsSal", options=list(width=700, height=600))
+
+plot(motion2)
 ```
 

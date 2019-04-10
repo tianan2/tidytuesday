@@ -1,0 +1,41 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE}
+library(tidyverse)
+library(lubridate)
+
+seattle_pets <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-03-26/seattle_pets.csv") %>% 
+  mutate(license_issue_date = mdy(license_issue_date)) %>% 
+  rename(animal_name = animals_name)
+
+```
+
+## Are some animal names associated with any particular breeds?
+
+```{r}
+name_breed_counts <- seattle_pets %>% 
+  filter(species == "Dog") %>%
+  group_by(animal_name) %>%
+  mutate(name_total = n()) %>% 
+  group_by(primary_breed) %>% 
+  mutate(breed_total = n()) %>% 
+  ungroup() %>% 
+  count(animal_name, primary_breed, name_total, breed_total)
+  
+name_breed_counts %>% 
+  filter(name_total >= 200, 
+         breed_total >= 200) %>% 
+  mutate(percent_of_breed = n / breed_total, 
+         percent_overall = name_total / nrow(name_breed_counts)) %>% 
+  mutate(overrepresented_ratio = percent_of_breed / percent_overall) %>% 
+  arrange(desc(overrepresented_ratio))
+  
+```
+

@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r cache = TRUE}
 library(tidyverse)
+theme_set(theme_light())
 
 prison_summary <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-01-22/prison_summary.csv")
 
@@ -77,12 +78,56 @@ map_data("state") %>% tbl_df()
 ```{r}
 map_data("county") %>% tbl_df()
 
-prison_population_2015 %>% 
+county_overall_2015 <- prison_population_2015 %>% 
+  filter(pop_category == "Total") %>% 
+  mutate(region = str_to_lower(state.name[match(state, state.abb)]), 
+         subregion = str_remove(str_to_lower(county_name), " county| parish| city"), 
+         incarceration_rate = prison_population / population)
+
+library(scales)
+
+county_overall_2015 %>% 
+  filter(incarceration_rate < .05) %>%
+  right_join(map_data("county"), c("region", "subregion")) %>% 
+  ggplot(aes(long, lat, group = group, fill = incarceration_rate)) +
+  geom_polygon() +
+  theme_map() +
+  coord_map() + 
+  scale_fill_gradient2(low = "blue", high = "red", midpoint = .01, 
+                       labels = percent_format())
+  
+```
+
+```{r}
+# Removed a county with an unusually high incarceration rate throughout the history
+county_overall <- prison_population %>% 
   filter(pop_category == "Total") %>% 
   mutate(region = str_to_lower(state.name[match(state, state.abb)]), 
          subregion = str_remove(str_to_lower(county_name), " county| parish| city"), 
          incarceration_rate = prison_population / population) %>% 
-  left_join(map_data("county"), c("region", "subregion"))
-  
+  filter(!is.na(incarceration_rate), 
+         county_name != "McPherson County") 
+         
+library(gganimate)
+library(gifski)
+library(png)
+
+county_overall %>%
+  filter(year %% 10 == 0) %>% 
+  right_join(map_data("county"), c("region", "subregion")) %>% 
+  ggplot(aes(long, lat, group = group, fill = incarceration_rate)) +
+  geom_polygon() +
+  theme_map() +
+  coord_map() +
+  transition_manual(year)
+```
+
+```{r}
+library(mapdata)
+
+ggplot(map("china", plot=F), aes(long, lat, group=group, fill=region)) + 
+  geom_path(show.legend = F) +
+  ggtitle("Map of China")
+
 ```
 

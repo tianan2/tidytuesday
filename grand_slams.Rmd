@@ -1,0 +1,51 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE}
+library(tidyverse)
+theme_set(theme_light())
+
+player_dob <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-04-09/player_dob.csv")
+
+# Removing some players in 1977 who were duplicated
+grand_slams <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-04-09/grand_slams.csv") %>% 
+  arrange(year, grand_slam, name, gender) %>% 
+  distinct(year, grand_slam, name, .keep_all = TRUE)
+
+grand_slam_timeline <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-04-09/grand_slam_timeline.csv")
+
+```
+
+```{r}
+grand_slams %>% 
+  count(name, grand_slam, sort = TRUE, name = "n_each") %>%
+  add_count(name, wt = n_each) %>% 
+  filter(n >= 8) %>% 
+  mutate(name = fct_reorder(name, n_each, sum)) %>% 
+  ggplot(aes(name, n_each, fill = grand_slam)) +
+  geom_col() + 
+  coord_flip()
+```
+
+```{r}
+grandslam_age <- player_dob %>% 
+  select(name, date_of_birth) %>% 
+  inner_join(grand_slams, by = "name") %>% 
+  mutate(age = as.numeric(difftime(tournament_date, date_of_birth, units = "days")) / 365.25)
+
+grandslam_age %>% 
+  ggplot(aes(age)) +
+  geom_histogram()
+```
+The median age of a Grand Slam winner (1968-present) is `r median(grand_slams_age$age)`. Does it differ between men and women?
+
+```{r}
+
+```
+

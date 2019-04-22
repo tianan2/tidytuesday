@@ -1,0 +1,72 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+
+brexit <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-04-16/brexit.csv")
+
+corbyn <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-04-16/corbyn.csv")
+
+dogs <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-04-16/dogs.csv")
+
+eu_balance <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-04-16/eu_balance.csv")
+
+pensions <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-04-16/pensions.csv")
+
+trade <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-04-16/trade.csv")
+
+women_research <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-04-16/women_research.csv")
+
+```
+
+```{r}
+library(lubridate)
+
+brexit %>% mutate(date = dmy(date), 
+                  percent_responding_right = percent_responding_right / 100, 
+                  percent_responding_wrong = percent_responding_wrong / 100) %>% 
+  rename(right = percent_responding_right, wrong = percent_responding_wrong) %>% 
+  gather(answer, value, -date) %>% 
+  ggplot(aes(date, value, color = answer)) + 
+  geom_point() + 
+  geom_smooth(method = "loess", se = FALSE) + 
+  scale_y_continuous(limits = c(0.38, 0.5), 
+                     breaks = seq(0.38, 0.5, 0.02), 
+                     labels = scales::percent)
+```
+
+```{r}
+options(scipen = 999)
+
+trade %>% ggplot(aes(year, trade_deficit)) + 
+  geom_col(fill = "blue")
+```
+
+```{r}
+library(ggrepel)
+
+pensions %>% ggplot(aes(pop_65_percent, gov_spend_percent_gdp)) + 
+  geom_point(alpha = 0.4, color = "red", size = 3) +
+  geom_text_repel(filter(pensions, country %in% c("Japan", 
+                                               "Italy", 
+                                               "Greece", 
+                                               "France", 
+                                               "United States",
+                                               "Turkey",
+                                               "South Korea", 
+                                               "Brazil", 
+                                               "Mexico")), 
+                  mapping = aes(label = country)) +
+  annotate(geom = "text", x = 7, y = 14, 
+           label = "A surprisingly \n high rate given \n the aged population.", 
+           hjust = 0) 
+
+```
+

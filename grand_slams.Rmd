@@ -1,13 +1,15 @@
 ---
 title: "Untitled"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r message=FALSE}
+```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 theme_set(theme_light())
 
@@ -43,9 +45,60 @@ grandslam_age %>%
   ggplot(aes(age)) +
   geom_histogram()
 ```
-The median age of a Grand Slam winner (1968-present) is `r median(grand_slams_age$age)`. Does it differ between men and women?
+
+The median age of a Grand Slam winner (1968-present) is `r median(grandslam_age$age)`. Does it differ between men and women?
 
 ```{r}
+grandslam_age %>% 
+  ggplot(aes(age, fill = gender)) +
+  geom_histogram(position = "identity", alpha = 0.75)
+```
+```{r}
+grandslam_age %>% 
+  mutate(decade = 10 * (year %/% 10)) %>% 
+  ggplot(aes(decade, age, fill = gender, group = interaction(gender, decade))) +
+  geom_boxplot()
+```
 
+Hard to make a conclusion on the average age of a winner except it looks like it's increased in the last decade. 
+
+```{r}
+grandslam_age %>% 
+  mutate(decade = 10 * (year %/% 10)) %>% 
+  filter(decade >= 1960) %>% 
+  group_by(decade, gender, name) %>% 
+  summarize(age = mean(age), 
+            wins = n()) %>% 
+  summarize(age = mean(age), 
+            players = n()) %>% 
+  ggplot(aes(decade, age, color = gender)) +
+  geom_line() + 
+  labs(title = "Average age of Grand Slam winners over time", 
+       subtitle = "Each player was counted only once", 
+       x = "Decade", 
+       y = "Average age")
+
+```
+
+```{r}
+tournaments <- grand_slams %>% mutate(grand_slam = str_to_title(str_replace(grand_slam, "_", " ")),
+                       grand_slam = str_replace(grand_slam, "Us", "US")) %>%
+  select(year, tournament = grand_slam, tournament_date, gender)
+
+time_processed <- grand_slam_timeline %>% 
+  inner_join(tournaments, by = c("year", "tournament", "gender")) %>% 
+  arrange(player, tournament_date) %>% 
+  filter(outcome != "Absent", 
+         !str_detect(outcome, "Qualif")) %>% 
+  group_by(player) %>% 
+  mutate(rolling_play_count = row_number(), 
+         rolling_won_count = cumsum(outcome == "Won"), 
+         rolling_finals_count = cumsum(outcome %in% c("Won", "Finalist"))) %>% 
+  ungroup()
+
+time_processed %>% 
+  filter(outcome %in% c("Won", "Finalist")) %>% 
+  arrange(tournament_date)
+  
 ```
 

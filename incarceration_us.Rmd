@@ -123,6 +123,18 @@ county_overall %>%
 ```
 
 ```{r}
+county_overall %>%
+  filter(region == "texas") %>% 
+  right_join(map_data("county"), c("region", "subregion")) %>%
+  ggplot(aes(long, lat, group = group, fill = incarceration_rate)) +
+  geom_polygon() +
+  theme_map() +
+  coord_map() +
+  transition_manual(year)
+```
+
+
+```{r}
 library(mapdata)
 
 ggplot(map("china", plot=F), aes(long, lat, group=group, fill=region)) + 

@@ -1,0 +1,47 @@
+---
+title: "Untitled"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+theme_set(theme_light())
+
+bird_collisions <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-04-30/bird_collisions.csv")
+mp_light <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-04-30/mp_light.csv")
+```
+
+```{r}
+bird_collisions %>% 
+  ggplot(aes(date, fill = locality)) + 
+  geom_histogram()
+```
+
+```{r}
+bird_collisions <- bird_collisions %>% 
+  left_join(mp_light, by = "date")
+
+bird_collisions %>% 
+  gather(category, value, -date, -light_score) %>% 
+  count(category, value, light_score_missing = is.na(light_score)) %>% 
+  group_by(category) %>% 
+  top_n(16, n) %>% 
+  ungroup() %>% 
+  mutate(value = fct_reorder(value, n, sum), 
+         category = fct_reorder(category, -n)) %>% 
+  ggplot(aes(value, n, fill = light_score_missing)) + 
+  geom_col() +
+  coord_flip() +
+  facet_wrap(~ category, scales = "free_y") + 
+  labs(x = " ", 
+       y = "# of collisions", 
+       title = "Category breakdowns of collisions")
+
+```
+

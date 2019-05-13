@@ -1,0 +1,44 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+theme_set(theme_light())
+options(scipen = 999)
+
+student_ratio <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-05-07/student_teacher_ratio.csv")
+```
+
+```{r}
+student_teacher_ratio_2015 <- student_ratio %>% 
+  filter(indicator == "Primary Education", 
+         year == "2015",
+         !is.na(student_ratio)) 
+
+student_teacher_ratio_2015 %>% 
+  arrange(desc(student_ratio)) %>% 
+  slice(c(1:10, seq(n() - 10, n()))) %>% 
+  mutate(country = fct_reorder(country, student_ratio)) %>% 
+  ggplot(aes(country, student_ratio)) + 
+  geom_point() +
+  coord_flip() + 
+  expand_limits(y = 0) +
+  labs(title = "Figure. Countries with the highest and lowest student/teacher ratio",
+       x = "", 
+       y = "Student/teacher ratio (primary education)")
+```
+
+```{r}
+library(WDI)
+
+WDIsearch("gdp per capita")
+
+WDI(indicator = "NY.GDP.PCAP.CD", start = 2015, end = 2015, extra = TRUE)
+```
+

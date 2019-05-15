@@ -37,8 +37,36 @@ student_teacher_ratio_2015 %>%
 ```{r}
 library(WDI)
 
-WDIsearch("gdp per capita")
+WDIsearch("^Population") %>% 
+  as.data.frame() %>% 
+  tbl_df() %>% 
+  filter(str_detect(name, "total"))
+```
 
-WDI(indicator = "NY.GDP.PCAP.CD", start = 2015, end = 2015, extra = TRUE)
+```{r}
+gdp_per_capita <- WDI(indicator = "NY.GDP.PCAP.CD", start = 2015, end = 2015, extra = TRUE) %>% 
+  tbl_df() %>% 
+  transmute(country_code = as.character(iso3c), 
+         gdp_per_capita = NY.GDP.PCAP.CD)
+
+population_total <- WDI(indicator = "SP.POP.TOTL", start = 2015, end = 2015, extra = TRUE) %>% 
+  tbl_df() 
+  transmute(country_code = as.character(iso3c), 
+         gdp_per_capita = NY.GDP.PCAP.CD)
+```
+
+```{r}
+student_teacher_ratio_2015 %>% 
+  ggplot(aes(student_ratio)) +
+  geom_histogram() +
+  scale_x_log10()
+
+student_teacher_ratio_2015 %>% 
+  inner_join(gdp_per_capita, by = "country_code") %>% 
+  ggplot(aes(gdp_per_capita, student_ratio)) +
+  geom_point() + 
+  scale_x_log10() + 
+  scale_y_log10() + 
+  geom_text(aes(label = country), hjust = 1, vjust = 1, check_overlap = TRUE)
 ```
 

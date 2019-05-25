@@ -37,20 +37,20 @@ student_teacher_ratio_2015 %>%
 ```{r}
 library(WDI)
 
-WDIsearch("^Population") %>% 
+WDIsearch("police") %>% 
   as.data.frame() %>% 
-  tbl_df() %>% 
-  filter(str_detect(name, "total"))
+  tbl_df() 
 ```
 
+# Administering indicators
 ```{r}
-indicators_raw <- WDI(indicator = c("NY.GDP.PCAP.CD", "SP.POP.TOTL"), 
+indicators_raw <- WDI(indicator = c("NY.GDP.PCAP.CD", "SP.POP.TOTL", "SE.SEC.ENRR"), 
                   start = 2015, end = 2015, extra = TRUE) %>% 
   tbl_df()
 
 indicators <- indicators_raw %>% 
   select(country_code = iso3c, 
-         NY.GDP.PCAP.CD:SP.POP.TOTL, 
+         NY.GDP.PCAP.CD:SE.SEC.ENRR, 
          region) %>% 
   mutate(country_code = as.character((country_code)))
 
@@ -81,6 +81,44 @@ student_teacher_ratio_2015 %>%
 
 # Primary education VS Secondary education
 ```{r}
+student_ratio %>% 
+  filter(year == "2015", 
+         indicator %in% c("Primary Education", "Secondary Education"), 
+         !is.na(student_ratio)) %>% 
+  group_by(country_code) %>% 
+  filter(n() == 2) %>% 
+  ungroup() %>% 
+  inner_join(indicators, by = "country_code") %>% 
+  arrange(desc(SP.POP.TOTL)) %>% 
+  ggplot(aes(NY.GDP.PCAP.CD, student_ratio, color = region)) +
+  geom_point(aes(size = SP.POP.TOTL)) + 
+  scale_x_log10() + 
+  scale_y_log10() + 
+  scale_size_continuous(labels = scales::comma_format()) +
+  geom_text(aes(label = country), hjust = 1, vjust = 1, check_overlap = TRUE) +
+  facet_wrap(~ indicator) +
+  labs(x = "GDP per capita", 
+       y = "Student/teacher ratio", 
+       title = "GDP per capita and student/teacher ratio are negatively correlated", 
+       subtitle = "In 2015",
+       color = "Region", 
+       size = "Population")
+```
+# Secondary enrollment VS Student/teacher ratio
 
+```{r}
+student_ratio_second_enrollment <- student_ratio %>% 
+  filter(year == "2015", 
+         indicator == "Secondary Education", 
+         !is.na(student_ratio)) %>% 
+  inner_join(indicators, by = "country_code") 
+
+student_ratio_second_enrollment%>% 
+  ggplot(aes(SE.SEC.ENRR, student_ratio)) +
+  geom_point()
+
+lm(student_ratio ~ SE.SEC.ENRR, data = student_ratio_second_enrollment) %>% 
+  summary()
+  
 ```
 

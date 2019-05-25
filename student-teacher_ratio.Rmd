@@ -17,7 +17,7 @@ student_ratio <- readr::read_csv("https://raw.githubusercontent.com/rfordatascie
 
 ```{r}
 student_teacher_ratio_2015 <- student_ratio %>% 
-  filter(indicator == "Primary Education", 
+  filter(indicator == c("Primary Education"), 
          year == "2015",
          !is.na(student_ratio)) 
 
@@ -44,15 +44,16 @@ WDIsearch("^Population") %>%
 ```
 
 ```{r}
-gdp_per_capita <- WDI(indicator = "NY.GDP.PCAP.CD", start = 2015, end = 2015, extra = TRUE) %>% 
-  tbl_df() %>% 
-  transmute(country_code = as.character(iso3c), 
-         gdp_per_capita = NY.GDP.PCAP.CD)
+indicators_raw <- WDI(indicator = c("NY.GDP.PCAP.CD", "SP.POP.TOTL"), 
+                  start = 2015, end = 2015, extra = TRUE) %>% 
+  tbl_df()
 
-population_total <- WDI(indicator = "SP.POP.TOTL", start = 2015, end = 2015, extra = TRUE) %>% 
-  tbl_df() 
-  transmute(country_code = as.character(iso3c), 
-         gdp_per_capita = NY.GDP.PCAP.CD)
+indicators <- indicators_raw %>% 
+  select(country_code = iso3c, 
+         NY.GDP.PCAP.CD:SP.POP.TOTL, 
+         region) %>% 
+  mutate(country_code = as.character((country_code)))
+
 ```
 
 ```{r}
@@ -62,11 +63,24 @@ student_teacher_ratio_2015 %>%
   scale_x_log10()
 
 student_teacher_ratio_2015 %>% 
-  inner_join(gdp_per_capita, by = "country_code") %>% 
-  ggplot(aes(gdp_per_capita, student_ratio)) +
-  geom_point() + 
+  inner_join(indicators, by = "country_code") %>% 
+  arrange(desc(SP.POP.TOTL)) %>% 
+  ggplot(aes(NY.GDP.PCAP.CD, student_ratio, color = region)) +
+  geom_point(aes(size = SP.POP.TOTL)) + 
   scale_x_log10() + 
   scale_y_log10() + 
-  geom_text(aes(label = country), hjust = 1, vjust = 1, check_overlap = TRUE)
+  scale_size_continuous(labels = scales::comma_format()) +
+  geom_text(aes(label = country), hjust = 1, vjust = 1, check_overlap = TRUE) +
+  labs(x = "GDP per capita", 
+       y = "Student/teacher ratio", 
+       title = "GDP per capita and student/teacher ratio are negatively correlated", 
+       subtitle = "In 2015",
+       color = "Region", 
+       size = "Population")
+```
+
+# Primary education VS Secondary education
+```{r}
+
 ```
 

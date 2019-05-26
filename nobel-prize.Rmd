@@ -1,0 +1,53 @@
+---
+title: "Untitled"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+library(tidyverse)
+library(lubridate)
+theme_set(theme_light())
+options(scipen = 999)
+
+nobel_winners <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-05-14/nobel_winners.csv") %>% distinct(prize_year, full_name, .keep_all = TRUE) %>% mutate(decade = 10 * (prize_year %/% 10), age = prize_year - year(birth_date))
+
+nobel_winner_all_pubs <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-05-14/nobel_winner_all_pubs.csv")
+```
+
+# Number of winners over time across category
+```{r}
+nobel_winners %>% 
+  group_by(category, decade) %>%
+  summarize(winners = n(), 
+            winners_per_year = winners / n_distinct(prize_year)) %>% 
+  ggplot(aes(decade, winners_per_year, color = category)) +
+  geom_line()
+```
+
+# Gender distribution over time across category
+```{r}
+nobel_winners %>% 
+  count(category, 
+        decade, 
+        gender = coalesce(gender, laureate_type)) %>% 
+  ggplot(aes(decade, n, fill = gender)) +
+  geom_col() + 
+  facet_wrap(~ category)
+```
+
+# Age distribution over time across category
+```{r}
+nobel_winners %>% 
+  group_by(decade, category) %>%
+  summarize(average_age = mean(age, na.rm = TRUE), 
+            median_age = median(age, na.rm = TRUE)) %>% 
+  ggplot(aes(decade, average_age, color = category)) +
+  geom_line()
+```
+

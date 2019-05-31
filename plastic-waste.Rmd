@@ -1,0 +1,64 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(janitor)
+library(scales)
+theme_set(theme_light())
+options(scipen = 999)
+
+coast_vs_waste <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-05-21/coastal-population-vs-mismanaged-plastic.csv") %>% clean_names()
+
+mismanaged_vs_gdp <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-05-21/per-capita-mismanaged-plastic-waste-vs-gdp-per-capita.csv") %>% clean_names()
+
+waste_vs_gdp <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-05-21/per-capita-plastic-waste-vs-gdp-per-capita.csv") %>% clean_names()
+
+```
+
+```{r}
+coast_vs_waste %>% summarize_all(~ mean(is.na(.)))
+
+coast_vs_waste_2010 <- coast_vs_waste %>% 
+  filter(!is.na(coastal_population)) %>% 
+  rename(country = entity, country_code = code) %>% 
+  select(-year)
+
+mismanaged_vs_gdp_2010 <- mismanaged_vs_gdp %>% 
+  filter(!is.na(per_capita_mismanaged_plastic_waste_kilograms_per_person_per_day)) %>% 
+  rename(country = entity, 
+         country_code = code, 
+         per_capita_mismanaged_plastic_waste = per_capita_mismanaged_plastic_waste_kilograms_per_person_per_day) %>% 
+  select(-year, -total_population_gapminder, -gdp_per_capita_ppp_constant_2011_international_rate)
+
+waste_vs_gdp_2010 <- waste_vs_gdp %>% 
+  filter(!is.na(per_capita_plastic_waste_kilograms_per_person_per_day)) %>% 
+  rename(country = entity, 
+         country_code = code, 
+         per_capita_plastic_waste = per_capita_plastic_waste_kilograms_per_person_per_day, 
+         gdp_per_capita = gdp_per_capita_ppp_constant_2011_international_constant_2011_international) %>%
+  select(-year, -total_population_gapminder)
+
+plastic_waste <- coast_vs_waste_2010 %>% 
+  left_join(mismanaged_vs_gdp_2010, by = c("country", "country_code")) %>% 
+  left_join(waste_vs_gdp_2010, by = c("country", "country_code"))
+  
+```
+
+```{r}
+plastic_waste %>% 
+  filter(total_population_gapminder >= 1e6) %>% 
+  arrange(-total_population_gapminder) %>% 
+  ggplot(aes(gdp_per_capita, per_capita_mismanaged_plastic_waste, size = total_population_gapminder)) + 
+  geom_point() + 
+  geom_text(aes(label = country), vjust = 1, hjust = 1, check_overlap = TRUE) +
+  scale_x_log10(labels = dollar_format()) +
+  scale_y_log10()
+```
+

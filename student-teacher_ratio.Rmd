@@ -37,9 +37,25 @@ student_teacher_ratio_2015 %>%
 ```{r}
 library(WDI)
 
-WDIsearch("police") %>% 
+WDIsearch("urban") %>% View()
   as.data.frame() %>% 
   tbl_df() 
+
+urban_indicators <- WDI(indicator = c("SP.URB.TOTL.IN.ZS", "SP.URB.GROW"), 
+                        extra = TRUE) %>% 
+  tbl_df()
+
+urban_indicators %>% 
+  filter(country == "China") %>% 
+  ggplot(aes(year, SP.URB.TOTL.IN.ZS)) +
+  geom_line()
+
+urban_indicators %>% 
+  filter(country == "China") %>% 
+  ggplot(aes(year, SP.URB.GROW)) + 
+  geom_line() + 
+  expand_limits(y = 0)
+
 ```
 
 # Administering indicators

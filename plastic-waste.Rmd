@@ -53,12 +53,19 @@ plastic_waste <- coast_vs_waste_2010 %>%
 
 ```{r}
 plastic_waste %>% 
-  filter(total_population_gapminder >= 1e6) %>% 
   arrange(-total_population_gapminder) %>% 
-  ggplot(aes(gdp_per_capita, per_capita_mismanaged_plastic_waste, size = total_population_gapminder)) + 
-  geom_point() + 
+  mutate(pct_coastal_pop = coastal_population / total_population_gapminder, 
+         high_coastal_pop = ifelse(pct_coastal_pop >= .8, ">=80%", "<80%")) %>% 
+  ggplot(aes(gdp_per_capita, per_capita_mismanaged_plastic_waste, color = high_coastal_pop)) + 
+  geom_point(aes(size = total_population_gapminder)) + 
   geom_text(aes(label = country), vjust = 1, hjust = 1, check_overlap = TRUE) +
   scale_x_log10(labels = dollar_format()) +
-  scale_y_log10()
+  scale_y_log10() +
+  scale_size_continuous(labels = comma_format()) +
+  labs(x = "GDP per capita", 
+       y = "Minsmanaged plastic waste (kg per person per day)", 
+       color = "Coastal population", 
+       title = "How plastic waste mismanagement correlates with country income", 
+       subtitle = "Based in Our World in Data 2010. Size represents total population")
 ```
 

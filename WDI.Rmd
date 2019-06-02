@@ -1,0 +1,36 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(WDI)
+theme_set(theme_light())
+options(scipen = 999)
+```
+
+```{r}
+WDIsearch("revenue") %>% View()
+  as.data.frame() %>% 
+  tbl_df() 
+
+indicators_raw <- WDI(indicator = c("GC.TAX.TOTL.GD.ZS", "GC.REV.XGRT.GD.ZS"), extra = TRUE) %>% # Central government revenues excluding all grants (%GDP) 
+  tbl_df()
+
+polity4_scores <- read_csv("polity_4_democracy_scores.csv")
+```
+
+```{r}
+indicators_raw %>% inner_join(polity4_scores, by = c("country", "year")) %>% 
+  filter(year == 2011, 
+         polity2 < 5) %>% 
+  ggplot(aes(polity2, GB.REV.XAGT.CN.ZS / 100)) + 
+  geom_point() +
+  geom_text(aes(label = country))
+```
+

@@ -21,8 +21,11 @@ library(drlib) # Personal package to reorder a column before plotting with facet
 ramen_ratings_processed <- ramen_ratings %>% 
   mutate(style = fct_lump(style, 4), 
          country = fct_lump(country, 12), 
-         brand = fct_lump(brand, 10)) %>%
-  replace_na(list(style = "Other")) 
+         brand = fct_lump(brand, 20)) %>%
+  replace_na(list(style = "Other")) %>% 
+  mutate(brand = fct_relevel(brand, "Other"), 
+         country = fct_relevel(country, "Other"), 
+         style = fct_relevel(style, "Pack"))
 
 ramen_ratings_processed %>% 
   gather(category, value, -review_number, -stars) %>% 
@@ -47,8 +50,10 @@ library(broom)
 lm(stars ~ brand + country + style, ramen_ratings_processed) %>% 
   tidy(conf.int = TRUE) %>% # Adding confidence intervals
   filter(term != "(Intercept)") %>% 
+  arrange(desc(estimate)) %>% 
+  extract(term, c("category", "term"), "^([a-z]+)([A-Z].*)") %>% 
   mutate(term = fct_reorder(term, estimate)) %>% 
-  ggplot(aes(estimate, term)) + 
+  ggplot(aes(estimate, term, color = category)) + 
   geom_point() +
   geom_errorbarh(aes(xmin = conf.low, xmax = conf.high)) +
   geom_vline(xintercept = 0, linetype = "dashed", color = "red") +

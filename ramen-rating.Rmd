@@ -16,7 +16,7 @@ ramen_ratings <- readr::read_csv("https://raw.githubusercontent.com/rfordatascie
 ```
 
 ```{r}
-library(drlib) # Personal package to get categorical variables properly ordered
+library(drlib) # Personal package to reorder a column before plotting with faceting, such that the values are ordered within each facet
 
 ramen_ratings_processed <- ramen_ratings %>% 
   mutate(style = fct_lump(style, 4), 
@@ -35,11 +35,24 @@ ramen_ratings_processed %>%
   geom_col() +
   coord_flip() +
   facet_wrap(~ category, scales = "free_y") +
-  scale_x_reordered()
-  
+  scale_x_reordered() +
+  labs(title = "Categorical predictors", 
+       x = "Predictors", 
+       y = "Count")
 ```
-	
+# Fitting linear model and plot co-efficients
 ```{r}
+library(broom)
 
+lm(stars ~ brand + country + style, ramen_ratings_processed) %>% 
+  tidy(conf.int = TRUE) %>% # Adding confidence intervals
+  filter(term != "(Intercept)") %>% 
+  mutate(term = fct_reorder(term, estimate)) %>% 
+  ggplot(aes(estimate, term)) + 
+  geom_point() +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high)) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "red") +
+  labs(x = "Estimated effects on ramen ratings", 
+       title = "Coefficients that predict ramen ratings")
 ```
 

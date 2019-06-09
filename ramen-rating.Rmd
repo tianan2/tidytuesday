@@ -1,0 +1,45 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+theme_set(theme_light())
+options(scipen = 999)
+
+ramen_ratings <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-06-04/ramen_ratings.csv")
+```
+
+```{r}
+library(drlib) # Personal package to get categorical variables properly ordered
+
+ramen_ratings_processed <- ramen_ratings %>% 
+  mutate(style = fct_lump(style, 4), 
+         country = fct_lump(country, 12), 
+         brand = fct_lump(brand, 10)) %>%
+  replace_na(list(style = "Other")) 
+
+ramen_ratings_processed %>% 
+  gather(category, value, -review_number, -stars) %>% 
+  count(category, value) %>% 
+  group_by(category) %>% 
+  top_n(20, n) %>% 
+  ungroup() %>% 
+  mutate(value = reorder_within(value, n, category)) %>% # Trick to get other properly ordered
+  ggplot(aes(value, n)) + 
+  geom_col() +
+  coord_flip() +
+  facet_wrap(~ category, scales = "free_y") +
+  scale_x_reordered()
+  
+```
+	
+```{r}
+
+```
+

@@ -69,3 +69,10 @@ plastic_waste %>%
        subtitle = "Based in Our World in Data 2010. Size represents total population")
 ```
 
+```{r}
+tbl_df(iso3166) 
+
+map_data("world") %>% 
+  tbl_df()
+```
+

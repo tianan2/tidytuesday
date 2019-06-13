@@ -1,6 +1,8 @@
 ---
 title: "Untitled"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -25,7 +27,7 @@ ramen_ratings_processed <- ramen_ratings %>%
   replace_na(list(style = "Other")) %>% 
   mutate(brand = fct_relevel(brand, "Other"), 
          country = fct_relevel(country, "Other"), 
-         style = fct_relevel(style, "Pack"))
+         style = fct_relevel(style, "Pack")) 
 
 ramen_ratings_processed %>% 
   gather(category, value, -review_number, -stars) %>% 
@@ -50,14 +52,109 @@ library(broom)
 lm(stars ~ brand + country + style, ramen_ratings_processed) %>% 
   tidy(conf.int = TRUE) %>% # Adding confidence intervals
   filter(term != "(Intercept)") %>% 
-  arrange(desc(estimate)) %>% 
-  extract(term, c("category", "term"), "^([a-z]+)([A-Z].*)") %>% 
+  extract(term, c("category", "term"), "^([a-z]+)([A-Z].*)") %>% # extracting category from columnnames
   mutate(term = fct_reorder(term, estimate)) %>% 
   ggplot(aes(estimate, term, color = category)) + 
   geom_point() +
   geom_errorbarh(aes(xmin = conf.low, xmax = conf.high)) +
-  geom_vline(xintercept = 0, linetype = "dashed", color = "red") +
-  labs(x = "Estimated effects on ramen ratings", 
-       title = "Coefficients that predict ramen ratings")
+  geom_vline(xintercept = 0, linetype = "dashed") + 
+  facet_wrap(~ category, ncol = 1, scales = "free_y") +
+  theme(legend.position = "none") +
+  labs(x = "Estimated effects on ramen ratings",
+       y = "", 
+       title = "Coefficients that predict ramen ratings", 
+       subtitle = "Less common brands and countries were lumpted together as the reference model")
+```
+# Webscraping
+```{r}
+library(rvest)
+library(janitor)
+
+ramen_list <- read_html("https://www.theramenrater.com/resources-2/the-list/")
+
+# How the original data was (probably) created
+ramen_reviews <- ramen_list %>% 
+  html_node("#myTable") %>% 
+  html_table() %>% 
+  tbl_df() %>% 
+  clean_names() %>% 
+  select(-t)
+```
+
+```{r}
+review_links <- read_html("https://www.theramenrater.com/resources-2/the-list/") %>% 
+  html_nodes("#myTable a")
+
+reviews <- tibble(review_number = parse_number(html_text(review_links)), 
+       link = html_attr(review_links, "href"))
+```
+
+See here for more about possibly and other "dealing with failure" functions:
+https://r4ds.had.co.nz/iteration.html#
+
+```{r}
+page <- read_html("https://www.theramenrater.com/2019/05/23/3180-yum-yum-moo-deng/")
+
+get_review_text <- function(url) {
+  read_html(url) %>% 
+  html_nodes(".entry-content > p") %>% 
+  html_text() %>% 
+  str_subset(".") 
+}
+
+review_text <- reviews %>% 
+  head(100) %>% 
+  mutate(text = map(link, possibly(get_review_text, NULL, quiet = FALSE))) 
+```
+
+```{r}
+library(tidytext)
+
+review_paragraphs <- review_text %>% 
+  filter(!map_lgl(text, is.null)) %>% 
+  unnest() %>% 
+  filter(str_detect(text, "Finished")) %>% 
+  mutate(text = str_remove(text, "Finished.*?\\. "))
+
+review_paragraphs_tokenized <- review_paragraphs %>% 
+  unnest_tokens(word, text) %>% 
+  anti_join(stop_words, by = "word") %>%
+  filter(str_detect(word, "[a-z]")) %>% 
+  inner_join(ramen_ratings, by = "review_number")
+
+review_words <- review_paragraphs_tokenized %>% 
+  filter(!is.na(stars)) %>% 
+  group_by(word) %>% 
+  summarize(number = n(), 
+            reviews = n_distinct(review_number), 
+            avg_stars = mean(stars)) %>% 
+  arrange(desc(reviews))
+
+review_words_filtered <- review_words %>% 
+  filter(reviews < 90, reviews >= 10)
+```
+https://www.tidytextmining.com/ngrams.html
+
+```{r}
+library(widyr)
+
+word_cors <- review_paragraphs_tokenized %>% 
+  semi_join(review_words_filtered, by = "word") %>% 
+  distinct(review_number, word) %>% 
+  pairwise_cor(word, review_number, sort = T)
+```
+
+```{r}
+library(igraph)
+library(ggraph)
+
+word_cors %>% 
+  head(200) %>% 
+  graph_from_data_frame() %>% 
+  ggraph() +
+  geom_edge_link() + 
+  geom_node_point() +
+  geom_node_text(aes(label = name), repel = TRUE)
+
 ```
 

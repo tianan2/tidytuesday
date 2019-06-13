@@ -1,0 +1,46 @@
+---
+title: "Untitled"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+theme_set(theme_light())
+
+wine_rating <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-05-28/winemag-data-130k-v2.csv") %>% select(-X1)
+
+```
+
+```{r}
+wine_rating_processed <- wine_rating %>% 
+  mutate(country = fct_lump(country, 6), 
+         taster_name = fct_lump(taster_name, 10), 
+         variety = fct_lump(variety, 15)) %>% 
+  replace_na(list(country = "Other", 
+                  taster_name = "Other", 
+                  variety = "Other"))
+
+wine_rating_processed %>% 
+  select(country, points, price, taster_name, variety) %>% 
+  gather(category, value, -points, -price) %>% 
+  count(category, value) %>% 
+  group_by(category) %>% 
+  top_n(15, n) %>% 
+  ungroup() %>% 
+  mutate(value = fct_reorder(value, n)) %>% 
+  ggplot(aes(value, n)) +
+  geom_col() +
+  coord_flip() +
+  facet_wrap(~ category, scales = "free_y")
+```
+# Fitting a linear regression to predict wine ratings based on country, taster, and variety
+```{r}
+
+```
+

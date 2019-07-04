@@ -38,7 +38,11 @@ nobel_winners %>%
         gender = coalesce(gender, laureate_type)) %>% 
   ggplot(aes(decade, n, fill = gender)) +
   geom_col() + 
-  facet_wrap(~ category)
+  facet_wrap(~ category) +
+  labs(x = "Decade", 
+       y = "# of Nobel prize winners", 
+       title = "Nobel Prize Gender Distribution over Time", 
+       fill = "Gender")
 ```
 
 # Age distribution over time across category

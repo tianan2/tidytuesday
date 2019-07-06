@@ -13,12 +13,12 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 theme_set(theme_light())
 
-wine_rating <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-05-28/winemag-data-130k-v2.csv") %>% select(-X1)
+wine_rating <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-05-28/winemag-data-130k-v2.csv") %>% select(-X1) %>% extract(title, "year", regex = "(20\\d\\d)", convert = TRUE, remove = FALSE)
 
 ```
 
 ```{r}
-wine_rating_processed <- wine_rating %>% 
+wine_rating_processed <- wine_rating %>% View()
   mutate(country = fct_lump(country, 6), 
          taster_name = fct_lump(taster_name, 10), 
          variety = fct_lump(variety, 15)) %>% 
@@ -41,6 +41,41 @@ wine_rating_processed %>%
 ```
 # Fitting a linear regression to predict wine ratings based on country, taster, and variety
 ```{r}
+wine_rating %>% 
+  ggplot(aes(year)) +
+  geom_histogram()
 
+wine_rating %>% 
+  ggplot(aes(price, points)) +
+  geom_point(alpha = .1) +
+  scale_x_log10() +
+  geom_smooth(method = "lm")
+
+summary(lm(points ~ log2(price), data = wine_rating)) 
+```
+Every time the price doubles, the expected points go up by 2. 
+
+```{r}
+wine_rating %>% 
+  mutate(country = fct_relevel(fct_lump(country, 7), "US")) %>%  
+  lm(points ~ log2(price) + country, data = .) %>% 
+  summary()
+```
+
+```{r}
+wine_rating %>% 
+  mutate(country = fct_relevel(fct_lump(country, 7), "US"), 
+         country = fct_reorder(country, points)) %>% 
+  ggplot(aes(country, points)) +
+  geom_boxplot() +
+  coord_flip()
+
+wine_rating %>% 
+  ggplot(aes(year, points, group = year)) + 
+  geom_boxplot()
+
+wine_rating %>% 
+  ggplot(aes())
+  
 ```
 

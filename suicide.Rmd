@@ -1,0 +1,25 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(janitor)
+master <- read_csv("master.csv") %>% clean_names()
+```
+```{r}
+master_2016_filtered <- master %>% 
+  filter(year == 2016) %>% 
+  group_by(country) %>% 
+  mutate(year_total = sum(suicides_no)) %>% 
+  filter(year_total > 500) 
+
+master_2016_filtered %>% 
+  
+```
+

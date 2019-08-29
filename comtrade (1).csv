@@ -1,0 +1,335 @@
+Classification,Year,Period,Period Desc.,Aggregate Level,Is Leaf Code,Trade Flow Code,Trade Flow,Reporter Code,Reporter,Reporter ISO,Partner Code,Partner,Partner ISO,2nd Partner Code,2nd Partner,2nd Partner ISO,Customs Proc. Code,Customs,Mode of Transport Code,Mode of Transport,Commodity Code,Commodity,Qty Unit Code,Qty Unit,Qty,Alt Qty Unit Code,Alt Qty Unit,Alt Qty,Netweight (kg),Gross weight (kg),Trade Value (US$),CIF Trade Value (US$),FOB Trade Value (US$),Flag
+H3,2010,2010,2010,4,0,1,Import,8,Albania,ALB,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,4306042,,4306042,,1837633,,,0
+H3,2010,2010,2010,4,0,2,Export,8,Albania,ALB,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,2386060,,2386060,,1426928,,,0
+H3,2010,2010,2010,4,0,1,Import,12,Algeria,DZA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1977164,,1977164,,1762885,,,0
+H3,2010,2010,2010,4,0,2,Export,12,Algeria,DZA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,869647,,869647,,209434,,,0
+H3,2010,2010,2010,4,0,1,Import,20,Andorra,AND,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,106440,,106440,,9468,,,0
+H3,2010,2010,2010,4,0,2,Export,20,Andorra,AND,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1949893,,1949893,,118056,,,0
+H3,2010,2010,2010,4,0,1,Import,24,Angola,AGO,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,168800,,168800,,196372,,,0
+H3,2010,2010,2010,4,0,1,Import,31,Azerbaijan,AZE,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,20380,,20380,,7126,,,0
+H3,2010,2010,2010,4,0,2,Export,31,Azerbaijan,AZE,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,257400,,257400,,17790,,,0
+H3,2010,2010,2010,4,0,1,Import,32,Argentina,ARG,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,803162,,803162,,995581,,,0
+H3,2010,2010,2010,4,0,2,Export,32,Argentina,ARG,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,37549837,,37549837,,26118234,,,0
+H3,2010,2010,2010,4,0,1,Import,36,Australia,AUS,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,4982852,,4982852,,3098558,,,0
+H3,2010,2010,2010,4,0,2,Export,36,Australia,AUS,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,156388292,,156388292,,60150487,,,0
+H3,2010,2010,2010,4,0,1,Import,40,Austria,AUT,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,146137298,,146137298,,42610439,,,6
+H3,2010,2010,2010,4,0,2,Export,40,Austria,AUT,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,100261509,,100261509,,40421295,,,6
+H3,2010,2010,2010,4,0,1,Import,44,Bahamas,BHS,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,3122439,,3122439,,21563542,,,0
+H3,2010,2010,2010,4,0,1,Import,48,Bahrain,BHR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,461785,,461785,,390973,,,0
+H3,2010,2010,2010,4,0,2,Export,48,Bahrain,BHR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1741777,,1741777,,429141,,,0
+H3,2010,2010,2010,4,0,3,Re-Export,48,Bahrain,BHR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,22847,,22847,,16769,,,0
+H3,2010,2010,2010,4,0,1,Import,50,Bangladesh,BGD,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,5563834,,5563834,,2202902,,,0
+H3,2010,2010,2010,4,0,2,Export,50,Bangladesh,BGD,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,32399286,,32399286,,22973407,,,0
+H3,2010,2010,2010,4,0,1,Import,51,Armenia,ARM,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,3190,,3190,,5423,,,0
+H3,2010,2010,2010,4,0,2,Export,51,Armenia,ARM,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,467437,,467437,,359734,,,0
+H3,2010,2010,2010,4,0,1,Import,56,Belgium,BEL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,285425894,,285425894,,130035516,,,0
+H3,2010,2010,2010,4,0,2,Export,56,Belgium,BEL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,396963159,,396963159,,171066610,,,0
+H3,2010,2010,2010,4,0,1,Import,60,Bermuda,BMU,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,17537,,17537,,10162,,,6
+H3,2010,2010,2010,4,0,1,Import,64,Bhutan,BTN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,179,,179,,769,,,0
+H3,2010,2010,2010,4,0,2,Export,64,Bhutan,BTN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,732451,,732451,,132969,,,0
+H3,2010,2010,2010,4,0,1,Import,68,Bolivia (Plurinational State of),BOL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,221121,,219480,,100507,,,0
+H3,2010,2010,2010,4,0,2,Export,68,Bolivia (Plurinational State of),BOL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,2796555,,3296697,,1086300,,,0
+H3,2010,2010,2010,4,0,3,Re-Export,68,Bolivia (Plurinational State of),BOL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",1,No Quantity,,,0,,60000,,31100,,,0
+H3,2010,2010,2010,4,0,1,Import,70,Bosnia Herzegovina,BIH,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,3027990,,3027990,,1251865,,,0
+H3,2010,2010,2010,4,0,2,Export,70,Bosnia Herzegovina,BIH,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,4265716,,4265716,,1735853,,,0
+H3,2010,2010,2010,4,0,1,Import,76,Brazil,BRA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,8091251,,8091251,,3207604,,,0
+H3,2010,2010,2010,4,0,2,Export,76,Brazil,BRA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,5473864,,5473864,,4039627,,,6
+H3,2010,2010,2010,4,0,1,Import,84,Belize,BLZ,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,210351,,210351,,164181,,,0
+H3,2010,2010,2010,4,0,1,Import,96,Brunei Darussalam,BRN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,183276,,183276,,106264,,,6
+H3,2010,2010,2010,4,0,2,Export,96,Brunei Darussalam,BRN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,80470,,80470,,39854,,,6
+H3,2010,2010,2010,4,0,1,Import,100,Bulgaria,BGR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,10889815,,10889815,,2328595,,,0
+H3,2010,2010,2010,4,0,2,Export,100,Bulgaria,BGR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,11526376,,11526376,,6169604,,,0
+H3,2010,2010,2010,4,0,1,Import,104,Myanmar,MMR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,47500,,47500,,37164,,,0
+H3,2010,2010,2010,4,0,1,Import,108,Burundi,BDI,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,300,,300,,61,,,0
+H3,2010,2010,2010,4,0,1,Import,112,Belarus,BLR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1774213,,1774213,,312700,,,0
+H3,2010,2010,2010,4,0,2,Export,112,Belarus,BLR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,3701639,,3701639,,1306700,,,0
+H3,2010,2010,2010,4,0,1,Import,116,Cambodia,KHM,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,22463,,22463,,18679,,,0
+H3,2010,2010,2010,4,0,2,Export,116,Cambodia,KHM,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1735382,,1735382,,205790,,,0
+H3,2010,2010,2010,4,0,1,Import,124,Canada,CAN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,148030525,,148030525,,74555111,,,0
+H3,2010,2010,2010,4,0,2,Export,124,Canada,CAN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,190480207,,190480207,,114872951,,,0
+H3,2010,2010,2010,4,0,3,Re-Export,124,Canada,CAN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,228458,,228458,,122459,,,0
+H3,2010,2010,2010,4,0,4,Re-Import,124,Canada,CAN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,824230,,824230,,566658,,,0
+H3,2010,2010,2010,4,0,1,Import,132,Cabo Verde,CPV,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,5978,,5978,,9188,,,0
+H3,2010,2010,2010,4,0,1,Import,144,Sri Lanka,LKA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,2976703,,2976703,,626715,,,0
+H3,2010,2010,2010,4,0,2,Export,144,Sri Lanka,LKA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1207348,,1207348,,625428,,,0
+H3,2010,2010,2010,4,0,1,Import,152,Chile,CHL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,8447104,,8447104,,6327106,,,6
+H3,2010,2010,2010,4,0,2,Export,152,Chile,CHL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,13461088,,13461088,,5547609,,,6
+H3,2010,2010,2010,4,0,1,Import,156,China,CHN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,8009673596,,8009673596,,5087619436,,,0
+H3,2010,2010,2010,4,0,2,Export,156,China,CHN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,25757608,,25757608,,21684547,,,0
+H3,2010,2010,2010,4,0,1,Import,170,Colombia,COL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,813644,,813644,,191562,,,0
+H3,2010,2010,2010,4,0,2,Export,170,Colombia,COL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,6140965,,6140965,,2596956,,,0
+H3,2010,2010,2010,4,0,3,Re-Export,170,Colombia,COL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,43200,,43200,,32379,,,0
+H3,2010,2010,2010,4,0,1,Import,188,Costa Rica,CRI,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,6628220,,6628220,,2510801,,,0
+H3,2010,2010,2010,4,0,2,Export,188,Costa Rica,CRI,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,5633147,,5633147,,2321360,,,0
+H3,2010,2010,2010,4,0,1,Import,191,Croatia,HRV,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,4219341,,4219341,,2155404,,,0
+H3,2010,2010,2010,4,0,2,Export,191,Croatia,HRV,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,7344317,,7344317,,2885291,,,0
+H3,2010,2010,2010,4,0,2,Export,196,Cyprus,CYP,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,3033926,,3033926,,816689,,,0
+H3,2010,2010,2010,4,0,3,Re-Export,196,Cyprus,CYP,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,394898,,394898,,115175,,,0
+H3,2010,2010,2010,4,0,1,Import,203,Czechia,CZE,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,58554612,,58554612,,5509853,,,0
+H3,2010,2010,2010,4,0,2,Export,203,Czechia,CZE,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,85408642,,85408642,,38997779,,,0
+H3,2010,2010,2010,4,0,1,Import,208,Denmark,DNK,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,35495558,,35495558,,18804286,,,0
+H3,2010,2010,2010,4,0,2,Export,208,Denmark,DNK,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,493555731,,493555731,,21623438,,,0
+H3,2010,2010,2010,4,0,2,Export,212,Dominica,DMA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,406,,406,,201,,,6
+H3,2010,2010,2010,4,0,3,Re-Export,212,Dominica,DMA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,406,,406,,201,,,6
+H3,2010,2010,2010,4,0,1,Import,214,Dominican Rep.,DOM,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1578105,,1578105,,751838,,,6
+H3,2010,2010,2010,4,0,2,Export,214,Dominican Rep.,DOM,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,14735265,,14735265,,7062788,,,0
+H3,2010,2010,2010,4,0,1,Import,218,Ecuador,ECU,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,557798,,557798,,605973,,,0
+H3,2010,2010,2010,4,0,2,Export,218,Ecuador,ECU,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,10035761,,10035761,,6228597,,,0
+H3,2010,2010,2010,4,0,1,Import,222,El Salvador,SLV,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,4955394,,4955394,,3036168,,,0
+H3,2010,2010,2010,4,0,2,Export,222,El Salvador,SLV,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,11200763,,11200763,,5357759,,,0
+H3,2010,2010,2010,4,0,1,Import,231,Ethiopia,ETH,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,375587,,375587,,502971,,,0
+H3,2010,2010,2010,4,0,2,Export,231,Ethiopia,ETH,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,180925,,180925,,112435,,,0
+H3,2010,2010,2010,4,0,1,Import,233,Estonia,EST,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,3887788,,3887788,,1710339,,,0
+H3,2010,2010,2010,4,0,2,Export,233,Estonia,EST,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,15322219,,15322219,,5970050,,,0
+H3,2010,2010,2010,4,0,1,Import,242,Fiji,FJI,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,16446,,16446,,39881,,,0
+H3,2010,2010,2010,4,0,2,Export,242,Fiji,FJI,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,674992,,674992,,117302,,,0
+H3,2010,2010,2010,4,0,1,Import,246,Finland,FIN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,3036876,,3036876,,1441490,,,6
+H3,2010,2010,2010,4,0,2,Export,246,Finland,FIN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,31885752,,31885752,,11199671,,,0
+H3,2010,2010,2010,4,0,1,Import,251,France,FRA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,98939700,,98939700,,40164589,,,0
+H3,2010,2010,2010,4,0,2,Export,251,France,FRA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,477953800,,477953800,,245182340,,,0
+H3,2010,2010,2010,4,0,4,Re-Import,251,France,FRA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,406700,,406700,,180265,,,0
+H3,2010,2010,2010,4,0,1,Import,258,French Polynesia,PYF,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,291,,291,,1879,,,0
+H3,2010,2010,2010,4,0,2,Export,258,French Polynesia,PYF,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,229020,,229020,,99722,,,0
+H3,2010,2010,2010,4,0,1,Import,268,Georgia,GEO,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,138019,,138019,,108595,,,0
+H3,2010,2010,2010,4,0,2,Export,268,Georgia,GEO,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,245923,,245923,,65693,,,0
+H3,2010,2010,2010,4,0,1,Import,275,State of Palestine,PSE,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,27318,,27318,,15915,,,6
+H3,2010,2010,2010,4,0,1,Import,276,Germany,DEU,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,296939900,,296939900,,125286763,,,0
+H3,2010,2010,2010,4,0,2,Export,276,Germany,DEU,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1418679800,,1418679800,,556269802,,,0
+H3,2010,2010,2010,4,0,1,Import,288,Ghana,GHA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1110190,,1110190,,504110,,,0
+H3,2010,2010,2010,4,0,2,Export,288,Ghana,GHA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,261585,,261585,,121155,,,0
+H3,2010,2010,2010,4,0,1,Import,300,Greece,GRC,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,7604890,,7604890,,5494431,,,0
+H3,2010,2010,2010,4,0,2,Export,300,Greece,GRC,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,50016236,,50016236,,10432038,,,0
+H3,2010,2010,2010,4,0,1,Import,304,Greenland,GRL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,10,,10,,35,,,0
+H3,2010,2010,2010,4,0,1,Import,320,Guatemala,GTM,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,837143,,837143,,525808,,,0
+H3,2010,2010,2010,4,0,2,Export,320,Guatemala,GTM,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,6692790,,6692790,,3317062,,,0
+H3,2010,2010,2010,4,0,1,Import,328,Guyana,GUY,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,670,,670,,4608,,,0
+H3,2010,2010,2010,4,0,2,Export,328,Guyana,GUY,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1613009,,1613009,,295462,,,0
+H3,2010,2010,2010,4,0,3,Re-Export,328,Guyana,GUY,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1613000,,1613000,,295438,,,0
+H3,2010,2010,2010,4,0,1,Import,340,Honduras,HND,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1212642,,1212642,,291332,,,0
+H3,2010,2010,2010,4,0,2,Export,340,Honduras,HND,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,2706295,,2706295,,1653983,,,0
+H3,2010,2010,2010,4,0,1,Import,344,"China, Hong Kong SAR",HKG,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,4795350260,,4795350260,,1735488805,,,0
+H3,2010,2010,2010,4,0,2,Export,344,"China, Hong Kong SAR",HKG,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,4217315291,,4217315291,,1222539556,,,0
+H3,2010,2010,2010,4,0,3,Re-Export,344,"China, Hong Kong SAR",HKG,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,2644259944,,2644259944,,758181784,,,0
+H3,2010,2010,2010,4,0,1,Import,348,Hungary,HUN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,11015500,,11015500,,1990000,,,0
+H3,2010,2010,2010,4,0,2,Export,348,Hungary,HUN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,15532400,,15532400,,6859000,,,0
+H3,2010,2010,2010,4,0,1,Import,352,Iceland,ISL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,68,,68,,1177,,,0
+H3,2010,2010,2010,4,0,2,Export,352,Iceland,ISL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,3996770,,3996770,,1215768,,,0
+H3,2010,2010,2010,4,0,1,Import,360,Indonesia,IDN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,39905902,,39905902,,14894977,,,0
+H3,2010,2010,2010,4,0,2,Export,360,Indonesia,IDN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,116353926,,116353926,,78628447,,,0
+H3,2010,2010,2010,4,0,1,Import,372,Ireland,IRL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,80894349,,80894349,,81806478,,,0
+H3,2010,2010,2010,4,0,2,Export,372,Ireland,IRL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,40896787,,40896787,,17304547,,,0
+H3,2010,2010,2010,4,0,1,Import,376,Israel,ISR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,4538731,,4538731,,3320000,,,0
+H3,2010,2010,2010,4,0,2,Export,376,Israel,ISR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,12369354,,12369354,,5405000,,,6
+H3,2010,2010,2010,4,0,1,Import,381,Italy,ITA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,138290583,,138290583,,90266252,,,0
+H3,2010,2010,2010,4,0,2,Export,381,Italy,ITA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,263949377,,263949377,,101045723,,,0
+H3,2010,2010,2010,4,0,1,Import,384,Côte d'Ivoire,CIV,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,4668564,,4668564,,2192215,,,0
+H3,2010,2010,2010,4,0,2,Export,384,Côte d'Ivoire,CIV,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,22000,,22000,,43003,,,0
+H3,2010,2010,2010,4,0,1,Import,388,Jamaica,JAM,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,3289,,3289,,10397,,,0
+H3,2010,2010,2010,4,0,2,Export,388,Jamaica,JAM,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,25635,,25635,,120993,,,0
+H3,2010,2010,2010,4,0,1,Import,392,Japan,JPN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1775748,,1775748,,1872082,,,0
+H3,2010,2010,2010,4,0,2,Export,392,Japan,JPN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1638962215,,1638962215,,820317146,,,0
+H3,2010,2010,2010,4,0,1,Import,398,Kazakhstan,KAZ,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,10,,10,,27,,,0
+H3,2010,2010,2010,4,0,2,Export,398,Kazakhstan,KAZ,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1313499,,1313499,,641690,,,0
+H3,2010,2010,2010,4,0,1,Import,400,Jordan,JOR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,140940,,140940,,19900,,,0
+H3,2010,2010,2010,4,0,2,Export,400,Jordan,JOR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,929362,,929362,,281727,,,0
+H3,2010,2010,2010,4,0,3,Re-Export,400,Jordan,JOR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,109070,,109070,,13070,,,0
+H3,2010,2010,2010,4,0,1,Import,404,Kenya,KEN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,302173,,302173,,154414,,,0
+H3,2010,2010,2010,4,0,2,Export,404,Kenya,KEN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,2937530,,2937530,,1163187,,,0
+H3,2010,2010,2010,4,0,1,Import,410,Rep. of Korea,KOR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,46452056,,46452056,,23802415,,,6
+H3,2010,2010,2010,4,0,2,Export,410,Rep. of Korea,KOR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,201548780,,201548780,,65541978,,,0
+H3,2010,2010,2010,4,0,2,Export,414,Kuwait,KWT,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,12314827,,12314827,,2368344,,,0
+H3,2010,2010,2010,4,0,1,Import,417,Kyrgyzstan,KGZ,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,561451,,561451,,185922,,,0
+H3,2010,2010,2010,4,0,2,Export,417,Kyrgyzstan,KGZ,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1337000,,1337000,,168407,,,0
+H3,2010,2010,2010,4,0,1,Import,418,Lao People's Dem. Rep.,LAO,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,791595,,791595,,461149,,,6
+H3,2010,2010,2010,4,0,2,Export,418,Lao People's Dem. Rep.,LAO,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,175444,,175444,,86892,,,6
+H3,2010,2010,2010,4,0,1,Import,422,Lebanon,LBN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1828644,,1828644,,926022,,,0
+H3,2010,2010,2010,4,0,2,Export,422,Lebanon,LBN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,3523089,,3523089,,2557274,,,0
+H3,2010,2010,2010,4,0,1,Import,428,Latvia,LVA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,69006257,,69006257,,12607013,,,0
+H3,2010,2010,2010,4,0,2,Export,428,Latvia,LVA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,6761859,,6761859,,2340397,,,6
+H3,2010,2010,2010,4,0,1,Import,440,Lithuania,LTU,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,31880113,,31880113,,13692535,,,0
+H3,2010,2010,2010,4,0,2,Export,440,Lithuania,LTU,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,10002695,,10002695,,3889469,,,0
+H3,2010,2010,2010,4,0,1,Import,442,Luxembourg,LUX,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,10486100,,10486100,,6780584,,,0
+H3,2010,2010,2010,4,0,2,Export,442,Luxembourg,LUX,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,7829714,,7829714,,2114350,,,0
+H3,2010,2010,2010,4,0,4,Re-Import,442,Luxembourg,LUX,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,35350,,35350,,4773,,,0
+H3,2010,2010,2010,4,0,1,Import,446,"China, Macao SAR",MAC,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,453597,,453597,,19577,,,0
+H3,2010,2010,2010,4,0,1,Import,450,Madagascar,MDG,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,15896,,15896,,9870,,,0
+H3,2010,2010,2010,4,0,2,Export,450,Madagascar,MDG,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,360895,,360895,,106278,,,0
+H3,2010,2010,2010,4,0,3,Re-Export,450,Madagascar,MDG,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,253,,253,,1381,,,0
+H3,2010,2010,2010,4,0,1,Import,454,Malawi,MWI,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,130541,,130541,,89886,,,0
+H3,2010,2010,2010,4,0,2,Export,454,Malawi,MWI,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,49911,,49911,,27962,,,0
+H3,2010,2010,2010,4,0,1,Import,458,Malaysia,MYS,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,81884863,,81884863,,29048653,,,0
+H3,2010,2010,2010,4,0,2,Export,458,Malaysia,MYS,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,134325736,,134325736,,79623243,,,0
+H3,2010,2010,2010,4,0,4,Re-Import,458,Malaysia,MYS,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,105659,,105659,,11409,,,0
+H3,2010,2010,2010,4,0,1,Import,462,Maldives,MDV,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1,,1,,15,,,0
+H3,2010,2010,2010,4,0,2,Export,462,Maldives,MDV,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,25000,,25000,,6274,,,0
+H3,2010,2010,2010,4,0,1,Import,466,Mali,MLI,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,9508,,9508,,916,,,0
+H3,2010,2010,2010,4,0,2,Export,466,Mali,MLI,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,244400,,244400,,24585,,,0
+H3,2010,2010,2010,4,0,1,Import,470,Malta,MLT,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,80114,,80114,,96090,,,0
+H3,2010,2010,2010,4,0,2,Export,470,Malta,MLT,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,958410,,958410,,505984,,,0
+H3,2010,2010,2010,4,0,1,Import,480,Mauritius,MUS,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,46644,,46644,,47761,,,0
+H3,2010,2010,2010,4,0,2,Export,480,Mauritius,MUS,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1066521,,1066521,,362103,,,0
+H3,2010,2010,2010,4,0,1,Import,484,Mexico,MEX,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,43806872,,43806872,,16944509,,,6
+H3,2010,2010,2010,4,0,2,Export,484,Mexico,MEX,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,414020848,,414020848,,208016716,,,0
+H3,2010,2010,2010,4,0,1,Import,490,"Other Asia, nes",,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,148886828,,148886828,,67383479,,,6
+H3,2010,2010,2010,4,0,2,Export,490,"Other Asia, nes",,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,183086989,,183086989,,78248266,,,0
+H3,2010,2010,2010,4,0,3,Re-Export,490,"Other Asia, nes",,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,394201,,394201,,202652,,,0
+H3,2010,2010,2010,4,0,4,Re-Import,490,"Other Asia, nes",,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,287896,,287896,,244614,,,0
+H3,2010,2010,2010,4,0,1,Import,498,Rep. of Moldova,MDA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,2300,,2300,,2301,,,0
+H3,2010,2010,2010,4,0,2,Export,498,Rep. of Moldova,MDA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,91681,,91681,,23296,,,0
+H3,2010,2010,2010,4,0,3,Re-Export,498,Rep. of Moldova,MDA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,6358,,6358,,650,,,0
+H3,2010,2010,2010,4,0,1,Import,499,Montenegro,MNE,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1014,,1014,,854,,,0
+H3,2010,2010,2010,4,0,2,Export,499,Montenegro,MNE,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,327387,,327387,,102749,,,0
+H3,2010,2010,2010,4,0,1,Import,516,Namibia,NAM,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,19554,,19554,,31155,,,0
+H3,2010,2010,2010,4,0,2,Export,516,Namibia,NAM,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1563684,,1563684,,548023,,,0
+H3,2010,2010,2010,4,0,1,Import,524,Nepal,NPL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,768,,768,,1510,,,0
+H3,2010,2010,2010,4,0,1,Import,528,Netherlands,NLD,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,295928300,,295928300,,126713016,,,0
+H3,2010,2010,2010,4,0,2,Export,528,Netherlands,NLD,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,361136602,,361136602,,172070681,,,0
+H3,2010,2010,2010,4,0,1,Import,533,Aruba,ABW,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,412,,412,,3828,,,0
+H3,2010,2010,2010,4,0,1,Import,540,New Caledonia,NCL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,123,,123,,1177,,,0
+H3,2010,2010,2010,4,0,2,Export,540,New Caledonia,NCL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,160297,,160297,,17526,,,0
+H3,2010,2010,2010,4,0,1,Import,554,New Zealand,NZL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,5000236,,5000236,,4200682,,,0
+H3,2010,2010,2010,4,0,2,Export,554,New Zealand,NZL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,39419938,,39419938,,15003185,,,0
+H3,2010,2010,2010,4,0,3,Re-Export,554,New Zealand,NZL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,137890,,137890,,52530,,,0
+H3,2010,2010,2010,4,0,4,Re-Import,554,New Zealand,NZL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,39732,,39732,,60262,,,0
+H3,2010,2010,2010,4,0,1,Import,558,Nicaragua,NIC,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,658938,,658938,,428631,,,0
+H3,2010,2010,2010,4,0,2,Export,558,Nicaragua,NIC,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,5241090,,5241090,,1928924,,,0
+H3,2010,2010,2010,4,0,2,Export,562,Niger,NER,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,47575,,47575,,1581,,,0
+H3,2010,2010,2010,4,0,1,Import,566,Nigeria,NGA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,13622700,,13622700,,52184401,,,0
+H3,2010,2010,2010,4,0,2,Export,566,Nigeria,NGA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,63800,,63800,,63537,,,0
+H3,2010,2010,2010,4,0,1,Import,579,Norway,NOR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,5433327,,5433327,,846474,,,0
+H3,2010,2010,2010,4,0,2,Export,579,Norway,NOR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,33425378,,33425378,,11874462,,,0
+H3,2010,2010,2010,4,0,1,Import,586,Pakistan,PAK,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,48064745,,48064745,,19385780,,,0
+H3,2010,2010,2010,4,0,2,Export,586,Pakistan,PAK,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,35255425,,35255425,,22153028,,,0
+H3,2010,2010,2010,4,0,1,Import,591,Panama,PAN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,317879,,317879,,555534,,,0
+H3,2010,2010,2010,4,0,2,Export,591,Panama,PAN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,4431449,,4431449,,841644,,,0
+H3,2010,2010,2010,4,0,3,Re-Export,591,Panama,PAN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,42461,,42461,,252590,,,0
+H3,2010,2010,2010,4,0,1,Import,600,Paraguay,PRY,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,882228,,882228,,190588,,,0
+H3,2010,2010,2010,4,0,2,Export,600,Paraguay,PRY,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,4255603,,4255603,,571721,,,0
+H3,2010,2010,2010,4,0,1,Import,604,Peru,PER,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",1,No Quantity,,,0,,,,897504,,,6
+H3,2010,2010,2010,4,0,2,Export,604,Peru,PER,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,691645,,691645,,574846,,,0
+H3,2010,2010,2010,4,0,1,Import,616,Poland,POL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,113676557,,113676557,,9553754,,,6
+H3,2010,2010,2010,4,0,2,Export,616,Poland,POL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,107540602,,107540602,,53596358,,,0
+H3,2010,2010,2010,4,0,1,Import,620,Portugal,PRT,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,21624816,,21624816,,12993190,,,6
+H3,2010,2010,2010,4,0,2,Export,620,Portugal,PRT,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,62642124,,62642124,,22185868,,,0
+H3,2010,2010,2010,4,0,1,Import,642,Romania,ROU,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,6119297,,6119297,,4809100,,,0
+H3,2010,2010,2010,4,0,2,Export,642,Romania,ROU,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,30171829,,30171829,,10649675,,,0
+H3,2010,2010,2010,4,0,1,Import,643,Russian Federation,RUS,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,12113023,,12113023,,9921101,,,0
+H3,2010,2010,2010,4,0,2,Export,643,Russian Federation,RUS,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,16258483,,16258483,,4863767,,,0
+H3,2010,2010,2010,4,0,1,Import,646,Rwanda,RWA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,92111,,92111,,65135,,,0
+H3,2010,2010,2010,4,0,1,Import,670,Saint Vincent and the Grenadines,VCT,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,20,,20,,85,,,0
+H3,2010,2010,2010,4,0,2,Export,670,Saint Vincent and the Grenadines,VCT,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,25980,,25980,,892,,,0
+H3,2010,2010,2010,4,0,3,Re-Export,670,Saint Vincent and the Grenadines,VCT,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,5000,,5000,,503,,,0
+H3,2010,2010,2010,4,0,1,Import,682,Saudi Arabia,SAU,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,11170000,,11170000,,11426948,,,0
+H3,2010,2010,2010,4,0,2,Export,682,Saudi Arabia,SAU,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,85150000,,85150000,,30910172,,,0
+H3,2010,2010,2010,4,0,3,Re-Export,682,Saudi Arabia,SAU,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,49855000,,49855000,,13940817,,,0
+H3,2010,2010,2010,4,0,1,Import,686,Senegal,SEN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,58384,,58384,,41360,,,0
+H3,2010,2010,2010,4,0,2,Export,686,Senegal,SEN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,34262,,34262,,17221,,,0
+H3,2010,2010,2010,4,0,1,Import,688,Serbia,SRB,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,916318,,916318,,492625,,,0
+H3,2010,2010,2010,4,0,2,Export,688,Serbia,SRB,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,5122590,,5122590,,2547693,,,0
+H3,2010,2010,2010,4,0,1,Import,699,India,IND,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,116252206,,116252206,,58822687,,,0
+H3,2010,2010,2010,4,0,2,Export,699,India,IND,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,29944272,,29944272,,14466885,,,6
+H3,2010,2010,2010,4,0,1,Import,702,Singapore,SGP,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,3539800,,3539800,,4794683,,,0
+H3,2010,2010,2010,4,0,2,Export,702,Singapore,SGP,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,55388760,,55388760,,45244449,,,0
+H3,2010,2010,2010,4,0,1,Import,703,Slovakia,SVK,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,85190273,,85190273,,13063787,,,6
+H3,2010,2010,2010,4,0,2,Export,703,Slovakia,SVK,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,2393739,,2393739,,8069682,,,6
+H3,2010,2010,2010,4,0,1,Import,704,Viet Nam,VNM,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,61585625,,61585625,,35532180,,,6
+H3,2010,2010,2010,4,0,2,Export,704,Viet Nam,VNM,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,39759786,,39759786,,19203270,,,6
+H3,2010,2010,2010,4,0,1,Import,705,Slovenia,SVN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,39282850,,39282850,,14618106,,,0
+H3,2010,2010,2010,4,0,2,Export,705,Slovenia,SVN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,35362087,,35362087,,14262550,,,0
+H3,2010,2010,2010,4,0,4,Re-Import,705,Slovenia,SVN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,3199,,3199,,3184,,,0
+H3,2010,2010,2010,4,0,1,Import,710,South Africa,ZAF,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,5766589,,5766589,,1920477,,,0
+H3,2010,2010,2010,4,0,2,Export,710,South Africa,ZAF,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,9403566,,9403566,,3910286,,,6
+H3,2010,2010,2010,4,0,1,Import,716,Zimbabwe,ZWE,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,189806,,189806,,200418,,,0
+H3,2010,2010,2010,4,0,2,Export,716,Zimbabwe,ZWE,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,39620,,39620,,8551,,,0
+H3,2010,2010,2010,4,0,1,Import,724,Spain,ESP,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,42563019,,42563019,,35440088,,,0
+H3,2010,2010,2010,4,0,2,Export,724,Spain,ESP,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,217891716,,217891716,,90114695,,,0
+H3,2010,2010,2010,4,0,1,Import,736,Fmr Sudan,SDN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,72651,,72651,,129629,,,0
+H3,2010,2010,2010,4,0,2,Export,736,Fmr Sudan,SDN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,48000,,48000,,8800,,,0
+H3,2010,2010,2010,4,0,1,Import,740,Suriname,SUR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,32,,32,,120,,,0
+H3,2010,2010,2010,4,0,2,Export,740,Suriname,SUR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,196052,,196052,,64420,,,0
+H3,2010,2010,2010,4,0,1,Import,752,Sweden,SWE,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,300323752,,300323752,,15844421,,,6
+H3,2010,2010,2010,4,0,2,Export,752,Sweden,SWE,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,90613967,,90613967,,35071611,,,6
+H3,2010,2010,2010,4,0,1,Import,757,Switzerland,CHE,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,30372118,,30372118,,5722654,,,6
+H3,2010,2010,2010,4,0,2,Export,757,Switzerland,CHE,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,93943027,,93943027,,27602160,,,6
+H3,2010,2010,2010,4,0,1,Import,760,Syria,SYR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,15849893,,15849893,,171566,,,0
+H3,2010,2010,2010,4,0,2,Export,760,Syria,SYR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,4911659,,4911659,,3134944,,,0
+H3,2010,2010,2010,4,0,1,Import,764,Thailand,THA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,17767461,,17767461,,6388038,,,6
+H3,2010,2010,2010,4,0,2,Export,764,Thailand,THA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,205915167,,205915167,,130446547,,,0
+H3,2010,2010,2010,4,0,4,Re-Import,764,Thailand,THA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,13825,,13825,,11476,,,0
+H3,2010,2010,2010,4,0,1,Import,768,Togo,TGO,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,746081,,746081,,223502,,,0
+H3,2010,2010,2010,4,0,2,Export,768,Togo,TGO,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1375860,,1375860,,494325,,,0
+H3,2010,2010,2010,4,0,1,Import,776,Tonga,TON,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,641878,,641878,,280215,,,6
+H3,2010,2010,2010,4,0,1,Import,780,Trinidad and Tobago,TTO,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,82652,,82652,,54354,,,0
+H3,2010,2010,2010,4,0,2,Export,780,Trinidad and Tobago,TTO,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,970483,,970483,,467002,,,0
+H3,2010,2010,2010,4,0,3,Re-Export,780,Trinidad and Tobago,TTO,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,21150,,21150,,27997,,,0
+H3,2010,2010,2010,4,0,1,Import,784,United Arab Emirates,ARE,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",1,No Quantity,,,,,8956816,,6839087,,,0
+H3,2010,2010,2010,4,0,2,Export,784,United Arab Emirates,ARE,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",1,No Quantity,,,,,19619859,,7178958,,,0
+H3,2010,2010,2010,4,0,3,Re-Export,784,United Arab Emirates,ARE,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",1,No Quantity,,,,,,,923775,,,0
+H3,2010,2010,2010,4,0,1,Import,788,Tunisia,TUN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1440701,,1440701,,1410096,,,0
+H3,2010,2010,2010,4,0,2,Export,788,Tunisia,TUN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,12213091,,12213091,,6314674,,,0
+H3,2010,2010,2010,4,0,1,Import,792,Turkey,TUR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,23260017,,23260017,,12985396,,,0
+H3,2010,2010,2010,4,0,2,Export,792,Turkey,TUR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,16120555,,16120555,,14038002,,,0
+H3,2010,2010,2010,4,0,1,Import,800,Uganda,UGA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,746009,,746009,,78205,,,0
+H3,2010,2010,2010,4,0,2,Export,800,Uganda,UGA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,2198603,,2198603,,933518,,,0
+H3,2010,2010,2010,4,0,1,Import,807,North Macedonia,MKD,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,3862552,,3862552,,1986769,,,0
+H3,2010,2010,2010,4,0,2,Export,807,North Macedonia,MKD,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1149610,,1149610,,503817,,,0
+H3,2010,2010,2010,4,0,1,Import,818,Egypt,EGY,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,37812,,37812,,257495,,,0
+H3,2010,2010,2010,4,0,2,Export,818,Egypt,EGY,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,20989903,,20989903,,14040181,,,0
+H3,2010,2010,2010,4,0,1,Import,826,United Kingdom,GBR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,53110389,,53110389,,38132930,,,0
+H3,2010,2010,2010,4,0,2,Export,826,United Kingdom,GBR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,838187982,,838187982,,265131714,,,0
+H3,2010,2010,2010,4,0,1,Import,834,United Rep. of Tanzania,TZA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,829333,,829333,,708515,,,0
+H3,2010,2010,2010,4,0,2,Export,834,United Rep. of Tanzania,TZA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,4489854,,4489854,,15489137,,,0
+H3,2010,2010,2010,4,0,1,Import,842,USA,USA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,379489772,,379489772,,225081310,,,0
+H3,2010,2010,2010,4,0,2,Export,842,USA,USA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,2057628815,,2057628815,,948446825,,,0
+H3,2010,2010,2010,4,0,3,Re-Export,842,USA,USA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,17145944,,17145944,,6073930,,,0
+H3,2010,2010,2010,4,0,1,Import,854,Burkina Faso,BFA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,132585,,132585,,33574,,,0
+H3,2010,2010,2010,4,0,2,Export,854,Burkina Faso,BFA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,42000,,42000,,1670,,,0
+H3,2010,2010,2010,4,0,1,Import,858,Uruguay,URY,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1212360,,1212360,,660225,,,0
+H3,2010,2010,2010,4,0,2,Export,858,Uruguay,URY,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1628017,,1628017,,789867,,,0
+H3,2010,2010,2010,4,0,1,Import,882,Samoa,WSM,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,14050,,14050,,34549,,,0
+H3,2010,2010,2010,4,0,2,Export,882,Samoa,WSM,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,20000,,20000,,4623,,,0
+H3,2010,2010,2010,4,0,1,Import,887,Yemen,YEM,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,3633484,,3633484,,1965533,,,0
+H3,2010,2010,2010,4,0,2,Export,887,Yemen,YEM,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,29054759,,29054759,,8271681,,,0
+H3,2010,2010,2010,4,0,3,Re-Export,887,Yemen,YEM,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1180000,,1180000,,359445,,,0
+H3,2010,2010,2010,4,0,1,Import,894,Zambia,ZMB,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,49700,,49700,,25082,,,0
+H3,2010,2010,2010,4,0,2,Export,894,Zambia,ZMB,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,9005,,9005,,230,,,0
+H2,2010,2010,2010,4,0,1,Import,52,Barbados,BRB,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,10216,,10216,,49033,,,0
+H2,2010,2010,2010,4,0,2,Export,52,Barbados,BRB,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1846020,,1846020,,378352,,,6
+H2,2010,2010,2010,4,0,3,Re-Export,52,Barbados,BRB,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1,,1,,1,,,6
+H2,2010,2010,2010,4,0,1,Import,72,Botswana,BWA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,5447,,5447,,10391,,,0
+H2,2010,2010,2010,4,0,2,Export,72,Botswana,BWA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,515554,,515554,,135380,,,0
+H2,2010,2010,2010,4,0,1,Import,90,Solomon Isds,SLB,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",1,No Quantity,,,,,,,4574,,,0
+H2,2010,2010,2010,4,0,1,Import,120,Cameroon,CMR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,95067,,95067,,77720,,,0
+H2,2010,2010,2010,4,0,2,Export,120,Cameroon,CMR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,50,,50,,405,,,0
+H2,2010,2010,2010,4,0,1,Import,174,Comoros,COM,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,33946,,33946,,22247,,,0
+H2,2010,2010,2010,4,0,1,Import,204,Benin,BEN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,400,,400,,162,,,0
+H2,2010,2010,2010,4,0,2,Export,204,Benin,BEN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,569175,,569175,,28679,,,0
+H2,2010,2010,2010,4,0,1,Import,364,Iran,IRN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,392284,,392284,,125869,,,0
+H2,2010,2010,2010,4,0,2,Export,364,Iran,IRN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,12849720,,12849720,,10299585,,,0
+H2,2010,2010,2010,4,0,2,Export,368,Iraq,IRQ,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",1,No Quantity,,,0,,0,,143500,,,0
+H2,2010,2010,2010,4,0,2,Export,434,Libya,LBY,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,13800,,13800,,1157,,,0
+H2,2010,2010,2010,4,0,1,Import,504,Morocco,MAR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,9938183,,9938183,,3749028,,,0
+H2,2010,2010,2010,4,0,2,Export,504,Morocco,MAR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,2517504,,2517504,,878801,,,0
+H2,2010,2010,2010,4,0,1,Import,508,Mozambique,MOZ,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,341371,,341371,,188965,,,6
+H2,2010,2010,2010,4,0,2,Export,508,Mozambique,MOZ,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,3210,,3210,,1590,,,6
+H2,2010,2010,2010,4,0,1,Import,512,Oman,OMN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,2775076,,2775076,,1434918,,,0
+H2,2010,2010,2010,4,0,2,Export,512,Oman,OMN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,4166347,,4166347,,1563301,,,0
+H2,2010,2010,2010,4,0,3,Re-Export,512,Oman,OMN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,282888,,282888,,89210,,,0
+H2,2010,2010,2010,4,0,1,Import,548,Vanuatu,VUT,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,430,,430,,3661,,,0
+H2,2010,2010,2010,4,0,1,Import,583,FS Micronesia,FSM,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,949,,949,,553,,,6
+H2,2010,2010,2010,4,0,1,Import,585,Palau,PLW,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,21557,,21557,,12540,,,6
+H2,2010,2010,2010,4,0,1,Import,608,Philippines,PHL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,1353650,,1353650,,403844,,,0
+H2,2010,2010,2010,4,0,2,Export,608,Philippines,PHL,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,131109488,,131109488,,59001939,,,0
+H2,2010,2010,2010,4,0,1,Import,634,Qatar,QAT,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,609030,,609030,,2103332,,,0
+H2,2010,2010,2010,4,0,1,Import,690,Seychelles,SYC,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,26815,,26815,,523,,,0
+H2,2010,2010,2010,4,0,1,Import,804,Ukraine,UKR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,3606831,,3606831,,2065433,,,0
+H2,2010,2010,2010,4,0,2,Export,804,Ukraine,UKR,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,5327948,,5327948,,3492359,,,0
+H2,2010,2010,2010,4,0,1,Import,862,Venezuela,VEN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,23562,,23562,,21599,,,0
+H2,2010,2010,2010,4,0,2,Export,862,Venezuela,VEN,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics.",8,Weight in kilograms,,,9584865,,9584865,,3370149,,,0
+H1,2010,2010,2010,4,0,2,Export,28,Antigua and Barbuda,ATG,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics",8,Weight in kilograms,,,87600,,87600,,35185,,,0
+H1,2010,2010,2010,4,0,3,Re-Export,28,Antigua and Barbuda,ATG,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics",8,Weight in kilograms,,,87600,,87600,,35185,,,0
+H1,2010,2010,2010,4,0,1,Import,270,Gambia,GMB,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics",8,Weight in kilograms,,,3582,,3582,,914,,,0
+H1,2010,2010,2010,4,0,1,Import,426,Lesotho,LSO,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics",8,Weight in kilograms,,,196342,,196342,,107558,,,6
+H1,2010,2010,2010,4,0,2,Export,426,Lesotho,LSO,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics",8,Weight in kilograms,,,3099,,3099,,1255,,,6
+H1,2010,2010,2010,4,0,1,Import,662,Saint Lucia,LCA,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics",8,Weight in kilograms,,,2693,,2693,,11861,,,0
+H1,2010,2010,2010,4,0,1,Import,678,Sao Tome and Principe,STP,0,World,WLD,,,,,,,,3915,"Waste, parings and scrap, of plastics",8,Weight in kilograms,,,50,,50,,509,,,0

@@ -18,6 +18,8 @@ wine_rating <- readr::read_csv("https://raw.githubusercontent.com/rfordatascienc
 ```
 
 ```{r}
+glimpse(wine_rating)
+
 wine_rating %>% count(country, sort = T)
 
 wine_rating %>% count(country, province, sort = T)
@@ -49,7 +51,7 @@ wine_rating %>%
   geom_smooth(method = "lm")
 
 summary(lm(points ~ log2(price), data = wine_rating)) 
-# Everytime the price doubles, the points go up by 2. 
+# Everytime the price doubles, the points go up by about 2. 
 ```
 
 # Fitting a linear regression to predict wine ratings based on country, taster, and variety
@@ -96,7 +98,8 @@ mod %>% tidy(conf.int = TRUE) %>%
   mutate(term = fct_reorder(term, estimate)) %>% 
   ggplot(aes(term, estimate)) +
   geom_point() +
-  geom_errorbar(aes(ymin = conf.low, ymax = conf.high)) +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high, width = .2)) +
+  geom_hline(aes(yintercept = 0), color = "red", lty = "dashed") +
   coord_flip()
 ```
 
@@ -136,11 +139,44 @@ wine_rating_tokens %>%
 ```{r}
 library(widyr)
 
-wine_rating_tokens %>% 
+wine_rating_filtered <- wine_rating_tokens %>% 
   distinct(review_id, word) %>% 
-  pairwise_cor(word, review_id)
-  
-  
+  add_count(word) %>% 
+  filter(n >= 1000, 
+         str_detect(word, "[a-z]")) 
+
+wine_rating_cors <- wine_rating_filtered %>% 
+  pairwise_cor(word, review_id, sort = T)
+
+```
+
+```{r}
+library(Matrix)
+
+# Predictor variable
+wine_word_matrix <- wine_rating_filtered %>% 
+  cast_sparse(review_id, word)
+
+# Response variable
+wine_ids <- as.integer(rownames(wine_word_matrix))
+scores <- wine_rating$points[wine_ids]
+
+nrow(wine_word_matrix)
+length(scores)
+
+library(glmnet)
+
+glm_model <- glmnet(wine_word_matrix, scores)
+glm_model
+
+glm_model %>% 
+  tidy() %>%
+  filter(term %in% c("rich", "black", "simple")) %>% 
+  ggplot(aes(lambda, estimate, color = term)) +
+  geom_line() +
+  scale_x_log10()
+
+
 ```
 
 ```{r}

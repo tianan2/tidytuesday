@@ -1,0 +1,76 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+library(lubridate)
+library(kableExtra)
+library(Rvoteview)
+library(jtools)
+
+nominates <- member_search(chamber = 'House', congress = 116) %>% select(state_abbrev, district_code, nominate.dim1)
+```
+
+```{r}
+library(uspoliticalextras)
+
+reps <- uspoliticalextras::uspol_csusa_house_bios %>%
+  filter(congress == 116) %>%
+  select(state_fips:district_code, party, last_name, gender, ethnicity, date_of_birth) %>%
+  mutate(age = round(lubridate::interval(date_of_birth, 
+                                         Sys.Date())/lubridate::duration(num = 1, 
+                                                                         units = "years"))) %>%
+  select(-date_of_birth)%>%
+  mutate(district_code = ifelse(district_code == 0, 1, district_code),
+         ethnicity = ifelse(grepl('middle|multi|nativ|pacific', ethnicity), 
+                            'other-race', 
+                            ethnicity),
+         ethnicity = gsub('-american', '', ethnicity),
+         ethnicity = gsub('african', 'black', ethnicity))
+```
+
+```{r}
+unique(uspoliticalextras::uspol_dems2018_house$variable)
+```
+
+```{r}
+south <- c('SC', 'MS', 'FL', 
+           'AL', 'GA', 'LA', 'TX', 
+           'VA', 'AR', 'NC', 'TE',
+           'OK', 'KE')
+
+dems <- uspoliticalextras::uspol_dems2018_house %>% 
+  spread(variable, estimate) %>%
+  mutate(district_code = ifelse(district_code == 0, 1, district_code),
+         is_south = ifelse(state_abbrev %in% south, 'Yes', 'No'))
+```
+
+```{r}
+full <- reps %>% left_join(dems) %>% left_join(nominates) %>%
+  mutate(ethnicity = as.factor(ethnicity),
+         gender = as.factor(gender),
+         party = as.factor(party),
+         is_south = as.factor(is_south))
+```
+
+```{r}
+keeps <- c('nominate.dim1', 'Per_BachelorsHigher',
+           'Median_HH_Income', 'Per_Black',
+           'Per_Hispanic', 'is_south', 'party',
+           'gender', 'ethnicity', 'age') 
+
+full1 <- full[, c(keeps)]
+colnames(full1) <- meta$var
+
+full1 <- within(full1, member_ETHNICITY <- relevel(member_ETHNICITY, ref = 4))
+full1 <- within(full1, member_GENDER <- relevel(member_GENDER, ref = 2))
+full1 <- within(full1, member_PARTY <- relevel(member_PARTY, ref = 2))
+full1 <- within(full1, cd_IS_SOUTH <- relevel(cd_IS_SOUTH, ref = 2))
+```
+

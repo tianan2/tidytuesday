@@ -67,7 +67,6 @@ most_recent_cycle_inspections <- inspections %>%
          inspection_type == "Initial Inspection") %>% 
   arrange(desc(inspection_date)) %>% 
   distinct(camis, .keep_all = TRUE)
-
 ```
 
 ## Which type of cuisine is more likely to get higher scores (e.g., more violations)?

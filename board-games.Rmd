@@ -7,20 +7,38 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r message=FALSE}
+```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 theme_set(theme_light())
 
 board_games <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-03-12/board_games.csv")
+
+View(board_games)
 ```
 
 ## EDA
+
 ```{r}
+board_games %>% 
+  count(publisher, sort = T)
+
 board_games %>% 
   count(year_published, sort = T) %>% 
   ggplot(aes(year_published, n)) +
   geom_line()
-  
+
+board_games %>% 
+  ggplot(aes(average_rating)) + 
+  geom_histogram() 
+## looks quite normally distributed, which is a good news if we gonna fit a
+## model because it means we can have a linear output - we're not doing any
+## classification yes or no question - it doesn't really have a skewed
+## distribution in which we need to be really creative
+
+board_games %>% 
+  ggplot(aes(max_playtime / 60)) +
+  geom_histogram() + 
+  scale_x_log10(breaks = c(1, 2, 4, 8))
 ```
 # Categorical variables
 ```{r}
@@ -67,7 +85,9 @@ board_games_data <- board_games %>%
 lm(average_rating ~ log(max_players + 1), data = board_games_data) %>% 
   summary()
 
-board_games_data %>% ggplot(aes(log(max_players + 1), average_rating)) + geom_point() + geom_smooth(method = "lm")
+board_games_data %>% ggplot(aes(log(max_players + 1), average_rating)) + 
+  geom_point() + 
+  geom_smooth(method = "lm")
 ```
 
 ```{r}
@@ -128,7 +148,10 @@ features_matrix <- features %>%
   cast_sparse(game_id, feature) 
 
 ## What I am predicting
-ratings <- board_games$average_rating[match(rownames(features_matrix), board_games$game_id)]
+ratings <- board_games$average_rating[as.integer(rownames(features_matrix))]
+
+nrow(features_matrix)
+length(ratings)
 
 lasso_fit <- glmnet(features_matrix, ratings)
 

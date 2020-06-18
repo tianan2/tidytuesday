@@ -1,0 +1,168 @@
+---
+title: "Untitled"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+theme_set(theme_light())
+
+bob_ross <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-08-06/bob-ross.csv") %>% janitor::clean_names()
+```
+
+```{r}
+bob_ross_gathered <- bob_ross %>% 
+  gather(element, value, -episode, -title) %>% 
+  filter(value == 1) %>% 
+  mutate(title = str_to_title(str_remove_all(title, '"')), 
+         element = str_to_title(str_replace(element, '_', ' '))) %>% 
+  select(-value) %>% ## note the use of *extract* function
+  extract(episode, into = c("season", "episode_number"), "S(.*)E(.*)", convert = TRUE, remove = FALSE) %>% 
+  arrange(season, episode_number)
+```
+
+# EDA
+```{r}
+bob_ross_gathered %>% 
+  count(element, sort = T) %>% 
+  head(25) %>% 
+  mutate(element = fct_reorder(element, n)) %>% 
+  ggplot(aes(element, n, fill = element)) +
+  geom_col() +
+  coord_flip() +
+  theme(legend.position = "none")
+```
+
+What are the most "crowded" painting with the most elements?
+
+```{r}
+bob_ross_gathered %>% ## note that title is not distinct - some of them are duplicated
+  add_count(episode) %>% 
+  arrange(desc(n)) 
+```
+
+
+```{r}
+bob_ross_gathered %>% 
+  count(season, element, sort = T)
+
+# How frequent a particular element has occurred in Bob's paintings over time?
+bob_ross_gathered %>% 
+  filter(!element %in% c("Tree", "Trees")) %>% 
+  add_count(season, name = "total_elements") %>% 
+  count(season, element, total_elements) %>% 
+  filter(n > 3) %>% 
+  mutate(percent_elements = n / total_elements) %>% 
+  filter(element == "Deciduous") %>% 
+  ggplot(aes(season, percent_elements)) +
+  geom_line() +
+  expand_limits(y = 0)
+
+by_season_element <- bob_ross_gathered %>% 
+  filter(!element %in% c("Tree", "Trees")) %>% 
+  group_by(season) %>% 
+  mutate(episode_total = n_distinct(episode_number)) %>% 
+  count(season, element, episode_total, sort = TRUE) %>% 
+  mutate(percent_included = n / episode_total) 
+
+by_season_element %>% 
+  filter(element == "Mountain") %>% 
+  ggplot(aes(season, percent_included)) +
+  geom_line() +
+  expand_limits(y = 0) +
+  scale_y_continuous(labels = scales::percent_format())
+
+# I may wanna apply this to many elements - how can I do that? 
+
+bob_ross_gathered %>% 
+  filter(!element %in% c("Tree", "Trees")) %>% 
+  group_by(season) %>% 
+  mutate(episode_total = n_distinct(episode_number)) %>% 
+  count(season, element, episode_total, sort = TRUE) %>% 
+  mutate(percent_included = n / episode_total) %>% 
+  group_by(element) %>% 
+  mutate(element_total = sum(n)) %>% 
+  ungroup() %>% 
+  filter(element_total > 100) %>% 
+  ggplot(aes(season, percent_included, color = element)) +
+  geom_line() +
+  facet_wrap(~ element) +
+  expand_limits(y = 0) + 
+  theme(legend.position = "none")
+  
+```
+
+Clustering
+
+What tends to occur together?
+
+```{r}
+library(widyr)
+
+correlations <- bob_ross_gathered %>% 
+  add_count(element) %>% 
+  filter(n >= 10) %>% 
+  pairwise_cor(element, episode, sort = TRUE) 
+
+# what tends to appear with a river?
+correlations %>% 
+  filter(item1 == "River") %>% 
+  mutate(item2 = fct_reorder(item2, correlation)) %>% 
+  ggplot(aes(item2, correlation)) +
+  geom_col() +
+  coord_flip() +
+  labs(title = "What tends to appear with River?", 
+       subtitle = "Among the elements that appear in at least 10 paintings")
+```
+
+```{r}
+library(ggraph)
+library(igraph)
+
+correlations %>% 
+  head(100) %>% 
+  graph_from_data_frame() %>% 
+  ggraph(layout = "kk") +
+  geom_edge_link(aes(alpha = correlation)) +
+  geom_node_point() +
+  geom_node_text(aes(label = name), vjust = 1, hjust = 1) +
+  theme_void()
+  
+```
+
+### Principal Component Analysis
+
+What dimensions drive a lot of the variation among paintings?
+
+
+```{r}
+library(reshape2)
+library(broom)
+
+binary_matrix <- bob_ross_gathered %>% 
+  acast(title ~ element)
+
+dim(binary_matrix)
+
+binary_matrix
+t(binary_matrix)
+
+# Center the columns
+colSums(t(t(binary_matrix) - colMeans(binary_matrix)))
+
+centered_matrix <- t(t(binary_matrix) - colMeans(binary_matrix))
+
+# Execute PCA
+svd_result <- svd(centered_matrix)
+
+tidy(svd_result, matrix = "v") %>% # Why?
+  mutate(element = colnames(binary_matrix)[column]) # Why?
+
+```
+

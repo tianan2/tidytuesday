@@ -35,6 +35,5 @@ lion_king_summarized %>%
   ggplot(aes(date, avg_ticket_price, color = period)) +
   geom_line(lty = 2, alpha = .5)
 
-
 ```
 

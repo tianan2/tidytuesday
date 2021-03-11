@@ -1,0 +1,90 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(tidytuesdayR)
+
+tuesdata <- tt_load(2020, week = 45)
+
+ikea <- tuesdata$ikea %>% 
+  select(-X1) %>% 
+  mutate(price_usd = 0.27 * price)
+```
+
+```{r}
+ikea %>% 
+  group_by(category) %>% 
+  summarize(avg_price = mean(price))
+
+ikea %>% 
+  count(name, sort = T)
+```
+```{r}
+library(glue)
+
+ikea %>% 
+  add_count(category, name = "category_total") %>% 
+  mutate(category = glue("{ category } ({ category_total })"), 
+         category = fct_reorder(category, price_usd)) %>% 
+  ggplot(aes(price_usd, category)) +
+  geom_boxplot() +
+  # geom_jitter(width = 0, height = .1, alpha = .3) +
+  scale_x_log10(labels = dollar) +
+  labs(title = "How much do items in each category cost?", 
+       x = "Price (USD)", 
+       y = " ")
+```
+```{r}
+library(ggridges)
+
+ikea %>% 
+  add_count(category, name = "category_total") %>% 
+  mutate(category = glue("{ category } ({ category_total })"), 
+         category = fct_reorder(category, price_usd)) %>% 
+  ggplot(aes(price_usd, category, fill = other_colors)) +
+  geom_density_ridges(alpha = .5) +
+  # geom_jitter(width = 0, height = .1, alpha = .3) +
+  scale_x_log10(labels = dollar) +
+  labs(title = "How much do items in each category cost?", 
+       x = "Price (USD)", 
+       y = " ")
+
+```
+
+```{r}
+ikea %>% 
+  mutate(name = fct_lump(name, 20), 
+         category = fct_lump(category, 8)) %>% 
+  filter(name != "Other")  %>% 
+  count(name, category, sort = T) %>% 
+  mutate(name = fct_reorder(name, n, sum), 
+         category = fct_reorder(category, n, sum)) %>% 
+  ggplot(aes(n, name, fill = category)) +
+  geom_col() +
+  scale_fill_discrete(guide = guide_legend(reverse = TRUE)) +
+  labs(x = "# of items", 
+       y = "Name of items")
+  
+```
+```{r}
+ikea %>% 
+  select(short_description) %>% 
+  mutate(short_description = str_trim(str_replace_all(short_description, "\\s+", " "))) %>% 
+  separate(short_description, 
+           c("main_description", "rest"), 
+           sep = ", ", 
+           extra = "merge", 
+           fill = "right") %>% 
+  extract(rest, "numbers", "([\\d\\-xX]+) cm", remove = F)
+
+```
+
+
+

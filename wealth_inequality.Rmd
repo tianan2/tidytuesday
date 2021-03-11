@@ -1,0 +1,103 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+library(tidytuesdayR)
+library(scales)
+library(tidytext)
+theme_set(theme_light())
+
+tt <- tt_load("2021-02-09")
+```
+
+```{r}
+income_distribution <- tt$income_distribution
+income_time <- tt$income_time
+income_limits <- tt$income_limits
+income_aggregate <- tt$income_aggregate
+income_mean <- tt$income_mean
+
+str(income_distribution)
+glimpse(income_distribution)
+summary(income_distribution)
+
+income_distribution %>% 
+  count(year)
+
+income_distribution %>% 
+  count(race)
+
+income_distribution %>% 
+  count(income_bracket)
+
+income_distribution %>% 
+  filter(year == 2019) %>% 
+  mutate(income_bracket = reorder_within(income_bracket, income_distribution, race)) %>% 
+  ggplot(aes(income_distribution, income_bracket)) +
+  geom_col() +
+  scale_y_reordered() +
+  facet_wrap(~ race, scales = "free_y")
+
+income_distribution %>% 
+  filter(race %in% c("All Races", "Asian Alone", "Black Alone", "Hispanic (Any Race)", "White Alone")) %>% 
+  ggplot(aes(year, income_median, color = race)) +
+  geom_line()
+```
+```{r}
+# Let's make one graph out of an dataset
+lifetime_earn <- tt$lifetime_earn
+
+lifetime_earn %>% 
+  ggplot(aes(lifetime_earn, race, fill = gender)) +
+  geom_col(position = "dodge") +
+  scale_x_continuous(labels = dollar)
+```
+
+```{r}
+plot_by_race <- function(data, column, labels = dollar, ...) {
+  data %>% 
+    mutate(race = fct_reorder(race, -{{ column }}, last)) %>% 
+    ggplot(aes(year, {{ column }}, color = race, ...)) +
+    geom_line() +
+    expand_limits(y = 0) +
+    scale_y_continuous(labels = labels)
+}
+
+tt$student_debt %>% 
+  plot_by_race(loan_debt)
+
+tt$student_debt %>% 
+  plot_by_race(loan_debt_pct, labels = percent)
+
+tt$retirement %>% 
+  plot_by_race(retirement)
+
+tt$home_owner %>% 
+  plot_by_race(home_owner_pct, labels = percent)
+
+tt$race_wealth %>% 
+  plot_by_race(wealth_family, lty = type)
+
+```
+
+```{r}
+race_wealth <- tt$race_wealth
+
+race_wealth %>% 
+  count(type)
+
+race_wealth %>% 
+  filter(race != "Non-White", 
+         year > 1980) %>% 
+  ggplot(aes(year, wealth_family, color = race)) +
+  geom_line() +
+  facet_wrap(~ type)
+```
+

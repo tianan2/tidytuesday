@@ -1,0 +1,115 @@
+---
+title: "Untitled"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(tidytuesdayR)
+library(scales)
+theme_set(theme_light())
+
+tuesdata <- tt_load("2020-08-04")
+glimpse(tuesdata$energy_types)
+glimpse(tuesdata$country_totals)
+
+energy_types <- tuesdata$energy_types %>% 
+  pivot_longer(cols = c(starts_with("2")), names_to = "year", values_to = "value") %>% 
+  mutate(year = as.integer(year)) %>% 
+  replace_na(list(country_name = "United Kingdom")) %>% 
+  mutate(country = ifelse(country == "UK", "GB", country),
+         country = ifelse(country == "EL", "GR", country), 
+         country = str_to_lower(country))
+
+country_totals <- tuesdata$country_totals
+```
+
+# Exploration of datasets
+
+```{r}
+energy_types %>% 
+  count(level, type, sort = T)
+
+country_totals %>% 
+  count(type, sort = T)
+```
+
+```{r}
+library(tidytext)
+
+data_prepared <- energy_types %>% 
+  filter(level == "Level 1", 
+         year == "2018", 
+         value > 0, 
+         type != "Other") %>% 
+  group_by(type) %>% 
+  mutate(country_name = fct_lump(country_name, 10, w = value)) %>%
+  mutate(country_name = reorder_within(country_name, value, type, fun = sum),
+         country = as.character(fct_lump(country, 10, w = value)))
+
+data_prepared %>% 
+  ggplot(aes(value, country_name)) +
+  geom_col() +
+  scale_y_reordered() +
+  facet_wrap(~ type, scales = "free") +
+  scale_x_continuous(labels = comma_format()) +
+  labs(title = "Total energy production by type in 2018", 
+       x = " ", 
+       y = " ", 
+       caption = "Data source: Eurostat")
+```
+# Try ggflags!
+
+```{r}
+library(ggflags)
+
+data_prepared %>% 
+  filter(country != "Other") %>% 
+  mutate(country = str_to_lower(country)) %>% 
+  ggplot(aes(value, country_name)) +
+  geom_col(width = .1) +
+  geom_flag(aes(country = country)) +
+  scale_y_reordered() +
+  scale_country(guide = F) +
+  facet_wrap(~ type, scales = "free") +
+  scale_x_continuous(labels = comma_format()) +
+  theme_minimal() +
+  labs(title = "Total energy production by type in 2018", 
+       x = " ", 
+       y = " ", 
+       caption = "Data source: Eurostat")
+```
+
+```{r}
+plot_slopegraph <- function(tbl) {
+  tbl %>% 
+    filter(value > 1) %>%
+    ggplot(aes(year, value)) +
+    geom_line(aes(group = country)) +
+    geom_flag(aes(country = country)) +
+    geom_text(aes(label = ifelse(year == 2017, NA, country_name),
+                hjust = ifelse(year == 2016, 1.2, -.2)),
+            check_overlap = TRUE) +
+    scale_country() +
+    scale_x_continuous(breaks = seq(2016, 2018, 1), 
+                     limits = c(2015, 2019)) +
+    theme(legend.position = "none", 
+        panel.grid = element_blank()) + 
+    labs(x = " ", 
+       y = "Gigawatts hours produced in this year")
+}
+
+energy_types %>% 
+  filter(type == "Wind") %>% 
+  plot_slopegraph()
+  # scale_y_log10(labels = comma) 
+         
+  
+```
+

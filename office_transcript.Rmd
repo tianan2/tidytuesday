@@ -12,7 +12,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(tidyverse)
 library(schrute)
-
 theme_set(theme_light())
 
 office_transcript <- as_tibble(theoffice) %>% mutate(season = as.integer(season), 

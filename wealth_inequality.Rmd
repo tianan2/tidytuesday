@@ -146,4 +146,17 @@ tt$income_aggregate %>%
        y = "Income share", 
        fill = " ")
 ```
+```{r}
+tt$income_distribution %>% 
+  filter(!str_detect(race, "in Combination")) %>% 
+  mutate(income_bracket = fct_inorder(income_bracket),
+         income_distribution = income_distribution / 100) %>% 
+  ggplot(aes(year, income_distribution, fill = income_bracket)) +
+  geom_area() +
+  scale_y_continuous(labels = percent) +
+  facet_wrap(~ race) +
+  labs(x = "Year", 
+       y = "Income share", 
+       fill = " ")
+```
 

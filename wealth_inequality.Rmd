@@ -65,26 +65,34 @@ plot_by_race <- function(data, column, labels = dollar, ...) {
     expand_limits(y = 0, 
                   x = 2020) +
     scale_y_continuous(labels = labels) +
-    theme(legend.position = "none")
+    theme(legend.position = "none") +
+    labs(x = "Year")
 }
 
 tt$student_debt %>% 
-  plot_by_race(loan_debt)
+  plot_by_race(loan_debt) +
+  labs(y = "Average family student loan debt (for aged 25-55)")
 
 tt$student_debt %>% 
-  plot_by_race(loan_debt_pct, labels = percent)
+  plot_by_race(loan_debt_pct, labels = percent) +
+  labs(y = "Share of families with student loan debt")
 
 tt$retirement %>% 
-  plot_by_race(retirement)
+  plot_by_race(retirement) +
+  labs(title = "Average family liquid retirement savings (normalized to 2016 dollars)", 
+       y = " ")
 
 tt$home_owner %>% 
-  plot_by_race(home_owner_pct, labels = percent)
+  plot_by_race(home_owner_pct, labels = percent) +
+  labs(title = "Home ownership percentage for families", 
+       y = " ")
 
 tt$race_wealth %>% 
   plot_by_race(wealth_family) + 
   facet_wrap(~ type, scales = "free_y")
 
 ```
+
 ```{r}
 tt$income_time %>% 
   mutate(percentile = fct_reorder(percentile, income_family)) %>% 
@@ -94,8 +102,13 @@ tt$income_time %>%
 tt$income_time %>% 
   spread(percentile, income_family) %>% 
   ggplot(aes(year, `50th`, ymin = `10th`, ymax = `90th`)) +
-  geom_ribbon()
+  geom_line() +
+  geom_ribbon(alpha = .25) +
+  scale_y_continuous(labels = dollar) +
+  labs(x = " ", 
+       y = "Family income (median with 10th and 90th percentile")
 
+tt$income_limits
 ```
 
 

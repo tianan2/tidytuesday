@@ -134,5 +134,16 @@ library(plotly)
 ggplotly(g)
 ```
 
-
+```{r}
+tt$income_aggregate %>% 
+  filter(!str_detect(income_quintile, "Top 5%"), 
+         !str_detect(race, "in Combination")) %>% 
+  mutate(income_quintile = fct_reorder(income_quintile, income_share)) %>% 
+  ggplot(aes(year, income_share, fill = income_quintile)) +
+  geom_area() +
+  facet_wrap(~ race) +
+  labs(x = "Year", 
+       y = "Income share", 
+       fill = " ")
+```
 

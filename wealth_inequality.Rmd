@@ -89,7 +89,9 @@ tt$home_owner %>%
 
 tt$race_wealth %>% 
   plot_by_race(wealth_family) + 
-  facet_wrap(~ type, scales = "free_y")
+  facet_wrap(~ type, scales = "free_y") +
+  expand_limits(x = 2030) +
+  labs(y = "Family wealth")
 
 ```
 
@@ -108,7 +110,28 @@ tt$income_time %>%
   labs(x = " ", 
        y = "Family income (median with 10th and 90th percentile")
 
-tt$income_limits
+tt$income_limits %>%
+  filter(dollar_type == "2019 Dollars", 
+         !str_detect(race, "in Combination")) %>% 
+  distinct(race, year, income_quintile, .keep_all = TRUE) %>% 
+  filter(income_quintile == "Top 5%") %>% 
+  plot_by_race(income_dollars) +
+  expand_limits(x = 2032) +
+  labs(y = "Top 5% familial income (2019 dollars)")
+
+g <- tt$income_limits %>%
+  filter(dollar_type == "2019 Dollars", 
+         !str_detect(race, "in Combination")) %>% 
+  mutate(income_quintile = fct_reorder(income_quintile, income_dollars)) %>% 
+  distinct(race, year, income_quintile, .keep_all = TRUE) %>% 
+  plot_by_race(income_dollars) +
+  facet_wrap(~ income_quintile, scales = "free_y") +
+  expand_limits(x = 2035) +
+  labs(y = "Top 5% familial income (2019 dollars)")
+
+library(plotly)
+
+ggplotly(g)
 ```
 
 

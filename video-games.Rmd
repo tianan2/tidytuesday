@@ -1,0 +1,43 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(tidytuesdayR)
+library(scales)
+theme_set(theme_light())
+
+tt <- tt_load("2021-03-16")
+```
+
+```{r}
+games <- tt$games %>% 
+  mutate(avg_peak_perc = parse_number(avg_peak_perc) / 100) %>% 
+  mutate(date = ymd(paste(year, str_sub(month, 1, 3), 1))) %>% 
+  filter(date > min(date))
+
+library(lubridate)
+
+tibble(date = seq(as.Date("2020-01-01"), as.Date("2020-12-31"), 1)) %>% 
+  mutate(month_number = month(date)) 
+
+games %>% 
+  count(date) %>% 
+  ggplot(aes(date, n)) +
+  geom_line()
+
+games %>% 
+  group_by(date) %>% 
+  summarize(median_avg = median(avg)) %>% 
+  ggplot(aes(date, median_avg)) +
+  geom_line() +
+  expand_limits(y = 0)
+
+```
+

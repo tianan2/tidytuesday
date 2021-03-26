@@ -29,12 +29,21 @@ issues <- tt$issues
 
 ```{r}
 # Which country has voted for resolutions most often?
-unvotes %>% 
+by_country <- unvotes %>% 
   group_by(country) %>% 
   summarize(n = n(), 
             yes_ratio = mean(vote == "1")) %>% 
-  arrange((yes_ratio))
+  arrange(desc(yes_ratio))
 
+by_country %>% 
+  filter(n > 5000) %>% 
+  head(20) %>% 
+  mutate(country = fct_reorder(country, yes_ratio)) %>% 
+  ggplot(aes(yes_ratio, country)) +
+  geom_point(aes(size = n))
+```
+
+```{r}
 unvotes %>% 
   left_join(roll_calls, by = "rcid") %>% 
   mutate(year = year(date)) %>% 

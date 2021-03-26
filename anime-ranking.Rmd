@@ -9,7 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r message=FALSE, cache=TRUE}
 library(tidyverse)
-library(here)
+library(scales)
 
 theme_set(theme_light())
 
@@ -31,6 +31,5 @@ anime_scores %>%
   ggplot(aes(title, score)) + 
   geom_col() +
   coord_flip()
-
 ```
 

@@ -1,0 +1,51 @@
+---
+title: "unvoting"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+library(tidytuesdayR)
+library(scales)
+library(lubridate)
+theme_set(theme_light())
+```
+
+```{r Load}
+tt <- tt_load("2021-03-23")
+```
+
+```{r}
+unvotes <- tt$unvotes %>% 
+  mutate(vote = fct_recode(vote, "1" = "yes", "0" = "abstain", "-1" = "no"))
+
+roll_calls <- tt$roll_calls
+issues <- tt$issues
+```
+
+```{r}
+# Which country has voted for resolutions most often?
+unvotes %>% 
+  group_by(country) %>% 
+  summarize(n = n(), 
+            yes_ratio = mean(vote == "1")) %>% 
+  arrange((yes_ratio))
+
+unvotes %>% 
+  left_join(roll_calls, by = "rcid") %>% 
+  mutate(year = year(date)) %>% 
+  group_by(country, year) %>% 
+  summarize(n = n(), 
+            yes_ratio = mean(vote == "1")) %>% 
+  filter(country == "China") %>% 
+  ggplot(aes(year, yes_ratio)) +
+  geom_point(aes(size = n)) +
+  geom_line() +
+  expand_limits(y = 0.5)
+
+```
+

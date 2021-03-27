@@ -33,14 +33,29 @@ by_country <- unvotes %>%
   group_by(country) %>% 
   summarize(n = n(), 
             yes_ratio = mean(vote == "1")) %>% 
+  filter(n >= 100) %>% 
   arrange(desc(yes_ratio))
 
 by_country %>% 
-  filter(n > 5000) %>% 
   head(20) %>% 
   mutate(country = fct_reorder(country, yes_ratio)) %>% 
   ggplot(aes(yes_ratio, country)) +
-  geom_point(aes(size = n))
+  geom_point(aes(size = n)) +
+  scale_x_continuous(labels = percent) +
+  labs(title = "% of yes votes in UNGM", 
+       y = " ", 
+       size = "# of votes")
+
+by_country %>% 
+  tail(20) %>%  
+  mutate(country = fct_reorder(country, yes_ratio)) %>% 
+  ggplot(aes(yes_ratio, country)) +
+  geom_point(aes(size = n)) +
+  scale_x_continuous(labels = percent) +
+  labs(title = "What countries voted yest the least in UNGM?", 
+       y = " ", 
+       size = "# of votes")
+  
 ```
 
 ```{r}

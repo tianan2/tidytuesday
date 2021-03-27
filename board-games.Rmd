@@ -1,0 +1,162 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+theme_set(theme_light())
+
+board_games <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-03-12/board_games.csv")
+
+View(board_games)
+```
+
+## EDA
+
+```{r}
+board_games %>% 
+  count(publisher, sort = T)
+
+board_games %>% 
+  count(year_published, sort = T) %>% 
+  ggplot(aes(year_published, n)) +
+  geom_line()
+
+board_games %>% 
+  ggplot(aes(average_rating)) + 
+  geom_histogram() 
+## looks quite normally distributed, which is a good news if we gonna fit a
+## model because it means we can have a linear output - we're not doing any
+## classification yes or no question - it doesn't really have a skewed
+## distribution in which we need to be really creative
+
+board_games %>% 
+  ggplot(aes(max_playtime / 60)) +
+  geom_histogram() + 
+  scale_x_log10(breaks = c(1, 2, 4, 8))
+```
+# Categorical variables
+```{r}
+categorical_variables <- board_games %>% 
+  select(game_id, name, category, family) %>% 
+  gather(type, value, -game_id, -name) %>% 
+  filter(!is.na(value)) %>% 
+  separate_rows(value, sep = ",") %>% 
+  arrange(game_id)
+  
+categorical_counts <- categorical_variables %>% 
+  count(type, value, sort = T)
+```
+
+```{r}
+categorical_counts %>% 
+  group_by(type) %>% 
+  ## new function!
+  top_n(20, value) %>% 
+  ungroup() %>% 
+  mutate(value = fct_reorder(value, n)) %>% 
+  ggplot(aes(value, n, fill = type)) +
+  geom_col(show.legend = F) +
+  coord_flip() +
+  facet_wrap(~ type, scales = "free")
+  
+```
+
+# Predict average rating!
+```{r}
+lm(average_rating ~ 1, board_games) %>% 
+  summary()
+```
+```{r}
+## cross-validation 
+validation_set <- board_games %>% 
+  filter(game_id %% 5 == 0)
+
+board_games_data <- board_games %>% 
+  filter(game_id %% 5 != 0)
+```
+
+```{r}
+lm(average_rating ~ log(max_players + 1), data = board_games_data) %>% 
+  summary()
+
+board_games_data %>% ggplot(aes(log(max_players + 1), average_rating)) + 
+  geom_point() + 
+  geom_smooth(method = "lm")
+```
+
+```{r}
+lm(average_rating ~ log(max_players + 1) + log(max_playtime + 1), data = board_games_data) %>% 
+  summary()
+```
+
+```{r}
+lm(average_rating ~ log(max_players + 1) + log(max_playtime + 1) + year_published, data = board_games_data) %>% 
+  summary()
+
+board_games_data %>% 
+  group_by(decade = 10 * (year_published %/% 10)) %>%
+  summarize(avg_rating = mean(average_rating)) %>% 
+  ggplot(aes(decade, avg_rating)) + 
+  geom_line()
+```
+
+```{r}
+library(broom)
+
+lm(average_rating ~ log(max_players + 1) + log(max_playtime + 1) + year_published, data = board_games_data) %>% 
+  tidy()
+```
+
+```{r}
+by_categorical <- board_games_data %>% 
+  inner_join(categorical_variables, by = c("game_id", "name")) %>% 
+  select(type, value, average_rating) %>%
+  group_by(type, value) %>% 
+  summarize(games = n(), 
+            average_rating = mean(average_rating)) %>% 
+  arrange(desc(average_rating))
+  
+board_games_data %>% 
+  inner_join(categorical_variables, by = c("game_id", "name")) %>% 
+  filter(type == "category") %>% 
+  mutate(value = fct_lump(value, 15), 
+         value = fct_reorder(value, average_rating)) %>% 
+  ggplot(aes(value, average_rating)) + 
+  geom_boxplot() + 
+  coord_flip()
+```
+```{r}
+features <- categorical_variables %>% 
+  unite(feature, type, value) %>% 
+  add_count(feature) %>% 
+  filter(n >= 50) 
+```
+
+```{r}
+library(glmnet)
+library(tidytext)
+library(Matrix)
+
+## Predictor
+features_matrix <- features %>% 
+  cast_sparse(game_id, feature) 
+
+## What I am predicting
+ratings <- board_games$average_rating[as.integer(rownames(features_matrix))]
+
+nrow(features_matrix)
+length(ratings)
+
+lasso_fit <- glmnet(features_matrix, ratings)
+
+lasso_fit %>% tidy()
+
+## what is a step? increasing value of the penalty parameter of lambda
+```
+

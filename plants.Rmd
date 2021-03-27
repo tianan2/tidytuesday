@@ -1,0 +1,27 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+library(tidytuesdayR)
+theme_set(theme_light())
+
+tt <- tt_load("2020-08-18")
+```
+```{r}
+plants <- tt$plants
+```
+
+```{r}
+plants %>% 
+  count(binomial_name, sort = T)
+
+
+```
+

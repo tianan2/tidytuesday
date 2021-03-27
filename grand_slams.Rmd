@@ -1,0 +1,104 @@
+---
+title: "Untitled"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+theme_set(theme_light())
+
+player_dob <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-04-09/player_dob.csv")
+
+# Removing some players in 1977 who were duplicated
+grand_slams <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-04-09/grand_slams.csv") %>% 
+  arrange(year, grand_slam, name, gender) %>% 
+  distinct(year, grand_slam, name, .keep_all = TRUE)
+
+grand_slam_timeline <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-04-09/grand_slam_timeline.csv")
+
+```
+
+```{r}
+grand_slams %>% 
+  count(name, grand_slam, sort = TRUE, name = "n_each") %>%
+  add_count(name, wt = n_each) %>% 
+  filter(n >= 8) %>% 
+  mutate(name = fct_reorder(name, n_each, sum)) %>% 
+  ggplot(aes(name, n_each, fill = grand_slam)) +
+  geom_col() + 
+  coord_flip()
+```
+
+```{r}
+grandslam_age <- player_dob %>% 
+  select(name, date_of_birth) %>% 
+  inner_join(grand_slams, by = "name") %>% 
+  mutate(age = as.numeric(difftime(tournament_date, date_of_birth, units = "days")) / 365.25)
+
+grandslam_age %>% 
+  ggplot(aes(age)) +
+  geom_histogram()
+```
+
+The median age of a Grand Slam winner (1968-present) is `r median(grandslam_age$age)`. Does it differ between men and women?
+
+```{r}
+grandslam_age %>% 
+  ggplot(aes(age, fill = gender)) +
+  geom_histogram(position = "identity", alpha = 0.75)
+```
+```{r}
+grandslam_age %>% 
+  mutate(decade = 10 * (year %/% 10)) %>% 
+  ggplot(aes(decade, age, fill = gender, group = interaction(gender, decade))) +
+  geom_boxplot()
+```
+
+Hard to make a conclusion on the average age of a winner except it looks like it's increased in the last decade. 
+
+```{r}
+grandslam_age %>% 
+  mutate(decade = 10 * (year %/% 10)) %>% 
+  filter(decade >= 1960) %>% 
+  group_by(decade, gender, name) %>% 
+  summarize(age = mean(age), 
+            wins = n()) %>% 
+  summarize(age = mean(age), 
+            players = n()) %>% 
+  ggplot(aes(decade, age, color = gender)) +
+  geom_line() + 
+  labs(title = "Average age of Grand Slam winners over time", 
+       subtitle = "Each player was counted only once", 
+       x = "Decade", 
+       y = "Average age")
+
+```
+
+```{r}
+tournaments <- grand_slams %>% mutate(grand_slam = str_to_title(str_replace(grand_slam, "_", " ")),
+                       grand_slam = str_replace(grand_slam, "Us", "US")) %>%
+  select(year, tournament = grand_slam, tournament_date, gender)
+
+time_processed <- grand_slam_timeline %>% 
+  inner_join(tournaments, by = c("year", "tournament", "gender")) %>% 
+  arrange(player, tournament_date) %>% 
+  filter(outcome != "Absent", 
+         !str_detect(outcome, "Qualif")) %>% 
+  group_by(player) %>% 
+  mutate(rolling_play_count = row_number(), 
+         rolling_won_count = cumsum(outcome == "Won"), 
+         rolling_finals_count = cumsum(outcome %in% c("Won", "Finalist"))) %>% 
+  ungroup()
+
+time_processed %>% 
+  filter(outcome %in% c("Won", "Finalist")) %>% 
+  arrange(tournament_date)
+  
+```
+

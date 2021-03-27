@@ -1,0 +1,39 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(tidytuesdayR)
+theme_set(theme_light())
+
+tuesdata <- tt_load(2020, week = 18)
+
+grosses <- tuesdata$grosses
+```
+```{r}
+library(tidymetrics)
+
+lion_king_summarized <- grosses %>% 
+  filter(show == "The Lion King") %>% 
+  rename(date = week_ending) %>% 
+  cross_by_periods(c("month", "quarter", "year")) %>% 
+  summarize(usd_gross = sum(weekly_gross), 
+            avg_ticket_price = mean(avg_ticket_price))
+
+lion_king_summarized %>% 
+  ggplot(aes(date, usd_gross, color = period)) +
+  geom_line() +
+  scale_y_continuous(labels = scales::dollar)
+
+lion_king_summarized %>% 
+  ggplot(aes(date, avg_ticket_price, color = period)) +
+  geom_line(lty = 2, alpha = .5)
+
+```
+

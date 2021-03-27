@@ -1,0 +1,105 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE}
+library(tidyverse)
+library(lubridate)
+library(broom)
+options(scipen = 999)
+
+movies_raw <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-10-23/movie_profit.csv") 
+
+```
+
+```{r}
+movies_profit <- movies_raw %>% 
+  select(-X1) %>% 
+  mutate(release_date = mdy(release_date)) %>%
+  filter(release_date < "2018-01-01") %>% 
+  ## important tidying work
+  arrange(desc(row_number())) %>% 
+  distinct(movie, release_date, .keep_all = T) %>% 
+  filter(worldwide_gross > 0) %>% 
+  mutate(distributor = fct_lump(distributor, 6))
+
+```
+
+```{r}
+by_distributor <- movies_profit %>% 
+  mutate(total_gross = domestic_gross + worldwide_gross) %>% 
+  filter(!is.na(distributor))
+
+profit_model <- function(df) {
+  lm(total_gross ~ production_budget, data = df)
+}
+  
+model_tidied <- by_distributor %>%
+  group_by(distributor) %>%
+  nest() %>% 
+  mutate(model = data %>% map(profit_model)) %>% 
+  mutate(tidy = map(model, tidy), 
+         confint = map(model, confint_tidy)) %>%  
+  unnest(tidy, confint) %>% 
+  filter(term == "production_budget")
+
+model_tidied %>% 
+  mutate(distributor = fct_reorder(distributor, estimate)) %>% 
+  ggplot(aes(distributor, estimate)) + 
+  geom_point() + 
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.25) + 
+  coord_flip()
+
+```
+```{r}
+by_genre <- movies_profit %>% 
+  mutate(total_gross = domestic_gross + worldwide_gross) 
+  
+model_tidied <- by_genre %>%
+  group_by(genre) %>%
+  nest() %>% 
+  mutate(model = data %>% map(profit_model)) %>% 
+  mutate(tidy = map(model, tidy), 
+         confint = map(model, confint_tidy)) %>%  
+  unnest(tidy, confint) %>% 
+  filter(term == "production_budget")
+
+model_tidied %>% 
+  mutate(genre = fct_reorder(genre, estimate)) %>% 
+  ggplot(aes(genre, estimate)) + 
+  geom_point() + 
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.25) + 
+  coord_flip()
+```
+
+## Which genre have the biggest payoff? 
+```{r}
+movies_profit %>% 
+  mutate(profit_ratio = worldwide_gross / production_budget) %>%
+  group_by(genre) %>% 
+  summarize(median_profit_ratio = median(profit_ratio)) %>% 
+  mutate(genre = fct_reorder(genre, median_profit_ratio)) %>% 
+  ggplot(aes(genre, median_profit_ratio)) +
+  geom_col() +
+  ## Look at this!
+  scale_y_continuous(labels = function(x) paste0(x, "X")) +
+  coord_flip()
+  
+```
+What are typical bugets over time?
+
+```{r}
+movies_profit %>% 
+  mutate(decade = 10 * (year(release_date) %/% 10)) %>% 
+  group_by(decade) %>% 
+  summarize_at(vars(production_budget:worldwide_gross), median, na.rm = T) %>% 
+  gather(metric, value, -decade) %>% 
+  ggplot(aes(decade, value, color = metric)) +
+  geom_line()
+```
+

@@ -1,0 +1,35 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, cache=TRUE}
+library(tidyverse)
+library(scales)
+
+theme_set(theme_light())
+
+tidy_anime_raw <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-04-23/tidy_anime.csv")
+
+```
+
+# Which anime has the highest ratings? 
+
+```{r}
+anime_scores <- tidy_anime_raw %>% 
+  mutate(title = ifelse(!is.na(title_english), title_english, name)) %>% 
+  select(title, type, source, score, scored_by, rank, popularity, members, favorites) %>% 
+  distinct()
+
+anime_scores %>% 
+  arrange(rank) %>% 
+  head(20) %>% 
+  ggplot(aes(title, score)) + 
+  geom_col() +
+  coord_flip()
+```
+

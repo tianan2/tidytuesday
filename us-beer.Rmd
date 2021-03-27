@@ -1,0 +1,46 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+library(lubridate)
+theme_set(theme_light())
+
+brewing_materials <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/brewing_materials.csv') %>% mutate(date = ymd(paste(year, month, 1))) %>% filter(year < 2016)
+beer_taxed <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/beer_taxed.csv')
+brewer_size <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/brewer_size.csv')
+beer_states <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/beer_states.csv')
+```
+
+# What ingredients are used in US beer production?
+
+```{r}
+brewing_materials %>% 
+  count(type, sort = T)
+
+brewing_materials %>% 
+  filter(date == max(date)) %>% 
+  filter(!str_detect(material_type, "Total")) %>% 
+  mutate(type = fct_reorder(type, month_current)) %>% 
+  ggplot(aes(type, month_current, fill = material_type)) +
+  geom_col() +
+  coord_flip()
+
+brewing_materials %>% 
+  filter(!str_detect(material_type, "Total")) %>% 
+  ggplot(aes(date, month_current, fill = type)) +
+  geom_col()
+
+```
+```{r}
+library(tidymetrics)
+
+
+```
+

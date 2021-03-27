@@ -1,0 +1,121 @@
+---
+title: "Untitled"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+theme_set(theme_light())
+
+major_field_raw <- readxl::read_excel("~/Downloads/data_tables/sed17-sr-tab012.xlsx", skip = 3)
+```
+
+```{r}
+major_field <- major_field_raw %>% 
+  rename(field = `Field of study`) %>% 
+  gather(key, value, -field) %>% 
+  mutate(year = as.numeric(ifelse(str_detect(key, "\\.\\."), NA, key)), 
+         type = ifelse(!str_detect(value, "Number|Percent"), NA, value), 
+         value = as.numeric(value)) %>%
+  fill(year, type) %>% 
+  select(field, year, type, value) %>% 
+  filter(!is.na(value)) %>% 
+  spread(type, value) 
+```
+
+```{r}
+major_field %>% 
+  filter(field == "Psychology and social sciences") %>% 
+  ggplot(aes(year, Number)) +
+  geom_line()
+```
+
+```{r}
+fine_field_raw <- readxl::read_excel("~/Downloads/data_tables/sed17-sr-tab013.xlsx", skip = 3) 
+
+fine_filed <- fine_field_raw %>% 
+  rename(field = 1) %>% 
+  gather(year, number, -field) %>% 
+  mutate(year = as.numeric(year), 
+         number = as.numeric(number)) %>% 
+  filter(!is.na(number))
+
+```
+
+# broad areas
+```{r}
+broad_field <- readxl::read_excel("~/Downloads/data_tables/sed17-sr-tab014.xlsx", skip = 4) 
+
+category <- c("All fieldsa", "Male", "Female")
+
+broad_field <- broad_field %>% 
+  rename(field = 1) %>% 
+  filter(!field %in% category) %>% 
+  mutate(field = fct_recode(field, "Life sciences" = "Life sciencesb", 
+                            "Other" = "Otherc")) %>% 
+  pull(field) %>% 
+  as.character()
+
+major_field <- readxl::read_excel("~/Downloads/data_tables/sed17-sr-tab015.xlsx", skip = 3) %>% 
+  rename(field = 1) %>% 
+  filter(!field %in% category) %>% 
+  mutate(field = fct_recode(field, "Life sciences" = "Life sciencesb", 
+                            "Other" = "Otherb")) %>% 
+  pull(field) %>% 
+  as.character() %>% 
+  ## look at the unique function
+  unique() %>% 
+  setdiff(broad_field)
+  
+```
+
+```{r}
+sex_field_raw <- readxl::read_excel("~/Downloads/data_tables/sed17-sr-tab015.xlsx", skip = 3) 
+
+sex <- c("All", "Male", "Female", "All doctorate recipientsa")
+
+recipients_year_sex <- sex_field_raw %>% 
+  rename(field = 1) %>% 
+  select(-contains("change")) %>% 
+  mutate(broad_field = ifelse(field %in% broad_field, field, NA), 
+         sex = ifelse(field %in% sex, field, NA)) %>% 
+  fill(broad_field, sex) %>% 
+  filter(!field %in% sex) %>% 
+  mutate(sex = fct_recode(sex, "All" = "All doctorate recipientsa")) %>% 
+  gather(year, number, -field, -broad_field, -sex) %>% 
+  mutate(year = as.numeric(year),
+         number = as.numeric(number)) 
+```
+
+```{r}
+recipients_year_sex %>% 
+  filter(sex != "All", 
+         broad_field == "Psychology and social sciences") %>% 
+  ggplot(aes(year, number, color = sex)) +
+  geom_line() + 
+  facet_wrap(~ field, scales = "free_y") +
+  expand_limits(y = 0)
+```
+```{r}
+recipients_year_sex %>% 
+  spread(sex, number) %>% 
+  mutate(pct_male = Male / All) %>% 
+  filter(broad_field == "Psychology and social sciences") %>% 
+  mutate(field = fct_reorder(field, desc(pct_male))) %>% 
+  ggplot(aes(year, pct_male, color = field)) + 
+  geom_line() +
+  scale_x_continuous(breaks = seq(2007, 2017, 1)) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(title = "Breakdown by sex over time within psychology and social sciences",
+       x = "Year", 
+       y = "% of PhD recipients reporting as male", 
+       color = "")
+  
+```
+

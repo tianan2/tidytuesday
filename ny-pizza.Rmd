@@ -1,0 +1,91 @@
+---
+title: "Untitled"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+theme_set(theme_light())
+
+pizza_jared <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-10-01/pizza_jared.csv")
+pizza_barstool <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-10-01/pizza_barstool.csv")
+pizza_datafiniti <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-10-01/pizza_datafiniti.csv")
+```
+
+Aggregate by place
+
+```{r}
+by_place <- pizza_jared %>% 
+  mutate(time = as.Date(as.POSIXct(time, origin = "1970-01-01")), 
+         answer = fct_relevel(answer, "Never Again", "Poor", "Average", "Good", "Excellent")) %>% 
+  group_by(place, answer) %>% 
+  summarize(votes = sum(votes)) %>% 
+  mutate(total = sum(votes), 
+         pct = votes / total,
+         answer_integer = as.integer(answer), 
+         score = sum(pct * answer_integer)) %>% 
+  ungroup() 
+```
+
+Where is the most popular pizza place in nyc?
+
+```{r}
+by_place %>% 
+  filter(total >= 29) %>% 
+  mutate(place = fct_reorder(place, score)) %>% 
+  ggplot(aes(answer, pct)) +
+  geom_col() +
+  facet_wrap(~ place) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(title = "Most Popular Pizzeria in NYC", 
+       subtitle = "Only the 9 places with the most respondents",
+       x = "", 
+       y = "% of respondents")
+
+## Small tweaks on the plot
+by_place %>% 
+  filter(as.integer(fct_reorder(place, total, .desc = TRUE)) <= 16, 
+         answer != "Fair") %>% 
+  mutate(place = glue::glue("{ place } ({ total })"), 
+         place = fct_reorder(place, score)) %>% 
+  ggplot(aes(answer, pct)) +
+  geom_col() +
+  facet_wrap(~ place) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(title = "Most Popular Pizzeria in NYC", 
+       subtitle = "Only the 16 places with the most repondents (# of respondents shown in parenthesis)",
+       x = "", 
+       y = "% of respondents")
+```
+
+```{r}
+library(broom)
+
+t_test_repeated <- function (x, frequency) {
+  tidy(t.test(rep(x, frequency)))
+}
+
+tidy(t_test_repeated(c(1, 2, 3, 4, 5), c(100, 200, 300, 400, 500)))
+
+by_place %>% 
+  filter(total >= 10) %>%
+  
+  nest(- place) %>% 
+  mutate(model = map(data, ~ t.test(.$score)))
+  
+
+by_place %>% 
+  group_by(place) %>% 
+  filter(total >= 10) %>% 
+  summarize(t_test_result = list(t_test_repeated(answer_integer, votes))) %>% 
+  unnest(t_test_result)
+```
+

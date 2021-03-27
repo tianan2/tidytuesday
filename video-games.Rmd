@@ -1,0 +1,63 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(tidytuesdayR)
+library(scales)
+theme_set(theme_light())
+
+tt <- tt_load("2021-03-16")
+```
+
+```{r}
+games <- tt$games %>% 
+  mutate(avg_peak_perc = parse_number(avg_peak_perc) / 100) %>% 
+  mutate(date = ymd(paste(year,month, 1))) %>% 
+  filter(date > min(date)) %>% 
+  mutate(month = fct_reorder(month, month(date)))
+
+library(lubridate)
+
+tibble(date = seq(as.Date("2020-01-01"), as.Date("2020-12-31"), 1)) %>% 
+  mutate(month_number = month(date)) 
+
+games %>% 
+  count(date) %>% 
+  ggplot(aes(date, n)) +
+  geom_line()
+
+# Trend in median number of users over time
+games %>% 
+  group_by(date) %>% 
+  summarize(median_avg = median(avg)) %>% 
+  ggplot(aes(date, median_avg)) +
+  geom_line() +
+  expand_limits(y = 0)
+
+# Is there a seasonal effect?
+games %>% 
+  filter(date < "2020-01-01") %>% 
+  group_by(month) %>% 
+  summarize(median_avg = median(avg)) %>% 
+  ggplot(aes(month, median_avg)) +
+  geom_line(aes(group = 1)) +
+  expand_limits(y = 0)
+
+# How has the breakout of Corona-19 changed the seasonal pattern?
+games %>% 
+  group_by(year, month) %>% 
+  summarize(median_avg = median(avg)) %>% 
+  ggplot(aes(month, median_avg, color = factor(year))) +
+  geom_line(aes(group = year)) +
+  expand_limits(y = 0)
+
+
+```
+

@@ -1,0 +1,38 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+
+start <- 1:6
+
+next_rolls <- sample(start, replace = T)
+next_rolls_2 <- sample(next_rolls, replace = T)
+
+simulate_roll <- function(num_sides = 6) {
+  rolls <- accumulate(1:1000, function (x, ...) {
+   result <- sample(x, replace = TRUE)
+  
+   if (length(unique(result)) == 1) {
+     done(result)
+   } else {
+     result
+   }
+    
+ }, .init = 1:6)
+  
+  length(rolls) -1
+}
+
+simulations <- replicate(100, simulate_roll())
+
+qplot(simulations, binwidth = 1)
+
+```
+

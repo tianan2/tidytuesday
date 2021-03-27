@@ -1,0 +1,33 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE}
+library(tidyverse)
+library(janitor)
+
+titanic_train <- read_csv("titanic/train.csv") %>% clean_names()
+titanic_test <- read_csv("titanic/test.csv") %>% clean_names()
+```
+
+```{r}
+titanic_train %>% 
+  group_by(pclass) %>% 
+  summarize(avg_survival = mean(survived))
+```
+```{r}
+titanic_train %>% 
+  group_by(sex) %>% 
+  summarize(avg_survival = mean(survived))
+```
+```{r}
+titanic_train %>% 
+  group_by(embarked) %>% 
+  summarize(avg_survival = mean(survived))
+```
+

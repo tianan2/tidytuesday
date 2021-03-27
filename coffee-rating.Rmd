@@ -1,0 +1,88 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(tidytuesdayR)
+theme_set(theme_light())
+
+tt_load("2020-07-07")
+
+coffee_ratings <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-07-07/coffee_ratings.csv') 
+```
+
+```{r}
+coffee_ratings %>% glimpse()
+
+coffee_ratings %>% 
+  count(species, sort = T)
+
+coffee_ratings %>% 
+  count(variety, sort = T)
+
+coffee_ratings %>% 
+  count(country_of_origin, sort = T)
+
+coffee_ratings %>% 
+  summarize(across(everything(), ~ mean(!is.na(.))))
+
+coffee_ratings %>% 
+  filter(!is.na(country_of_origin), 
+         total_cup_points > 0) %>% 
+  mutate(country_of_origin = fct_lump(country_of_origin, 12), 
+         country_of_origin = fct_reorder(country_of_origin, total_cup_points)) %>% 
+  ggplot(aes(total_cup_points, country_of_origin)) +
+  geom_boxplot()
+```
+
+# Interesting dimensions
+
+* Country
+* Variety
+* Company??
+
+```{r}
+library(ggridges)
+
+coffee_metrics <- coffee_ratings %>% 
+  mutate(coffee_id = row_number()) %>% 
+  select(coffee_id, total_cup_points, variety, company, country_of_origin, farm_name, aroma:moisture) %>% 
+  pivot_longer(cols = aroma:cupper_points, names_to = "metric", values_to = "value") 
+
+coffee_metrics %>% 
+  mutate(metric = fct_reorder(metric, value)) %>% 
+  ggplot(aes(value, metric)) +
+  geom_density_ridges()
+```
+
+```{r}
+library(widyr)
+library(ggraph)
+library(igraph)
+
+correlations <- coffee_metrics %>% 
+  pairwise_cor(metric, coffee_id, value, sort = TRUE)
+
+correlations %>% 
+  head(60) %>% 
+  graph_from_data_frame() %>% 
+  ggraph() +
+  geom_edge_link(aes(edge_alpha = correlation)) +
+  geom_node_point() +
+  geom_node_text(aes(label = name), repel = TRUE)
+
+coffee_metrics %>% 
+  widely_svd(metric, coffee_id, value) %>% 
+  filter(dimension < 4) %>% 
+  mutate(metric = fct_reorder(metric, value)) %>% 
+  ggplot(aes(value, metric)) +
+  geom_col() +
+  facet_wrap(~ dimension)
+```
+

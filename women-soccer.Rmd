@@ -1,0 +1,49 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+
+wwc_outcomes <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-07-09/wwc_outcomes.csv")
+squads <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-07-09/squads.csv")
+codes <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-07-09/codes.csv")
+
+outcomes <- wwc_outcomes %>% 
+  inner_join(codes, by = "team") %>% 
+  group_by(year, yearly_game_id) %>% 
+  mutate(opposing_score = rev(score), 
+         win_by = score - opposing_score) 
+```
+
+```{r}
+outcomes %>% 
+  ggplot(aes(score)) +
+  geom_histogram() +
+  facet_wrap(~ win_status)
+
+outcomes_processed <- outcomes %>% 
+  filter(round == "Group") %>% 
+  group_by(team, year) %>% 
+  summarize(avg_score = mean(score), 
+            avg_win_by = mean(win_by))
+
+outcomes %>% 
+  left_join(outcomes_processed, by = c("team", "year")) %>% 
+  filter(round == "Final") %>% 
+  ggplot(aes(team, avg_win_by, fill = win_status)) + 
+  geom_col() + 
+  facet_wrap(~ year, scales = "free_x") + 
+  labs(title = "Does performance in the group round predict the final winner?",
+       subtitle = "Yes in all years except 2011", 
+       x = "Country", 
+       y = "Average # of goals the team had won by in the Group round", 
+       fill = "Result")
+  
+```
+

@@ -1,0 +1,38 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(naniar)
+
+oscar_raw <- read_csv("https://raw.githubusercontent.com/TheEconomist/graphic-detail-data/master/data/2019-03-02_oscars-influence/movie-counts.csv")
+```
+
+```{r}
+oscar_raw %>% 
+  filter(!is.na(result)) %>% 
+  ggplot(aes(oscars_year, count, color = result)) +
+  geom_line()f
+```
+```{r}
+oscar_raw %>% 
+  filter(!is.na(result)) %>% 
+  ggplot(aes(oscars_year, annual_share, color = result)) +
+  geom_line() 
+```
+```{r}
+oscar_raw %>% 
+  group_by(oscars_year, result) %>% 
+  summarize(avg_count = mean(count), 
+            avg_annual_share = mean(annual_share)) %>% 
+  ungroup() %>% 
+  ggplot(aes(oscars_year, avg_count, color = result)) +
+  geom_line()
+```
+

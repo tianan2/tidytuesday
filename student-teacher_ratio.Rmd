@@ -1,0 +1,140 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+theme_set(theme_light())
+options(scipen = 999)
+
+student_ratio <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-05-07/student_teacher_ratio.csv")
+```
+
+```{r}
+student_teacher_ratio_2015 <- student_ratio %>% 
+  filter(indicator == c("Primary Education"), 
+         year == "2015",
+         !is.na(student_ratio)) 
+
+student_teacher_ratio_2015 %>% 
+  arrange(desc(student_ratio)) %>% 
+  slice(c(1:10, seq(n() - 10, n()))) %>% 
+  mutate(country = fct_reorder(country, student_ratio)) %>% 
+  ggplot(aes(country, student_ratio)) + 
+  geom_point() +
+  coord_flip() + 
+  expand_limits(y = 0) +
+  labs(title = "Figure. Countries with the highest and lowest student/teacher ratio",
+       x = "", 
+       y = "Student/teacher ratio (primary education)")
+```
+
+```{r}
+library(WDI)
+
+WDIsearch("urban") %>% View()
+  as.data.frame() %>% 
+  tbl_df() 
+
+urban_indicators <- WDI(indicator = c("SP.URB.TOTL.IN.ZS", "SP.URB.GROW"), 
+                        extra = TRUE) %>% 
+  tbl_df()
+
+urban_indicators %>% 
+  filter(country == "China") %>% 
+  ggplot(aes(year, SP.URB.TOTL.IN.ZS)) +
+  geom_line()
+
+urban_indicators %>% 
+  filter(country == "China") %>% 
+  ggplot(aes(year, SP.URB.GROW)) + 
+  geom_line() + 
+  expand_limits(y = 0)
+
+```
+
+# Administering indicators
+```{r}
+indicators_raw <- WDI(indicator = c("NY.GDP.PCAP.CD", "SP.POP.TOTL", "SE.SEC.ENRR"), 
+                  start = 2015, end = 2015, extra = TRUE) %>% 
+  tbl_df()
+
+indicators <- indicators_raw %>% 
+  select(country_code = iso3c, 
+         NY.GDP.PCAP.CD:SE.SEC.ENRR, 
+         region) %>% 
+  mutate(country_code = as.character((country_code)))
+
+```
+
+```{r}
+student_teacher_ratio_2015 %>% 
+  ggplot(aes(student_ratio)) +
+  geom_histogram() +
+  scale_x_log10()
+
+student_teacher_ratio_2015 %>% 
+  inner_join(indicators, by = "country_code") %>% 
+  arrange(desc(SP.POP.TOTL)) %>% 
+  ggplot(aes(NY.GDP.PCAP.CD, student_ratio, color = region)) +
+  geom_point(aes(size = SP.POP.TOTL)) + 
+  scale_x_log10() + 
+  scale_y_log10() + 
+  scale_size_continuous(labels = scales::comma_format()) +
+  geom_text(aes(label = country), hjust = 1, vjust = 1, check_overlap = TRUE) +
+  labs(x = "GDP per capita", 
+       y = "Student/teacher ratio", 
+       title = "GDP per capita and student/teacher ratio are negatively correlated", 
+       subtitle = "In 2015",
+       color = "Region", 
+       size = "Population")
+```
+
+# Primary education VS Secondary education
+```{r}
+student_ratio %>% 
+  filter(year == "2015", 
+         indicator %in% c("Primary Education", "Secondary Education"), 
+         !is.na(student_ratio)) %>% 
+  group_by(country_code) %>% 
+  filter(n() == 2) %>% 
+  ungroup() %>% 
+  inner_join(indicators, by = "country_code") %>% 
+  arrange(desc(SP.POP.TOTL)) %>% 
+  ggplot(aes(NY.GDP.PCAP.CD, student_ratio, color = region)) +
+  geom_point(aes(size = SP.POP.TOTL)) + 
+  scale_x_log10() + 
+  scale_y_log10() + 
+  scale_size_continuous(labels = scales::comma_format()) +
+  geom_text(aes(label = country), hjust = 1, vjust = 1, check_overlap = TRUE) +
+  facet_wrap(~ indicator) +
+  labs(x = "GDP per capita", 
+       y = "Student/teacher ratio", 
+       title = "GDP per capita and student/teacher ratio are negatively correlated", 
+       subtitle = "In 2015",
+       color = "Region", 
+       size = "Population")
+```
+# Secondary enrollment VS Student/teacher ratio
+
+```{r}
+student_ratio_second_enrollment <- student_ratio %>% 
+  filter(year == "2015", 
+         indicator == "Secondary Education", 
+         !is.na(student_ratio)) %>% 
+  inner_join(indicators, by = "country_code") 
+
+student_ratio_second_enrollment%>% 
+  ggplot(aes(SE.SEC.ENRR, student_ratio)) +
+  geom_point()
+
+lm(student_ratio ~ SE.SEC.ENRR, data = student_ratio_second_enrollment) %>% 
+  summary()
+  
+```
+

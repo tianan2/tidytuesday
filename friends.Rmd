@@ -1,0 +1,51 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(tidytuesdayR)
+library(glue)
+theme_set(theme_light())
+
+tt <- tt_load("2020-09-08")
+
+friends <- tt$friends %>% 
+  inner_join(friends_info, by = c("season", "episode")) %>% 
+  mutate(episode_title = glue("{ season }.{ episode } { title }"), 
+         episode_title = fct_reorder(episode_title, season + 0.01 * episode))
+
+friends_emotions <- tt$friends_emotions
+
+friends_info <- tt$friends_info
+
+```
+
+```{r}
+friends %>% 
+ count(season, episode, sort = T)
+
+main_cast <- friends %>% 
+  count(speaker, sort = T) %>% 
+  head(6)
+
+friends %>% 
+  count(episode_title)
+```
+
+Graph ratings over time
+
+```{r}
+friends %>% 
+  ggplot(aes(as.integer(episode_title), us_views_millions)) +
+  geom_point(aes(color = factor(season))) +
+  expand_limits(y = 0) +
+  labs(x = "Episode number", 
+       color = "Season")
+```
+

@@ -4,7 +4,7 @@ author: "Jaehwan Lim"
 date: "January 8, 2019"
 output: html_document
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 ```{r setup, include=FALSE}
@@ -28,7 +28,9 @@ tidytuesday_tweets %>%
   expand_limits(y = 0) +
   labs(x = "Time", 
        y = "# of tweets")
+```
 
+```{r}
 tidytuesday_tweets %>% 
   count(screen_name, sort = T) %>% 
   mutate(screen_name = fct_reorder(screen_name, n)) %>% 
@@ -66,8 +68,7 @@ tweet_words <-
 tweet_words %>% 
   count(word, sort = T) %>% 
   head(16) %>%
-  mutate(word = fct_reorder(word, n)) %>% 
-  ggplot(aes(x = word, y = n)) +
+  ggplot(aes(x = fct_reorder(word, n), y = n)) +
   geom_col() +
   coord_flip() + 
   labs(title = "Most common words in #tidytuesday tweets", 

@@ -1,0 +1,36 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(janitor)
+theme_set(theme_light())
+options(scipen = 999)
+master <- read_csv("master.csv") %>% clean_names()
+```
+
+```{r}
+master_2015_filtered <- master %>% 
+  filter(year == 2015) %>% 
+  group_by(country) %>% 
+  mutate(year_total = sum(suicides_no)) %>% 
+  filter(year_total > 100) 
+
+master_2015_filtered %>% 
+  distinct(country, .keep_all = TRUE) %>% 
+  arrange(desc(year_total)) %>%
+  head(20) %>% 
+  ungroup() %>% 
+  mutate(country = fct_reorder(country, year_total)) %>% 
+  ggplot(aes(country, year_total)) +
+  geom_col() +
+  coord_flip()
+  
+```
+

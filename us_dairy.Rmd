@@ -4,7 +4,7 @@ author: "Jaehwan Lim"
 date: "February 6, 2019"
 output: html_document
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 ```{r setup, include=FALSE}
@@ -36,7 +36,9 @@ state_production %>%
   ggplot(aes(region, total_production)) +
   geom_col() + 
   coord_flip()
+```
 
+```{r}
 state_production %>% 
   group_by(region, year) %>% 
   summarize(total_production = sum(milk_produced)) %>% 
@@ -58,7 +60,9 @@ milk_products_tidied <- milk_products %>%
   mutate(product = coalesce(product, category), 
          product = str_to_title(str_replace_all(product, "_", " ")), 
          category = str_to_title(category)) 
+```
 
+```{r}
 milk_products_tidied %>% 
   group_by(year, category) %>% 
   mutate(total_consumption = sum(value)) %>% 
@@ -66,14 +70,8 @@ milk_products_tidied %>%
   geom_line() + 
   facet_wrap(~ product, scales = "free") + 
   expand_limits(y = 0)
-  
+```
 
-milk_products_tidied %>%
-  filter(year == max(year)) %>% 
-  mutate(product = fct_reorder(products, value)) %>% 
-  ggplot(aes(product, value, color = category)) + 
-  geom_col() + 
-  coord_flip()
 ```
 
 ```{r}

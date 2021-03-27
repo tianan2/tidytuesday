@@ -1,0 +1,59 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE}
+library(tidyverse)
+library(tidytuesdayR)
+library(scales)
+theme_set(theme_light())
+
+trains_raw <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-02-26/full_trains.csv")
+small_trains <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-02-26/small_trains.csv")
+
+tt <- tt_load("2019-02-26")
+
+summary(trains_raw)
+glimpse(trains_raw)
+
+summary(small_trains)
+```
+```{r}
+small_trains %>% 
+  View()
+
+small_trains %>% 
+  group_by(departure_station, service) %>% 
+  summarize(n = n(), 
+            avg_delay = mean(avg_delay_all_departing)) %>% 
+  arrange(desc(avg_delay))
+```
+
+## EDA
+```{r}
+november_2018 <- trains_raw %>%
+  filter(year == "2018", month == "11") %>% 
+  mutate(pct_late_at_departure = num_late_at_departure / total_num_trips)
+
+november_2018 %>% 
+  mutate(departure_station = fct_lump(departure_station, 3)) %>% 
+  ggplot(aes(departure_station, pct_late_at_departure)) + 
+  geom_boxplot() +
+  coord_flip()
+  
+```
+
+```{r}
+november_2018 %>% 
+  mutate(arrival_station = fct_infreq(arrival_station, pct_late_at_departure), 
+         departure_station = fct_infreq(departure_station, pct_late_at_departure)) %>% 
+  ggplot(aes(arrival_station, departure_station, fill = pct_late_at_departure)) +
+  geom_tile() + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+

@@ -11,7 +11,7 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r message=FALSE}
 library(tidyverse)
 library(janitor)
 library(lubridate)
@@ -67,7 +67,6 @@ most_recent_cycle_inspections <- inspections %>%
          inspection_type == "Initial Inspection") %>% 
   arrange(desc(inspection_date)) %>% 
   distinct(camis, .keep_all = TRUE)
-
 ```
 
 ## Which type of cuisine is more likely to get higher scores (e.g., more violations)?
@@ -81,7 +80,6 @@ by_cuisine <- most_recent_cycle_inspections %>%
             median_score = median(score), 
             restaurant = n()) %>% 
   arrange(desc(restaurant))
-
 
 cuisine_conf_ints <- most_recent_cycle_inspections %>% 
   add_count(cuisine_description) %>% 
@@ -107,12 +105,23 @@ cuisine_conf_ints %>%
 ```{r}
 by_dba <- most_recent_cycle_inspections %>% 
   group_by(dba, cuisine = cuisine_description) %>% 
-  summarize(mean_score = mean(score), 
+  summarize(avg_score = mean(score), 
             median_score = median(score), 
             locations = n()) %>% 
   arrange(desc(locations)) %>% 
   ungroup()
 
+by_dba
+```
+
+```{r}
+by_dba %>% 
+  ggplot(aes(locations, mean_score)) + 
+  geom_point() + 
+  scale_x_log10()
+```
+
+```{r}
 by_dba %>% 
   mutate(locations_bin = cut(locations, c(0, 1, 3, 10, Inf), 
                          labels = c("1", "2-3", "3-10", ">10"))) %>% 
@@ -151,11 +160,21 @@ violation_cuisine_counts %>%
 
 ```{r}
 library(widyr)
+library(irlba)
 
-restaurant_inspections %>% 
+violations <- restaurant_inspections %>% 
   semi_join(most_recent_cycle_inspections, by = c("camis", "inspection_date")) %>% 
-  filter(!is.na(violation_description)) %>%
+  filter(!is.na(violation_description)) 
+
+violations %>% 
   pairwise_cor(violation_description, camis, sort = TRUE)
+
+principal_components <- violations %>% 
+  mutate(value = 1) %>% 
+  widely_svd(violation_description, camis, value, nv = 6) 
+
+principal_components %>% 
+  filter(dimension == 3)
   
 ```
 

@@ -1,0 +1,77 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(WDI)
+theme_set(theme_light())
+options(scipen = 999)
+```
+
+```{r}
+WDIsearch("foreign") %>% View()
+  as.data.frame() %>% 
+  tbl_df() 
+
+indicators_raw <- WDI(indicator = c("GC.TAX.TOTL.GD.ZS", "GC.REV.XGRT.GD.ZS"), extra = TRUE) %>% # Central government revenues excluding all grants (%GDP) 
+  tbl_df()
+
+polity4_scores <- read_csv("polity_4_democracy_scores.csv")
+```
+
+```{r}
+indicators_raw %>% inner_join(polity4_scores, by = c("country", "year")) %>% 
+  filter(year == 2011, 
+         polity2 < 5) %>% 
+  ggplot(aes(polity2, GB.REV.XAGT.CN.ZS / 100)) + 
+  geom_point() +
+  geom_text(aes(label = country))
+```
+# Data readin (Foreign workers)
+```{r}
+WDIsearch("migrant") %>% View()
+  as.data.frame() %>% 
+  tbl_df() 
+  
+raw_migrant <- WDI(indicator = c("SM.POP.TOTL.ZS", "SM.POP.TOTL", "SG.POP.MIGR.FE.ZS"), extra = TRUE) %>% 
+  rename(total_percent = "SM.POP.TOTL.ZS", 
+         total = "SM.POP.TOTL", 
+         female_percent = "SG.POP.MIGR.FE.ZS")
+```
+
+```{r}
+raw_migrant %>% filter(country == "World") %>% 
+  select(country, year, total_percent, female_percent, region) %>% 
+  filter(!is.na(total_percent), 
+          !is.na(female_percent)) %>% 
+  mutate(region = fct_recode(region, "World" = "Aggregates" ))
+
+migrant_asia <- raw_migrant %>% 
+  filter(region == "East Asia & Pacific") 
+
+migrant_asia %>% 
+  select(country, year, total_percent, female_percent, income) %>% 
+  filter(!is.na(total_percent), !is.na(female_percent)) %>%
+  group_by(year, income) %>% 
+  summarize(avg_percent = mean(total_percent, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  ggplot(aes(year, avg_percent, color = income)) +
+  geom_line() 
+
+migrant_asia %>% 
+  filter(income %in% c("High income", "Upper middle income")) %>% 
+  select(country, year, total_percent, female_percent) %>% 
+  filter(!is.na(total_percent), 
+         !is.na(female_percent)) %>%
+  group_by(year) %>% 
+  summarize(avg_percent = mean(total_percent, na.rm = TRUE)) %>% 
+  ggplot(aes(year, avg_percent)) +
+  geom_line() 
+```
+

@@ -1,0 +1,179 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F, dpi = 90)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(janitor)
+library(scales)
+library(comtradr)
+library(sf)
+theme_set(theme_minimal())
+options(scipen = 999)
+
+coast_vs_waste <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-05-21/coastal-population-vs-mismanaged-plastic.csv") %>% clean_names()
+
+mismanaged_vs_gdp <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-05-21/per-capita-mismanaged-plastic-waste-vs-gdp-per-capita.csv") %>% clean_names()
+
+waste_vs_gdp <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-05-21/per-capita-plastic-waste-vs-gdp-per-capita.csv") %>% clean_names()
+
+waste_trade <- read_csv("comtrade (1).csv") %>% clean_names()
+
+```
+
+```{r}
+coast_vs_waste %>% summarize_all(~ mean(is.na(.)))
+
+coast_vs_waste_2010 <- coast_vs_waste %>% 
+  filter(!is.na(coastal_population)) %>% 
+  rename(country = entity, 
+         country_code = code) %>% 
+  select(-year)
+
+mismanaged_vs_gdp_2010 <- mismanaged_vs_gdp %>% 
+  filter(!is.na(per_capita_mismanaged_plastic_waste_kilograms_per_person_per_day)) %>% 
+  rename(country = entity, 
+         country_code = code, 
+         per_capita_mismanaged_plastic_waste = per_capita_mismanaged_plastic_waste_kilograms_per_person_per_day) %>% 
+  select(-year, -total_population_gapminder, -gdp_per_capita_ppp_constant_2011_international_rate)
+
+waste_vs_gdp_2010 <- waste_vs_gdp %>% 
+  filter(!is.na(per_capita_plastic_waste_kilograms_per_person_per_day)) %>% 
+  rename(country = entity, 
+         country_code = code, 
+         per_capita_plastic_waste = per_capita_plastic_waste_kilograms_per_person_per_day, 
+         gdp_per_capita = gdp_per_capita_ppp_constant_2011_international_constant_2011_international) %>%
+  select(-year, -total_population_gapminder)
+
+plastic_waste <- coast_vs_waste_2010 %>% 
+  left_join(mismanaged_vs_gdp_2010, by = c("country", "country_code")) %>% 
+  left_join(waste_vs_gdp_2010, by = c("country", "country_code"))
+```
+
+```{r}
+plastic_waste %>% 
+  arrange(-total_population_gapminder) %>% 
+  mutate(pct_coastal_pop = coastal_population / total_population_gapminder, 
+         high_coastal_pop = ifelse(pct_coastal_pop >= .8, ">=80%", "<80%")) %>% 
+  ggplot(aes(gdp_per_capita, per_capita_plastic_waste)) + 
+  geom_point(aes(size = total_population_gapminder, fill = high_coastal_pop), shape = 21, alpha = .8) + 
+  geom_smooth(aes(method = "lm")) +
+  geom_text(aes(label = country), vjust = 1, hjust = 1, check_overlap = TRUE) +
+  scale_x_log10(labels = dollar_format()) +
+  scale_y_log10() +
+  scale_size_continuous(labels = comma_format()) +
+  theme(legend.position = "bottom") +
+  labs(x = "GDP per capita", 
+       y = "Plastic waste (kg per person per day)", 
+       color = "Coastal population", 
+       title = "How plastic waste generation correlates with country income", 
+       subtitle = "Based in Our World in Data 2010. Size represents total population")
+```
+
+```{r}
+tbl_df(iso3166) 
+
+plastic_waste %>% inner_join(iso3166, by = c("country" = "ISOname"))
+
+map_data("world") %>% 
+  tbl_df()
+```
+
+
+```{r}
+waste_trade <- waste_trade %>% 
+  select("trade_flow", "reporter", "reporter_iso", "partner", "partner_iso", "netweight_kg") %>% 
+  spread(trade_flow, netweight_kg, convert = TRUE, fill = 0) %>% 
+  clean_names() %>% 
+  mutate(net_import = import - export) %>% 
+  select(-export, -import, -re_export, -re_import)
+```
+
+```{r}
+waste_net_2010 <- plastic_waste %>% 
+  left_join(waste_trade, by = c("country_code" = "reporter_iso")) %>% 
+  replace_na(list(net_import = 0)) %>% 
+  mutate(total_waste = total_population_gapminder * per_capita_plastic_waste * 365,
+         waste_per_log = log10(per_capita_plastic_waste),
+         gdp_per_log = log10(gdp_per_capita),
+         total_gdp = gdp_per_capita * total_population_gapminder, 
+         waste_quant = cut(per_capita_plastic_waste, 
+                           breaks = c(0, 0.10, 0.15, 0.2, 0.252, 2, 3.6)),
+         net_waste = total_waste - net_import,
+         net_waste_per_log = case_when(net_waste > 0 ~ log10(net_waste / total_population_gapminder / 365),
+                                       T ~ log10(net_waste / total_population_gapminder  / 365 + 1 - net_waste / total_population_gapminder / 365)))
+
+```
+
+```{r}
+library(comtradr)
+
+china_waste_2010 <- ct_search(reporters = "China", 
+                              partners = "All", 
+                              trade_direction = "All", 
+                              freq = "annual", 
+                              start_date = 2010, 
+                              end_date = 2010, 
+                              commod_codes = "3915")
+
+china_waste_processed <- china_waste_2010 %>% 
+  as.tibble() %>% 
+  select(trade_flow, partner, partner_iso, netweight_kg) %>%
+  spread(trade_flow, netweight_kg, convert = T, fill = 0) %>%
+  mutate(net_import = (Import - Export)/1000000000) 
+
+china_waste_processed %>% 
+  filter(!is.na(partner_iso)) %>%
+  mutate(partner = fct_reorder(partner, net_import)) %>%
+  top_n(10, net_import) %>%
+  ggplot(aes(partner, net_import, fill = partner)) +
+  geom_col(show.legend = F) +
+  coord_flip() +
+  labs(x = "",
+       y = "",
+       title = "China import plaste waste net import in year 2010",
+       subtitle = "Near 8 million tons")
+
+
+```
+
+# Drawing maps
+```{r}
+isocode <- tibble(
+  iso2 = codelist$iso2c,
+  iso3 = codelist$iso3c,
+  continent = codelist$continent
+)
+
+world_sf <- spData::world %>%
+  rename("geometry" = "geom") %>%
+  inner_join(isocode %>% select(-continent), by = c("iso_a2" = "iso2")) %>%
+  select(-iso_a2)
+
+waste_map <- world_sf %>% 
+  full_join(waste_net_2010, by = c("iso3" = "country_code")) %>% 
+  select(country, net_waste, iso3, waste_quant, per_capita_plastic_waste, total_population_gapminder, geometry)
+
+top_3 <- waste_map %>%
+  filter(country %in% c("China", "United States", "Germany"))
+
+top_3 <- cbind(top_3, st_coordinates(st_centroid(top_3)))
+
+waste_map %>% 
+  ggplot(aes(fill = net_waste / 1000000000), size = 0.1) +
+  geom_sf() +
+  scale_fill_continuous(low = "#FCFEB2", high = "#B01425",
+                        guide = guide_colourbar(direction = "horizontal",
+                                               barheight = 0.5, barwidth = 15),
+                        na.value = "white")
+
+
+```
+
+
+

@@ -1,0 +1,91 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+theme_set(theme_light())
+
+horror_movies_raw <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-10-22/horror_movies.csv")
+```
+
+```{r}
+horror_movies <- horror_movies_raw %>% 
+  arrange(desc(review_rating)) %>% 
+  extract(title, "year", "\\((\\d\\d\\d\\d)\\)", remove = FALSE, convert = TRUE) %>% 
+  mutate(budget = parse_number(budget))
+```
+
+```{r}
+horror_movies %>% 
+  count(genres, sort = T)
+
+horror_movies %>% 
+  count(language, sort = T)
+
+horror_movies %>% 
+  ggplot(aes(budget)) + 
+  geom_histogram() + 
+  scale_x_log10(labels = scales::dollar_format())
+```
+Do higher budget movies end up higher rating? 
+
+```{r}
+horror_movies %>% 
+  ggplot(aes(budget, review_rating)) + 
+  geom_point() + 
+  scale_x_log10() +
+  geom_smooth(method = "lm")
+```
+No relationship between budget and review-rating. How about movie and review rating?
+```{r}
+horror_movies %>% 
+  mutate(movie_rating = fct_lump(movie_rating, 5), 
+         movie_rating = fct_reorder(movie_rating, review_rating, na.rm = T)) %>% 
+  ggplot(aes(movie_rating, review_rating)) + 
+  geom_boxplot() + 
+  coord_flip()
+```
+```{r}
+horror_movies %>% 
+  separate_rows(genres, sep = "\\| ") %>% 
+  mutate(genres = fct_lump(genres, 5)) %>% 
+  ggplot(aes(genres, review_rating)) +
+  geom_boxplot()
+```
+Let's do some text parsing.
+```{r}
+library(tidytext)
+
+horror_movies_unnested <- horror_movies %>% 
+  separate(plot, into = c("directors", "cast_sentence", "plot"), extra = "merge", sep = "\\. ", fill = "right") %>% 
+  unnest_tokens(word, plot) %>% 
+  anti_join(stop_words, by = "word")
+
+horror_movies_unnested %>% 
+  filter(!is.na(review_rating)) %>% 
+  group_by(word) %>% 
+  summarize(movies = n(), 
+            avg_rating = mean(review_rating)) %>% 
+  arrange(desc(movies)) %>% 
+  filter(movies >= 100) %>% 
+  mutate(word = fct_reorder(word, avg_rating)) %>% 
+  ggplot(aes(avg_rating, word)) +
+  geom_point()
+```
+Lasso regression for predicting review_ratin based on words
+```{r}
+library(glmnet)
+
+horror_movies_unnested %>% 
+  add_count(word) %>% 
+  filter(n >= 20 ) %>% 
+  count(title, word) %>% 
+  cast_sparse(title, word, n)
+```
+

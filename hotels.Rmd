@@ -1,0 +1,123 @@
+---
+title: "hotels"
+author: "Jaehwan Lim"
+date: "March 27, 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(tidytuesdayR)
+library(scales)
+library(skimr)
+library(lubridate)
+theme_set(theme_light())
+
+hotels <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-11/hotels.csv')
+```
+
+```{r}
+hotels %>% skim()
+```
+```{r}
+hotels_stay <- hotels %>% 
+  mutate(children = case_when(children + babies > 0 ~ "children", 
+                              TRUE ~ "none"), 
+         required_car_parking_spaces = case_when(required_car_parking_spaces > 0 ~ "required", 
+                                                 TRUE ~ "none")) %>% 
+  filter(is_canceled == "0") %>% 
+  select(-is_canceled, -babies, -reservation_status)
+```
+
+```{r}
+hotels_stay %>% 
+  mutate(arrival_date_month = factor(arrival_date_month, 
+                                     levels = month.name)) %>% 
+  count(hotel, arrival_date_month, children) %>% 
+  group_by(hotel, children) %>% 
+  mutate(proportion = n / sum(n)) %>% 
+  ggplot(aes(arrival_date_month, proportion, fill = children)) +
+  geom_col(position = "dodge") +
+  scale_y_continuous(labels = percent) +
+  facet_wrap(~ hotel, nrow = 2)
+  
+```
+```{r}
+hotels_stay %>% 
+  mutate(arrival_date_month = factor(arrival_date_month, 
+                                     levels = month.name)) %>% 
+  count(hotel, required_car_parking_spaces, children) %>% 
+  group_by(hotel, children) %>% 
+  mutate(proportion = n / sum(n)) %>% 
+  ggplot(aes(required_car_parking_spaces, proportion, fill = children)) +
+  geom_col(position = "dodge") +
+  scale_y_continuous(labels = percent) +
+  facet_wrap(~ hotel, nrow = 2)
+```
+```{r}
+library(GGally)
+
+hotels_stay %>% 
+  select(children, 
+         adr, 
+         required_car_parking_spaces, 
+         total_of_special_requests) %>% 
+  ggpairs(mapping = aes(color = children))
+```
+
+## Build models with recipes
+
+```{r}
+# Make a dataframe for modeling
+
+hotels_df <- hotels_stay %>% 
+  select(children, hotel, arrival_date_month, meal, adr, adults, 
+         required_car_parking_spaces, total_of_special_requests, 
+         stays_in_week_nights, stays_in_weekend_nights) %>% 
+  mutate_if(is.character, factor)
+```
+
+```{r}
+library(tidymodels)
+
+# Data preprocessing and feature engineering
+
+set.seed(1234)
+hotel_split <- initial_split(hotels_df)
+
+hotel_train <- training(hotel_split)
+hotel_test <- testing(hotel_split)
+
+hotel_rec <- recipe(children ~., data = hotel_train) %>% 
+  step_downsample(children) %>% 
+  step_dummy(all_nominal(), -all_outcomes()) %>% 
+  step_zv(all_numeric()) %>% 
+  step_normalize(all_numeric()) %>% 
+  prep()
+
+hotel_rec
+
+test_proc <- bake(hotel_rec, new_data = hotel_test)
+```
+
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+

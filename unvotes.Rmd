@@ -17,14 +17,14 @@ theme_set(theme_light())
 
 ```{r Load}
 tt <- tt_load("2021-03-23")
+
+unvotes <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-03-23/unvotes.csv')
+roll_calls <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-03-23/roll_calls.csv')
+issues <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-03-23/issues.csv')
 ```
 
 ```{r}
-unvotes <- tt$unvotes %>% 
-  mutate(vote = fct_recode(vote, "1" = "yes", "0" = "abstain", "-1" = "no"))
-
-roll_calls <- tt$roll_calls
-issues <- tt$issues
+unvotes <- unvotes %>% mutate(vote = match(vote, c("no", "abstain", "yes")) - 2)
 ```
 
 ```{r}
@@ -32,11 +32,13 @@ issues <- tt$issues
 by_country <- unvotes %>% 
   group_by(country) %>% 
   summarize(n = n(), 
-            yes_ratio = mean(vote == "1")) %>% 
+            yes_ratio = mean(vote == 1)) 
+
+by_country_filtered <- by_country %>% 
   filter(n >= 100) %>% 
   arrange(desc(yes_ratio))
 
-by_country %>% 
+by_country_filtered %>% 
   head(20) %>% 
   mutate(country = fct_reorder(country, yes_ratio)) %>% 
   ggplot(aes(yes_ratio, country)) +
@@ -46,7 +48,7 @@ by_country %>%
        y = " ", 
        size = "# of votes")
 
-by_country %>% 
+by_country_filtered %>% 
   tail(20) %>%  
   mutate(country = fct_reorder(country, yes_ratio)) %>% 
   ggplot(aes(yes_ratio, country)) +
@@ -64,12 +66,65 @@ unvotes %>%
   mutate(year = year(date)) %>% 
   group_by(country, year) %>% 
   summarize(n = n(), 
-            yes_ratio = mean(vote == "1")) %>% 
+            yes_ratio = mean(vote == 1)) %>% 
   filter(country == "China") %>% 
   ggplot(aes(year, yes_ratio)) +
   geom_point(aes(size = n)) +
   geom_line() +
   expand_limits(y = 0.5)
 
+```
+```{r}
+library(ggthemes) 
+library(countrycode)
+
+map_data_mutated <- map_data("world") %>% 
+  tibble() %>% 
+  filter(region != "Antarctica") %>%
+  mutate(iso3c = countrycode(region, "country.name", "iso3c"))
+
+map_data_mutated %>% 
+  ggplot(aes(long, lat, group = group)) +
+  geom_polygon() +
+  theme_map()
+
+# Mapping out the distribution of yes-ratio 
+
+by_country_filtered %>% 
+  mutate(iso3c = countrycode(country, "country.name", "iso3c")) %>% 
+  left_join(map_data_mutated, by = "iso3c") %>% 
+  ggplot(aes(long, lat, group = group, fill = yes_ratio)) +
+  geom_polygon() +
+  theme_map()
+
+```
+
+
+### Correlation between nations
+
+
+```{r}
+library(widyr)
+
+unvotes %>% 
+  filter(country %in% c("United States", "South Korea")) %>% 
+  select(rcid, country, vote) %>% 
+  pivot_wider(names_from = "country", values_from = "vote", values_fill = 0) %>% 
+  summarize(correlation = cor(`South Korea`, `United States`))
+
+unvotes %>% 
+  select(-country_code) %>% 
+  pairwise_cor(country, rcid, vote) %>% 
+  filter(item2 == "United States", 
+         !is.na(correlation)) %>% 
+  arrange(desc(correlation)) %>% 
+  mutate(item1 = fct_reorder(item1, correlation)) %>% 
+  slice(c(1:10, (n() - 10):n())) %>% 
+  ggplot(aes(correlation, item1)) +
+  geom_errorbarh(height = 0, aes(xmin = "correlation", xmax = 0)) +
+  geom_point() +
+  labs(title = "Which countries correlated with the US most and least?", 
+       y = " ")
+ 
 ```
 

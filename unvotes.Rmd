@@ -21,6 +21,12 @@ tt <- tt_load("2021-03-23")
 unvotes <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-03-23/unvotes.csv')
 roll_calls <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-03-23/roll_calls.csv')
 issues <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-03-23/issues.csv')
+
+roll_calls %>% 
+  count(short, sort = T)
+
+issues %>% 
+  count(issue, sort = T)
 ```
 
 ```{r}
@@ -61,9 +67,14 @@ by_country_filtered %>%
 ```
 
 ```{r}
-unvotes %>% 
+unvotes_joined <- unvotes %>% 
   left_join(roll_calls, by = "rcid") %>% 
-  mutate(year = year(date)) %>% 
+  mutate(year = year(date))
+
+unvotes_joined %>% 
+  count(short, sort = T)
+
+unvotes_joined %>% 
   group_by(country, year) %>% 
   summarize(n = n(), 
             yes_ratio = mean(vote == 1)) %>% 
@@ -74,6 +85,8 @@ unvotes %>%
   expand_limits(y = 0.5)
 
 ```
+
+
 ```{r}
 library(ggthemes) 
 library(countrycode)
@@ -106,12 +119,29 @@ by_country_filtered %>%
 ```{r}
 library(widyr)
 
-unvotes %>% 
-  filter(country %in% c("United States", "South Korea")) %>% 
-  select(rcid, country, vote) %>% 
-  pivot_wider(names_from = "country", values_from = "vote", values_fill = 0) %>% 
-  summarize(correlation = cor(`South Korea`, `United States`))
+## How China and the U.S. has correlated with each other over time across issue areas?
 
+unvotes_joined %>% 
+  filter(country %in% c("United States", "China"), 
+         year >= 1971) %>%
+  left_join(issues, by = "rcid") %>% filter(issue == "Economic development")
+  filter(!is.na(issue)) %>% 
+  select(rcid, country, vote, issue, year) %>% 
+  pivot_wider(names_from = "country", values_from = "vote", values_fill = 0) %>% 
+  group_by(year = 10 * (year %/% 10), issue) %>% 
+  summarize(correlation = cor(`China`, `United States`)) %>% 
+  ggplot(aes(year, correlation)) +
+  geom_point() +
+  geom_line(size = 1) +
+  facet_wrap(~ issue) +
+  labs(title = "Correlation in UN Voting between China nad US across issue areas (each decade)", 
+       x = "Year")
+```
+
+### Which countries supported most and least the US at UNGA?
+
+
+```{r}
 unvotes %>% 
   select(-country_code) %>% 
   pairwise_cor(country, rcid, vote) %>% 
@@ -119,11 +149,11 @@ unvotes %>%
          !is.na(correlation)) %>% 
   arrange(desc(correlation)) %>% 
   mutate(item1 = fct_reorder(item1, correlation)) %>% 
-  slice(c(1:10, (n() - 10):n())) %>% 
+  slice(c(1:15, (n() - 10):n())) %>% 
   ggplot(aes(correlation, item1)) +
-  geom_errorbarh(height = 0, aes(xmin = "correlation", xmax = 0)) +
+  geom_errorbarh(height = 0, aes(xmin = 0, xmax = correlation)) +
   geom_point() +
-  labs(title = "Which countries correlated with the US most and least?", 
+  labs(title = "How much these countries' votings were correlated with the US?", 
        y = " ")
  
 ```

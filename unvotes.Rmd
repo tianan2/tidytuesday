@@ -17,14 +17,20 @@ theme_set(theme_light())
 
 ```{r Load}
 tt <- tt_load("2021-03-23")
+
+unvotes <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-03-23/unvotes.csv')
+roll_calls <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-03-23/roll_calls.csv')
+issues <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-03-23/issues.csv')
+
+roll_calls %>% 
+  count(short, sort = T)
+
+issues %>% 
+  count(issue, sort = T)
 ```
 
 ```{r}
-unvotes <- tt$unvotes %>% 
-  mutate(vote = fct_recode(vote, "1" = "yes", "0" = "abstain", "-1" = "no"))
-
-roll_calls <- tt$roll_calls
-issues <- tt$issues
+unvotes <- unvotes %>% mutate(vote = match(vote, c("no", "abstain", "yes")) - 2)
 ```
 
 ```{r}
@@ -32,11 +38,13 @@ issues <- tt$issues
 by_country <- unvotes %>% 
   group_by(country) %>% 
   summarize(n = n(), 
-            yes_ratio = mean(vote == "1")) %>% 
+            yes_ratio = mean(vote == 1)) 
+
+by_country_filtered <- by_country %>% 
   filter(n >= 100) %>% 
   arrange(desc(yes_ratio))
 
-by_country %>% 
+by_country_filtered %>% 
   head(20) %>% 
   mutate(country = fct_reorder(country, yes_ratio)) %>% 
   ggplot(aes(yes_ratio, country)) +
@@ -46,7 +54,7 @@ by_country %>%
        y = " ", 
        size = "# of votes")
 
-by_country %>% 
+by_country_filtered %>% 
   tail(20) %>%  
   mutate(country = fct_reorder(country, yes_ratio)) %>% 
   ggplot(aes(yes_ratio, country)) +
@@ -59,12 +67,17 @@ by_country %>%
 ```
 
 ```{r}
-unvotes %>% 
+unvotes_joined <- unvotes %>% 
   left_join(roll_calls, by = "rcid") %>% 
-  mutate(year = year(date)) %>% 
+  mutate(year = year(date))
+
+unvotes_joined %>% 
+  count(short, sort = T)
+
+unvotes_joined %>% 
   group_by(country, year) %>% 
   summarize(n = n(), 
-            yes_ratio = mean(vote == "1")) %>% 
+            yes_ratio = mean(vote == 1)) %>% 
   filter(country == "China") %>% 
   ggplot(aes(year, yes_ratio)) +
   geom_point(aes(size = n)) +
@@ -74,9 +87,83 @@ unvotes %>%
 ```
 
 
+<<<<<<< HEAD
 ## Principal component analysis
 
 ```{r}
 unvotes
 
 ```
+=======
+```{r}
+library(ggthemes) 
+library(countrycode)
+
+map_data_mutated <- map_data("world") %>% 
+  tibble() %>% 
+  filter(region != "Antarctica") %>%
+  mutate(iso3c = countrycode(region, "country.name", "iso3c"))
+
+map_data_mutated %>% 
+  ggplot(aes(long, lat, group = group)) +
+  geom_polygon() +
+  theme_map()
+
+# Mapping out the distribution of yes-ratio 
+
+by_country_filtered %>% 
+  mutate(iso3c = countrycode(country, "country.name", "iso3c")) %>% 
+  left_join(map_data_mutated, by = "iso3c") %>% 
+  ggplot(aes(long, lat, group = group, fill = yes_ratio)) +
+  geom_polygon() +
+  theme_map()
+
+```
+
+
+### Correlation between nations
+
+
+```{r}
+library(widyr)
+
+## How China and the U.S. has correlated with each other over time across issue areas?
+
+unvotes_joined %>% 
+  filter(country %in% c("United States", "China"), 
+         year >= 1971) %>%
+  left_join(issues, by = "rcid") %>% filter(issue == "Economic development")
+  filter(!is.na(issue)) %>% 
+  select(rcid, country, vote, issue, year) %>% 
+  pivot_wider(names_from = "country", values_from = "vote", values_fill = 0) %>% 
+  group_by(year = 10 * (year %/% 10), issue) %>% 
+  summarize(correlation = cor(`China`, `United States`)) %>% 
+  ggplot(aes(year, correlation)) +
+  geom_point() +
+  geom_line(size = 1) +
+  facet_wrap(~ issue) +
+  labs(title = "Correlation in UN Voting between China nad US across issue areas (each decade)", 
+       x = "Year")
+```
+
+### Which countries supported most and least the US at UNGA?
+
+
+```{r}
+unvotes %>% 
+  select(-country_code) %>% 
+  pairwise_cor(country, rcid, vote) %>% 
+  filter(item2 == "United States", 
+         !is.na(correlation)) %>% 
+  arrange(desc(correlation)) %>% 
+  mutate(item1 = fct_reorder(item1, correlation)) %>% 
+  slice(c(1:15, (n() - 10):n())) %>% 
+  ggplot(aes(correlation, item1)) +
+  geom_errorbarh(height = 0, aes(xmin = 0, xmax = correlation)) +
+  geom_point() +
+  labs(title = "How much these countries' votings were correlated with the US?", 
+       y = " ")
+ 
+```
+
+>>>>>>> 5755a1033ed9a7624b58ce0874c36d52d9e19bef

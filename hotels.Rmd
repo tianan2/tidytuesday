@@ -114,6 +114,17 @@ test_proc <- bake(hotel_rec, new_data = hotel_test)
 
 
 ```{r}
+library(kknn)
+
+knn_spec <- nearest_neighbor() %>% 
+  set_engine("kknn") %>% 
+  set_mode("classification")
+
+knn_fit <- knn_spec %>% 
+  fit(children ~ ., 
+      data = juice(hotel_rec))
+
+knn_fit
 
 ```
 

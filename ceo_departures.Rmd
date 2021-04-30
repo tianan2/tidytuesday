@@ -98,6 +98,15 @@ boot_models <- ceo_folds %>% mutate(coef_info = map(splits, fit_binom))
 boot_models     
 ```
 
+
+
+```{r}
+intervals <- int_pctl(boot_models, coef_info)
+```
+
+
+
+
 ```{r}
 boot_models %>% 
   unnest(coef_info) %>% 

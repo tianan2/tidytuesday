@@ -24,6 +24,7 @@ youtube <- tt$youtube %>% select(-favorite_count)
 View(youtube)
 ```
 
+
 ```{r}
 youtube %>% 
   count(year, sort = T)
@@ -31,6 +32,9 @@ youtube %>%
 youtube %>% 
   count(brand, sort = T)
 ```
+
+
+
 ```{r}
 summary(youtube)
 
@@ -46,6 +50,9 @@ youtube %>%
   facet_wrap(~ brand) +
   theme(legend.position = "none")
 ```
+
+
+
 ```{r}
 youtube %>% 
   ggplot(aes(view_count)) +
@@ -59,6 +66,9 @@ youtube %>%
   scale_x_log10(labels = comma) +
   facet_wrap(~ metric)
 ```
+
+
+
 ```{r}
 youtube %>% 
   filter(!is.na(view_count)) %>% 
@@ -79,6 +89,9 @@ youtube %>%
   geom_boxplot() +
   scale_y_log10(labels = comma)
 ```
+
+
+
 ```{r}
 youtube %>% 
   filter(!is.na(view_count)) %>% 
@@ -93,6 +106,9 @@ youtube %>%
   theme(legend.position = "none") +
   labs(title = "# of median views of Soper Bowl ads over time")
 ```
+
+
+
 ```{r}
 youtube %>% 
   filter(!is.na(view_count)) %>% 
@@ -112,6 +128,9 @@ youtube %>%
 
 lm(log2(view_count) ~ funny + show_product_quickly + patriotic + celebrity + danger + animals + use_sex, data = youtube) %>% summary()
 ```
+
+
+
 ```{r}
 youtube %>% 
   gather(category, value, funny:use_sex) %>% 
@@ -128,6 +147,8 @@ youtube %>%
        y = "% of ads with this element")
 ```
 
+
+
 ```{r}
 glm(celebrity ~ year, 
     data = youtube, 
@@ -143,6 +164,9 @@ coefficients <- youtube %>%
   filter(term != "(Intercept)") %>% 
   arrange(desc(estimate))
 ```
+
+
+
 ```{r}
 youtube %>% 
   gather(category, value, funny:use_sex) %>% 
@@ -160,6 +184,9 @@ youtube %>%
   labs(x = "Time (rounded to 2 years)", 
        y = "% of ads with this element")
 ```
+
+
+
 
 ```{r}
 by_brand_category <- youtube %>% 
@@ -190,6 +217,9 @@ youtube %>%
   facet_wrap(~ brand, scales = "free_y") +
   scale_x_continuous(labels = percent)
 ```
+
+
+
 ```{r}
 by_brand_category %>% 
   ggplot(aes(category, brand, fill = pct)) +

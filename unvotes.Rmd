@@ -1,6 +1,8 @@
 ---
 title: "unvoting"
 output: html_document
+editor_options: 
+  chunk_output_type: inline
 ---
 
 ```{r setup, include=FALSE}
@@ -15,6 +17,8 @@ library(lubridate)
 theme_set(theme_light())
 ```
 
+
+
 ```{r Load}
 tt <- tt_load("2021-03-23")
 
@@ -28,6 +32,8 @@ roll_calls %>%
 issues %>% 
   count(issue, sort = T)
 ```
+
+
 
 ```{r}
 unvotes <- unvotes %>% mutate(vote = match(vote, c("no", "abstain", "yes")) - 2)
@@ -90,6 +96,8 @@ unvotes_joined %>%
 
 ```
 
+
+
 ```{r}
 library(ggthemes) 
 library(countrycode)
@@ -141,6 +149,7 @@ unvotes_joined %>%
        x = "Year")
 ```
 
+
 ### Which countries supported most and least the US at UNGA?
 
 
@@ -161,4 +170,40 @@ unvotes %>%
  
 ```
 
->>>>>>> 5755a1033ed9a7624b58ce0874c36d52d9e19bef
+### Two kinds of machine learning: 
+
+### Principal component analysis
+
+
+```{r}
+unvotes_df <- unvotes %>% 
+  select(country, rcid, vote) %>% 
+  mutate(vote = factor(vote, levels = c("no", "abstain", "yes")), 
+         vote = as.numeric(vote), 
+         rcid = paste0("rcid_", rcid)) %>% 
+  pivot_wider(names_from = rcid, values_from = vote, values_fill = 2)
+```
+
+
+
+
+```{r}
+library(recipes)
+
+pca_recipe <- recipe(~., data = unvotes_df) %>% 
+  update_role(country, new_role = "id") %>% 
+  step_normalize(all_predictors()) %>% 
+  step_pca(all_predictors())
+
+pca_prep <- prep(pca_recipe)  
+```
+
+
+
+```{r}
+bake(pca_prep, new_data = NULL) %>% 
+  ggplot(aes(PC1, PC2, label = country)) +
+  geom_point(color = "midnightblue", alpha = .7, size = 2) +
+  geom_text(check_overlap = TRUE, hjust = "inward")
+```
+

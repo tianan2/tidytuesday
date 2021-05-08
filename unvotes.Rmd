@@ -1,6 +1,8 @@
 ---
 title: "unvoting"
 output: html_document
+editor_options: 
+  chunk_output_type: inline
 ---
 
 ```{r setup, include=FALSE}
@@ -14,6 +16,8 @@ library(scales)
 library(lubridate)
 theme_set(theme_light())
 ```
+
+
 
 ```{r Load}
 tt <- tt_load("2021-03-23")
@@ -29,9 +33,13 @@ issues %>%
   count(issue, sort = T)
 ```
 
+
+
 ```{r}
 unvotes <- unvotes %>% mutate(vote = match(vote, c("no", "abstain", "yes")) - 2)
 ```
+
+
 
 ```{r}
 # Which country has voted for resolutions most often?
@@ -66,6 +74,8 @@ by_country_filtered %>%
   
 ```
 
+
+
 ```{r}
 unvotes_joined <- unvotes %>% 
   left_join(roll_calls, by = "rcid") %>% 
@@ -87,14 +97,7 @@ unvotes_joined %>%
 ```
 
 
-<<<<<<< HEAD
-## Principal component analysis
 
-```{r}
-unvotes
-
-```
-=======
 ```{r}
 library(ggthemes) 
 library(countrycode)
@@ -132,7 +135,7 @@ library(widyr)
 unvotes_joined %>% 
   filter(country %in% c("United States", "China"), 
          year >= 1971) %>%
-  left_join(issues, by = "rcid") %>% filter(issue == "Economic development")
+  left_join(issues, by = "rcid") %>% 
   filter(!is.na(issue)) %>% 
   select(rcid, country, vote, issue, year) %>% 
   pivot_wider(names_from = "country", values_from = "vote", values_fill = 0) %>% 
@@ -145,6 +148,7 @@ unvotes_joined %>%
   labs(title = "Correlation in UN Voting between China nad US across issue areas (each decade)", 
        x = "Year")
 ```
+
 
 ### Which countries supported most and least the US at UNGA?
 
@@ -166,4 +170,40 @@ unvotes %>%
  
 ```
 
->>>>>>> 5755a1033ed9a7624b58ce0874c36d52d9e19bef
+### Two kinds of machine learning: 
+
+### Principal component analysis
+
+
+```{r}
+unvotes_df <- unvotes %>% 
+  select(country, rcid, vote) %>% 
+  mutate(vote = factor(vote, levels = c("no", "abstain", "yes")), 
+         vote = as.numeric(vote), 
+         rcid = paste0("rcid_", rcid)) %>% 
+  pivot_wider(names_from = rcid, values_from = vote, values_fill = 2)
+```
+
+
+
+
+```{r}
+library(recipes)
+
+pca_recipe <- recipe(~., data = unvotes_df) %>% 
+  update_role(country, new_role = "id") %>% 
+  step_normalize(all_predictors()) %>% 
+  step_pca(all_predictors())
+
+pca_prep <- prep(pca_recipe)  
+```
+
+
+
+```{r}
+bake(pca_prep, new_data = NULL) %>% 
+  ggplot(aes(PC1, PC2, label = country)) +
+  geom_point(color = "midnightblue", alpha = .7, size = 2) +
+  geom_text(check_overlap = TRUE, hjust = "inward")
+```
+

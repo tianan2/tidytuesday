@@ -25,7 +25,6 @@ water <- water %>%
   mutate(report_date = mdy(report_date)) %>% 
   filter(between(lat, -30, 30), 
          between(lon, -40, 60))
-  
 ```
 
 

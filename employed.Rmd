@@ -18,7 +18,7 @@ earn <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidyt
 ```
 
 
-Let's use k-means clustering to explore [employment by race and gender]. 
+## Let's use k-means clustering to explore [employment by race and gender]. 
 
 # Explore data
 
@@ -55,8 +55,7 @@ employed_demo <- employed_tidied %>%
   mutate(occupation = snakecase::to_snake_case(occupation))
 
 ```
-
-# We are now ready to explore which occupations are most likely to be together in terms of demographic representations among these categories we have and total.
+We are now ready to explore which occupations are most likely to be together in terms of demographic representations among these categories we have and total.
 
 # Implement k-means clustering!
 

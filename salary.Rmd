@@ -1,0 +1,108 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(scales)
+library(lubridate)
+theme_set(theme_classic())
+
+survey_raw <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-05-18/survey.csv') 
+
+survey_cleaned <- survey_raw %>% 
+  mutate(timestamp = mdy_hms(timestamp), 
+         age_category = fct_relevel(fct_reorder(how_old_are_you, parse_number(how_old_are_you)), "under 18"), 
+         experience_overall = str_replace(overall_years_of_professional_experience, " - ", "-"), 
+         experience_overall = fct_reorder(experience_overall, parse_number(experience_overall)), 
+         experience_in_field = str_replace(years_of_experience_in_field, " - ", "-"), 
+         experience_in_field = fct_reorder(experience_in_field, parse_number(experience_in_field)), 
+         gender = fct_collapse(gender, "Other or prefer not to answer" = c("Prefer not to answer", "Other or prefer not to answer")), 
+         race = fct_lump(coalesce(race, "Other"), 4))
+
+```
+
+
+
+```{r}
+survey_cleaned %>% 
+  filter(currency == "USD") %>% 
+  filter(annual_salary > 1000, 
+         annual_salary < 1000000) %>% 
+  ggplot(aes(annual_salary)) +
+  geom_histogram() +
+  scale_x_log10()
+
+survey_usd <- survey_cleaned %>% 
+  filter(currency == "USD") %>% 
+  filter(annual_salary > 5000, 
+         annual_salary < 2000000) %>% 
+  mutate(state = str_remove(state, ", .*"))
+```
+
+
+
+```{r}
+summarize_salary <- function(tbl) {
+  tbl %>% 
+    summarize(median_salary = median(annual_salary)) %>% 
+    arrange(desc(median_salary))
+}
+
+plot_categorial <- function(tbl, column, n_levels = 9, reorder = TRUE) {
+  lumped_tbl <- tbl %>% 
+    filter(!is.na({{ column }})) %>% 
+    mutate({{ column }} := fct_lump({{ column }}, n_levels)) 
+  
+  if (reorder) {
+    lumped_tbl <- lumped_tbl %>% 
+      mutate({{ column }} := fct_reorder({{ column }}, median_salary)) 
+  }
+  
+  lumped_tbl %>%  
+    group_by({{ column }}) %>% 
+    summarize_salary() %>% 
+    ggplot(aes(median_salary, {{ column }})) +
+    geom_col() +
+    labs(x = "Median salary")
+}
+
+survey_usd %>% plot_categorial(industry)
+
+survey_usd %>% plot_categorial(state)
+
+survey_usd %>% plot_categorial(job_title, n_levels = 15)
+
+survey_usd %>% plot_categorial(experience_overall, reorder = FALSE)
+
+survey_usd %>% plot_categorial(gender)
+
+```
+
+
+
+```{r}
+library(broom)
+
+lm(data = survey_usd, log2(annual_salary) ~ experience_overall) %>% 
+  summary()
+
+anova_survey_usd <- survey_usd %>% 
+  mutate(job_title = fct_lump(job_title, 10), 
+         state = fct_lump(state, 10), 
+         industry = fct_lump(industry, 10)) %>% 
+  lm(log2(annual_salary) ~ job_title + state + experience_in_field + gender + race + industry, data = .) %>% 
+  anova()
+
+anova_survey_usd %>% 
+  tidy() %>% 
+  mutate(pct_variation = sumsq / sum(sumsq))
+
+```
+
+

@@ -12,33 +12,42 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(tidyverse)
 library(readxl)
-theme_set(theme_light())
+library(lubridate)
+theme_set(theme_classic())
 
-genron_poll <- read_excel("genron_npo.xlsx") %>% rename(year = "...1")
+genron_poll <- 
+  read_excel("genron_npo.xlsx") %>% 
+  rename(year = "...1") %>% 
+  mutate(year = as.character(year),
+         year = paste0(year, "-01-01"), 
+         year = ymd(year))
 ```
 
 ```{r}
+percent <- function(x) (x / 100)
+
+genron_poll <- genron_poll %>% mutate_if(is.numeric, percent)
+
 genron_poll %>% 
   rename("Favorable" = china_f, 
          "Unfavorable" = china_u) %>% 
   gather(china, value, Favorable, Unfavorable) %>% 
-  ggplot(aes(x = year, y = value / 100, color = china)) +
+  ggplot(aes(x = year, value, color = china)) +
   geom_point() +
-  geom_line(size = 2.5) + 
-  scale_x_continuous(limits = c(2005, 2018), 
-                     breaks = seq(2005, 2018, 1)) +
+  geom_line(size = 2) + 
   scale_y_continuous(limits = c(0, 1), 
                      breaks = seq(0, 1, .1), 
                      labels = scales::percent_format()) +
   theme(legend.position = "bottom") +
   scale_color_discrete(labels = c("Favorable", "Unfavorable")) + 
   scale_colour_manual(values = c("blue", "red")) +
-  labs(title = "Chinese Public Opinion toward Japan: Favorable / Unfavorable", 
+  labs(title = "Chinese view toward Japan has been improving", 
        x = "Year", 
        y = " ", 
        color = " ", 
        caption = "Source: GenronNPO") +
   theme(plot.title = element_text(face = "bold", hjust = .5, size = 15))
+ggsave(filename = "chinese_view_toward_japan.pdf", width = 8, height = 5)
   
 ```
 
@@ -47,11 +56,9 @@ genron_poll %>%
   rename("Favorable" = japan_f, 
          "Unfavorable" = japan_u) %>% 
   gather(china, value, Favorable, Unfavorable) %>% 
-  ggplot(aes(x = year, y = value / 100, color = china)) +
+  ggplot(aes(x = year, y = value, color = china)) +
   geom_point() +
-  geom_line(size = 2.5) + 
-  scale_x_continuous(limits = c(2005, 2018), 
-                     breaks = seq(2005, 2018, 1)) +
+  geom_line(size = 2) + 
   scale_y_continuous(limits = c(0, 1), 
                      breaks = seq(0, 1, .1), 
                      labels = scales::percent_format()) +
@@ -62,7 +69,8 @@ genron_poll %>%
        x = "Year", 
        y = " ", 
        color = " ", 
-       caption = "GenronNPO") +
+       caption = "Source: GenronNPO") +
   theme(plot.title = element_text(face = "bold", hjust = .5, size = 15))
+ggsave(filename = "japanese_view_toward_china.pdf", width = 8, height = 5)
 ```
 

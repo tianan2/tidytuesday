@@ -1,0 +1,151 @@
+---
+title: "penguins-tidymodel"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+library(tidymodels)
+theme_set(theme_light())
+
+penguins_raw <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-07-28/penguins.csv')
+```
+
+## Let's build a model for the sex of three species of penguins. We can build a classification model to distinghish male and female penguins. 
+
+```{r}
+penguins_raw %>% 
+  count(species, sort = T)
+
+penguins_raw %>% 
+  count(island, sort = T)
+
+penguins_raw %>% 
+  count(year, sort = T)
+```
+
+
+```{r}
+penguins_raw %>% 
+  filter(!is.na(sex)) %>% 
+  ggplot(aes(bill_length_mm, flipper_length_mm, 
+             color = sex, size = body_mass_g)) +
+  geom_point(alpha = .7) +
+  facet_wrap(~ species)
+```
+
+
+
+```{r}
+penguins_df <- penguins_raw %>% 
+  filter(!is.na(sex)) %>% 
+  mutate(sex = as.factor(sex)) %>% 
+  select(-year, -island)
+```
+
+## Build a model
+
+```{r}
+set.seed(123)
+penguins_split <- initial_split(penguins_df, strata = sex)
+
+penguins_train <- training(penguins_split)
+penguins_test <- testing(penguins_split)
+
+set.seed(234)
+penguins_boot <- bootstraps(penguins_train)
+penguins_boot
+```
+
+
+```{r}
+glm_spec <- logistic_reg() %>% 
+  set_engine("glm")
+
+rf_spec <- rand_forest() %>% 
+  set_mode("classification") %>% 
+  set_engine("ranger")
+```
+
+```{r}
+penguins_wf <- workflow() %>% 
+  add_formula(sex ~ .)
+
+penguins_wf
+```
+
+## Train models
+
+```{r}
+glm_rs <- penguins_wf %>% 
+  add_model(glm_spec) %>% 
+  fit_resamples(
+    resamples = penguins_boot,
+    control = control_resamples(save_pred = TRUE, verbose = TRUE)
+    )
+
+rf_rs <- penguins_wf %>% 
+  add_model(rf_spec) %>% 
+  fit_resamples(
+    resamples = penguins_boot,
+    control = control_resamples(save_pred = TRUE, verbose = TRUE)
+    )
+```
+
+## Evaluate modeling
+
+```{r}
+collect_metrics(rf_rs)
+```
+
+
+```{r}
+collect_metrics(glm_rs)
+```
+
+```{r}
+glm_rs %>%
+  conf_mat_resampled()
+```
+
+```{r}
+glm_rs %>% 
+  collect_predictions() %>% 
+  group_by(id) %>% 
+  roc_curve(sex, .pred_female) %>% 
+  ggplot(aes(1 - specificity, sensitivity, color = id)) +
+  geom_abline(lty = 2, color = "grey80") +
+  geom_path(show.legend = FALSE) +
+  coord_equal()
+```
+
+
+```{r}
+penguins_final <- penguins_wf %>% 
+  add_model(glm_spec) %>% 
+  last_fit(penguins_split)
+
+penguins_final
+```
+
+```{r}
+collect_metrics(penguins_final)
+```
+
+```{r}
+collect_predictions(penguins_final)
+```
+
+```{r}
+penguins_final$.workflow[[1]] %>% 
+  tidy(exponentiate = TRUE)
+```
+
+
+
+
+

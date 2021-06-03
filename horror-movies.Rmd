@@ -56,6 +56,9 @@ model_tidied %>%
   coord_flip()
 
 ```
+
+
+
 ```{r}
 by_genre <- movies_profit %>% 
   mutate(total_gross = domestic_gross + worldwide_gross) 

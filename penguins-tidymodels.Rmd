@@ -1,6 +1,8 @@
 ---
 title: "penguins-tidymodel"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -142,8 +144,20 @@ collect_predictions(penguins_final)
 
 ```{r}
 penguins_final$.workflow[[1]] %>% 
-  tidy(exponentiate = TRUE)
+  tidy(exponentiate = TRUE) %>% 
+  arrange(desc(estimate))
 ```
+
+```{r}
+penguins_raw %>% 
+  filter(!is.na(sex)) %>% 
+  ggplot(aes(bill_depth_mm, bill_length_mm, 
+             color = sex, size = body_mass_g)) +
+  geom_point(alpha = .7) +
+  facet_wrap(~ species)
+```
+
+
 
 
 

@@ -1,0 +1,118 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+library(scales)
+library(lubridate)
+library(tidytuesdayR)
+theme_set(theme_light())
+
+tt <- tt_load("2021-04-27")
+
+departures_raw <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-04-27/departures.csv')
+
+```
+
+
+```{r}
+departures_raw %>% 
+  filter(departure_code < 9, 
+         fyear < 2019, fyear > 1995) %>% 
+  mutate(departure_code = if_else(departure_code %in% 3:4, "involuntary", "others")) %>% 
+  select(fyear, departure_code) %>% 
+  count(fyear, departure_code) %>% 
+  ggplot(aes(fyear, n, color = departure_code)) +
+  geom_point(size = 2) +
+  geom_line(size = 1.2, alpha = .8) +
+  geom_smooth(method = "lm") +
+  labs(x = NULL, 
+       y = "Number of CEO Departures", 
+       color = NULL)
+```
+
+
+### Build a model to measure how significant the observed trends are. 
+
+
+```{r}
+departures <- departures_raw %>% 
+  filter(departure_code < 9, 
+         fyear < 2019, fyear > 1995) %>% 
+  mutate(departure_code = if_else(departure_code %in% 3:4, "involuntary", "others")) %>% 
+  select(fyear, departure_code)
+  
+```
+
+
+## Bootstrapping model
+
+
+```{r}
+library(broom)
+
+df <- departures %>% 
+  count(fyear, departure_code) %>% 
+  pivot_wider(names_from = departure_code, values_from = n)
+
+mod <- glm(cbind(involuntary, others) ~ fyear, 
+           data = df, family = "binomial")
+
+summary(mod)
+tidy(mod, exponentiate = TRUE)
+```
+
+```{r}
+library(rsample)
+
+set.seed(123)
+
+ceo_folds <- bootstraps(departures, times = 1000)
+ceo_folds
+```
+
+
+```{r}
+fit_binom <- function(split) {
+  df <- analysis(split) %>% 
+  count(fyear, departure_code) %>% 
+  pivot_wider(names_from = departure_code, values_from = n)
+  
+  mod <- glm(cbind(involuntary, others) ~ fyear, 
+           data = df, family = "binomial")
+  
+  tidy(mod, exponentiate = TRUE)
+}
+```
+
+
+```{r}
+boot_models <- ceo_folds %>% mutate(coef_info = map(splits, fit_binom))
+
+boot_models     
+```
+
+
+
+```{r}
+intervals <- int_pctl(boot_models, coef_info)
+```
+
+
+
+
+```{r}
+boot_models %>% 
+  unnest(coef_info) %>% 
+  filter(term == "fyear") %>% 
+  ggplot(aes(estimate)) +
+  geom_vline(xintercept = 1, lty = 2, size = 2, color = "gray50") +
+  geom_histogram(fill = "midnightblue", alpha = .8)
+```
+
